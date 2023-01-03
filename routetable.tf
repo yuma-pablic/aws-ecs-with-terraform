@@ -56,7 +56,12 @@ resource "aws_route_table_association" "public-ingress-1c" {
 }
 
 ## Ingress用ルートテーブルのデフォルトルート
-
+resource "aws_default_route_table" "default-rtb" {
+  default_route_table_id = aws_route_table.sbcntr-route-ingress.id
+  depends_on = [
+    aws_internet_gateway.sbcntr-igw
+  ]
+}
 
 ## 管理用サブネットのルートはIngressと同様として作成する
 resource "aws_route_table_association" "public-management-1a" {
