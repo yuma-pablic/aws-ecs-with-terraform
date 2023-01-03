@@ -285,3 +285,14 @@ resource "aws_security_group_rule" "sbcntr-sg-management-server-from-vpce" {
     protocol = "tcp"
     to_port = 443
 }
+
+### Management -> Internal
+resource "aws_security_group_rule" "sbcntr-sg-management-server-from-vpce" {
+    type = "ingress"
+    description = "HTTPS for management server"
+    from_port = 10080
+    source_security_group_id = aws_security_group.sbcntr-sg-management.id
+    security_group_id = aws_security_group.sbcntr-sg-internal.id
+    protocol = "tcp"
+    to_port = 10080
+}
