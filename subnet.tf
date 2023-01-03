@@ -21,3 +21,26 @@ resource "aws_subnet" "sbcntr-subnet-private-container-1c" {
     Type = "Isolated"
   }
 }
+
+#DB用プライベートサブネット
+resource "aws_subnet" "sbcntr-subnet-private-db-1a" {
+  vpc_id            = aws_vpc.sbcntrVpc.id
+  cidr_block        = "10.0.16.0/24"
+  availability_zone = "ap-northeast-1a"
+  map_public_ip_on_launch = false
+  tags = {
+    Name = "sbcntr-subnet-private-db-1a"
+    Type = "Isolated"
+  }
+}
+
+resource "aws_subnet" "sbcntr-subnet-private-db-1c" {
+  vpc_id            = aws_vpc.sbcntrVpc.id
+  cidr_block        = "10.0.17.0/24"
+  availability_zone = "ap-northeast-1c"
+  map_public_ip_on_launch = false
+  tags = {
+    Name = "sbcntr-subnet-private-db-1c"
+    Type = "Isolated"
+  }
+}
