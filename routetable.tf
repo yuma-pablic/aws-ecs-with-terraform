@@ -55,5 +55,7 @@ resource "aws_route_table_association" "public-ingress-1c" {
   route_table_id = aws_route_table.sbcntr-route-ingress.id
 }
 
+## Ingress用ルートテーブルのデフォルトルート
+
 
 

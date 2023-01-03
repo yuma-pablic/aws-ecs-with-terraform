@@ -67,3 +67,26 @@ resource "aws_subnet" "sbcntr-subnet-public-ingress-1c" {
     Type = "public"
   }
 }
+
+## 管理サーバ用のサブネット
+resource "aws_subnet" "sbcntr-subnet-public-management-1a" {
+    vpc_id =  aws_vpc.sbcntrVpc
+    cidr_block = "10.0.240.0/24"
+    availability_zone = "ap-northeast-1a"
+    map_public_ip_on_launch = true
+    tags = {
+        Name = "sbcntr-subnet-public-management-1a"
+        Type = "Public"
+    }
+}
+
+resource "aws_subnet" "sbcntr-subnet-public-management-1c" {
+    vpc_id =  aws_vpc.sbcntrVpc
+    cidr_block = "10.0.241.0/24"
+    availability_zone = "ap-northeast-1c"
+    map_public_ip_on_launch = true
+    tags = {
+        Name = "sbcntr-subnet-public-management-1c"
+        Type = "Public"
+    }
+}
