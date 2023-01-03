@@ -3,8 +3,7 @@ resource "aws_security_group" "sbcntr-sg-ingress" {
     description = "Security group for ingress"
     name = "ingress"
     tags = {
-      "key" = "Name"
-      "Value" = "sbcntr-sg-ingress"
+      "Name" ="sbcntr-sg-ingress"
     }
 }
 
@@ -34,9 +33,7 @@ resource "aws_security_group_rule" "egress-v4" {
 
 resource "aws_security_group_rule" "egress-v6" {
     type = "egress"
-    cidr_blocks = [
-        "::/0"
-    ]
+    ipv6_cidr_blocks = ["::/0"]
     description = "from ::/0:80"
     from_port = 80
     protocol = "tcp"
@@ -50,8 +47,7 @@ resource "aws_security_group" "sbcntr-sg-management" {
     description = "Security Group of management server"
     name = "management"
     tags = {
-      "key" = "Name"
-      "Value" = "sbcntr-sg-management"
+      "Name" = "sbcntr-sg-management"
     }
 }
 
@@ -73,8 +69,7 @@ resource "aws_security_group" "sbcntr-sg-backend" {
     description = "Security Group of backend app"
     name = "container"
     tags = {
-      "key" = "Name"
-      "Value" = "sbcntr-sg-container"
+      "Name" = "sbcntr-sg-container"
     }
 }
 
@@ -96,8 +91,7 @@ resource "aws_security_group" "sbcntr-sg-front-container" {
     description = "Security Group of front container app"
     name = "front-container"
     tags = {
-      "key" = "Name"
-      "Value" = "sbcntr-sg-container"
+      "Name" = "sbcntr-sg-container"
     }
 }
 
@@ -119,8 +113,7 @@ resource "aws_security_group" "sbcntr-sg-internal" {
     description = "Security group for internal load balancer"
     name = "internal"
     tags = {
-      "key" = "Name"
-      "Value" = "sbcntr-sg-internal"
+      "Name" = "sbcntr-sg-internal"
     }
 }
 
@@ -142,8 +135,7 @@ resource "aws_security_group" "sbcntr-sg-db" {
     description = "Security Group of database"
     name = "database"
     tags = {
-      "key" = "Name"
-      "Value" = "sbcntr-sg-db"
+      "Name" = "sbcntr-sg-db"
     }
 }
 
