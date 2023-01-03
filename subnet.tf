@@ -44,3 +44,26 @@ resource "aws_subnet" "sbcntr-subnet-private-db-1c" {
     Type = "Isolated"
   }
 }
+
+#Ingress用のパブリックサブネット
+resource "aws_subnet" "sbcntr-subnet-public-ingress-1a" {
+  vpc_id            = aws_vpc.sbcntrVpc.id
+  cidr_block        = "10.0.0.0/24"
+  availability_zone = "ap-northeast-1a"
+  map_public_ip_on_launch = true
+  tags = {
+    Name = "sbcntr-subnet-public-ingress-1a"
+    Type = "public"
+  }
+}
+
+resource "aws_subnet" "sbcntr-subnet-public-ingress-1c" {
+  vpc_id            = aws_vpc.sbcntrVpc.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "ap-northeast-1c"
+  map_public_ip_on_launch = true
+  tags = {
+    Name = "sbcntr-subnet-public-ingress-1c"
+    Type = "public"
+  }
+}
