@@ -151,6 +151,26 @@ resource "aws_security_group_rule" "db-egress-v4" {
     security_group_id = aws_security_group.sbcntr-sg-db.id 
 }
 
+## VPCエンドポイント用セキュリティグループの生成
+resource "aws_security_group" "sbcntr-sg-vpce" {
+    name = "egress"
+    description = "Security Group of VPC Endpoint"
+    vpc_id = aws_vpc.sbcntrVpc.id
+}
+
+resource "aws_security_group_rule" "sbcntr-sg-vpce-egress" {
+    type = "egress"
+    cidr_blocks = [
+        "0.0.0.0/0"
+    ]
+    description = "Allow all outbound traffic by default"
+    from_port = 80
+    protocol = "-1"
+    to_port = 80
+    security_group_id = aws_security_group.sbcntr-sg-vpce.id
+}
+
+
 # ルール紐付け
 ## Internet LB -> Front Container
 resource "aws_security_group_rule" "sbcntr-sg-frontcontainer-from-sg-ingress" {
@@ -233,3 +253,35 @@ resource "aws_security_group_rule" "sbcntr-sg-management-from-internal" {
 }
 
 
+ ### Back container -> VPC endpoint
+ resource "aws_security_group_rule" "sbcntr-sg-back-container-from-vpce" {
+    type = "ingress"
+    description = " HTTPS for Container App"
+    from_port = 443
+    source_security_group_id = aws_security_group.sbcntr-sg-backend.id
+    security_group_id = aws_security_group.sbcntr-sg-vpce.id
+    protocol = "tcp"
+    to_port = 443
+}
+
+ ### Front container -> VPC endpoint
+ resource "aws_security_group_rule" "sbcntr-sg-front-container-from-vpce" {
+    type = "ingress"
+    description = "HTTPS for Front Container App"
+    from_port = 443
+    source_security_group_id = aws_security_group.sbcntr-sg-front-container.id
+    security_group_id = aws_security_group.sbcntr-sg-vpce.id
+    protocol = "tcp"
+    to_port = 443
+}
+
+### Management Server -> VPC endpoint
+resource "aws_security_group_rule" "sbcntr-sg-management-server-from-vpce" {
+    type = "ingress"
+    description = "HTTPS for management server"
+    from_port = 443
+    source_security_group_id = aws_security_group.sbcntr-sg-management.id
+    security_group_id = aws_security_group.sbcntr-sg-vpce.id
+    protocol = "tcp"
+    to_port = 443
+}
