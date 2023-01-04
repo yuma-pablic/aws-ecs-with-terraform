@@ -23,8 +23,6 @@ resource "aws_subnet" "sbcntr-subnet-private-container-1c" {
 }
 
 
-
-
 #DB用プライベートサブネット
 resource "aws_subnet" "sbcntr-subnet-private-db-1a" {
   vpc_id                  = aws_vpc.sbcntrVpc.id
