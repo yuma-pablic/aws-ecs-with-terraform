@@ -1,7 +1,7 @@
 # ECRからImageを取得する用
 resource "aws_vpc_endpoint" "sbcntr-vpce-ecr-api" {
     vpc_id          = aws_vpc.sbcntrVpc.id
-    service_name    = "com.amazonaws.apnortheast-1.ecr.api"
+    service_name    = "com.amazonaws.ap-northeast-1.ecr.api"
     private_dns_enabled = true
     vpc_endpoint_type = "Interface"
     subnet_ids = [
@@ -13,7 +13,7 @@ resource "aws_vpc_endpoint" "sbcntr-vpce-ecr-api" {
 
 resource "aws_vpc_endpoint" "sbcntr-vpce-ecr-dkr" {
     vpc_id = aws_vpc.sbcntrVpc.id
-    service_name = "com.amazonaws.apnortheast-1.ecr.dkr"
+    service_name = "com.amazonaws.ap-northeast-1.ecr.dkr"
     private_dns_enabled = true
     vpc_endpoint_type = "Interface"
     subnet_ids = [
@@ -25,7 +25,7 @@ resource "aws_vpc_endpoint" "sbcntr-vpce-ecr-dkr" {
 
 resource "aws_vpc_endpoint" "sbcntr-vpce-ecr-s3" {
     vpc_id =  aws_vpc.sbcntrVpc.id
-    service_name = "com.amazonaws.apnortheast-1.s3"
+    service_name = "com.amazonaws.ap-northeast-1.s3"
     vpc_endpoint_type = "Gateway"
     subnet_ids = [
         aws_subnet.sbcntr-subnet-private-egress-1a.id, 
@@ -37,7 +37,7 @@ resource "aws_vpc_endpoint" "sbcntr-vpce-ecr-s3" {
 #Cloud watch logsにデータを送信する用
 resource "aws_vpc_endpoint" "sbcntr-vpce-ecr-logs" {
     vpc_id =  aws_vpc.sbcntrVpc.id
-    service_name = "com.amazonaws.apnortheast-1.logs"
+    service_name = "com.amazonaws.ap-northeast-1.logs"
     vpc_endpoint_type = "Gateway"
     subnet_ids = [
         aws_subnet.sbcntr-subnet-private-egress-1a.id, 

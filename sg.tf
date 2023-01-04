@@ -287,7 +287,7 @@ resource "aws_security_group_rule" "sbcntr-sg-management-server-from-vpce" {
 }
 
 ### Management -> Internal
-resource "aws_security_group_rule" "sbcntr-sg-management-server-from-vpce" {
+resource "aws_security_group_rule" "sbcntr-sg-management-server-from-internal" {
     type = "ingress"
     description = "HTTPS for management server"
     from_port = 10080

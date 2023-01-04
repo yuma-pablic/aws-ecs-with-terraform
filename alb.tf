@@ -15,7 +15,7 @@ resource "aws_lb_target_group" "sbcntr-tg-blue" {
     vpc_id = aws_vpc.sbcntrVpc.id
     
     health_check {
-        protocol = "http"
+        protocol = "HTTP"
         path = "/healthcheck"
         port = "traffic-port"
         healthy_threshold = 3
@@ -26,13 +26,13 @@ resource "aws_lb_target_group" "sbcntr-tg-blue" {
     }
 }
 
-resource "aws_alb_target_group" "sbcntr-tg-green" {
+resource "aws_lb_target_group" "sbcntr-tg-green" {
     name = "sbcntr-tg-green"
     port = 80
     protocol  = "HTTP"
     vpc_id = aws_vpc.sbcntrVpc.id
     health_check {
-        protocol = "http"
+        protocol = "HTTP"
         path = "/healthcheck"
         port = "traffic-port"
         healthy_threshold = 3
@@ -44,21 +44,21 @@ resource "aws_alb_target_group" "sbcntr-tg-green" {
 }
 
 resource "aws_lb_listener" "sbcntr-lisner-blue" {
-    load_balancer_arn = aws_alb.sbcntr-alb-internal
+    load_balancer_arn = aws_alb.sbcntr-alb-internal.id
     port = 80
-    protocol = "http"
+    protocol = "HTTP"
     default_action {
-      type = "redirect"
+      type = "forward"
       target_group_arn = aws_lb_target_group.sbcntr-tg-blue.id
     }
 }
 
 resource "aws_lb_listener" "sbcntr-lisner-green" {
-    load_balancer_arn = aws_alb.sbcntr-alb-internal
+    load_balancer_arn = aws_alb.sbcntr-alb-internal.id
     port = 10080
-    protocol = "http"
+    protocol = "HTTP"
     default_action {
-      type = "redirect"
+      type = "forward"
       target_group_arn = aws_lb_target_group.sbcntr-tg-green.id
     }
 }
