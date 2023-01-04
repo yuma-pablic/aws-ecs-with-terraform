@@ -11,7 +11,6 @@ resource "aws_subnet" "sbcntr-subnet-private-container-1a" {
 }
 
 
-
 resource "aws_subnet" "sbcntr-subnet-private-container-1c" {
   vpc_id                  = aws_vpc.sbcntrVpc.id
   cidr_block              = "10.0.9.0/24"
