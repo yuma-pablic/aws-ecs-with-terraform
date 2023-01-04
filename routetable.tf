@@ -1,6 +1,6 @@
 #コンテナアプリ用のルートテーブル
 resource "aws_route_table" "sbcntr-route-app" {
-  vpc_id            = aws_vpc.sbcntrVpc.id
+  vpc_id = aws_vpc.sbcntrVpc.id
   tags = {
     Name = "sbcntr-route-app"
   }
@@ -19,7 +19,7 @@ resource "aws_route_table_association" "private-1c" {
 
 # DB用ルートテーブル
 resource "aws_route_table" "sbcntr-route-db" {
-  vpc_id            = aws_vpc.sbcntrVpc.id
+  vpc_id = aws_vpc.sbcntrVpc.id
   tags = {
     Name = "sbcntr-route-db"
   }
@@ -39,7 +39,7 @@ resource "aws_route_table_association" "private-db-1c" {
 
 #Ingress用のルートテーブル
 resource "aws_route_table" "sbcntr-route-ingress" {
-  vpc_id            = aws_vpc.sbcntrVpc.id
+  vpc_id = aws_vpc.sbcntrVpc.id
   tags = {
     Name = "sbcntr-route-ingress"
   }
@@ -65,12 +65,12 @@ resource "aws_default_route_table" "default-rtb" {
 
 ## 管理用サブネットのルートはIngressと同様として作成する
 resource "aws_route_table_association" "public-management-1a" {
-  subnet_id = aws_subnet.sbcntr-subnet-public-ingress-1a.id
+  subnet_id      = aws_subnet.sbcntr-subnet-public-ingress-1a.id
   route_table_id = aws_route_table.sbcntr-route-ingress.id
 }
 
 resource "aws_route_table_association" "public-management-1c" {
-  subnet_id = aws_subnet.sbcntr-subnet-public-ingress-1c.id
+  subnet_id      = aws_subnet.sbcntr-subnet-public-ingress-1c.id
   route_table_id = aws_route_table.sbcntr-route-ingress.id
 }
 
