@@ -2,7 +2,7 @@ data "aws_caller_identity" "self" {}
 
 resource "aws_iam_policy" "sbcntr-AccessingECRRepositoryPolicy" {
   name        = "sbcntr-AccessingECRRepositoryPolicy"
-  description = ""
+  description = "Policy to access ECR repo from Cloud9 instance"
   policy = jsonencode(
     {
       "Version" : "2012-10-17",
@@ -51,6 +51,28 @@ resource "aws_iam_policy" "sbcntr-AccessingECRRepositoryPolicy" {
     }
   )
 
+}
+
+resource "aws_iam_role" "sbcntr-cloud9-role" {
+  name               = "sbcntr-cloud9-role"
+  description        = ""
+  assume_role_policy = aws_iam_policy.sbcntr-AccessingECRRepositoryPolicy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "AAAA" {
+  role = aws_iam_role.sbcntr-cloud9-role.name
+  policy_arn = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Action" : "*",
+          "Resource" : "*"
+        }
+      ]
+    }
+  )
 }
 # Blue Green Deploymentを実行する際の権限
 resource "aws_iam_role" "ecs-codedeploy-role" {
