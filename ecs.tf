@@ -31,7 +31,6 @@ resource "aws_ecs_task_definition" "sbcntr-backend-def" {
       name               = "app"
       image              = "${data.aws_caller_identity.self.account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-backend:v1"
       cpu                = 256
-      memory             = null
       memory_reservation = 512
       essential          = true
       runtime_platform = {
