@@ -9,10 +9,12 @@ resource "aws_alb" "sbcntr-alb-internal" {
 }
 
 resource "aws_lb_target_group" "sbcntr-tg-blue" {
-  name     = "sbcntr-tg-blue"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.sbcntrVpc.id
+  name        = "sbcntr-tg-blue"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.sbcntrVpc.id
+  target_type = "ip"
+
 
   health_check {
     protocol            = "HTTP"
@@ -27,10 +29,12 @@ resource "aws_lb_target_group" "sbcntr-tg-blue" {
 }
 
 resource "aws_lb_target_group" "sbcntr-tg-green" {
-  name     = "sbcntr-tg-green"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.sbcntrVpc.id
+  name        = "sbcntr-tg-green"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.sbcntrVpc.id
+  target_type = "ip"
+
   health_check {
     protocol            = "HTTP"
     path                = "/healthcheck"
