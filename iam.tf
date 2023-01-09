@@ -93,6 +93,51 @@ resource "aws_iam_role_policy_attachment" "iam-atachment-sbcntr-cloud9-role-ecr"
   policy_arn = aws_iam_policy.sbcntr-accessing-ecr-repository-policy.arn
 }
 # Blue Green Deploymentを実行する際の権限
+
+resource "aws_iam_policy" "sbcntr-accessing-codedeploy-policy" {
+  name = "sbcntr-accessing-codedeploy-policy"
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Action" : [
+            "ecs:DescribeServices",
+            "ecs:CreateTaskSet",
+            "ecs:UpdateServicePrimaryTaskSet",
+            "ecs:DeleteTaskSet",
+            "elasticloadbalancing:DescribeTargetGroups",
+            "elasticloadbalancing:DescribeListeners",
+            "elasticloadbalancing:ModifyListener",
+            "elasticloadbalancing:DescribeRules",
+            "elasticloadbalancing:ModifyRule",
+            "lambda:InvokeFunction",
+            "cloudwatch:DescribeAlarms",
+            "sns:Publish",
+            "s3:GetObject",
+            "s3:GetObjectVersion"
+          ],
+          "Resource" : "*",
+          "Effect" : "Allow"
+        },
+        {
+          "Action" : [
+            "iam:PassRole"
+          ],
+          "Effect" : "Allow",
+          "Resource" : "*",
+          "Condition" : {
+            "StringLike" : {
+              "iam:PassedToService" : [
+                "ecs-tasks.amazonaws.com"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  )
+}
 resource "aws_iam_role" "ecs-codedeploy-role" {
   name               = "ecs-codedeploy-role"
   assume_role_policy = <<EOT
@@ -134,4 +179,9 @@ resource "aws_iam_role" "ecs_task_execution_role" {
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
     "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
   ]
+}
+
+resource "aws_iam_role_policy_attachment" "sbcntr-accessing-codedeploy-attachement" {
+  role       = aws_iam_role.ecs-codedeploy-role.name
+  policy_arn = aws_iam_policy.sbcntr-accessing-codedeploy-policy.arn
 }
