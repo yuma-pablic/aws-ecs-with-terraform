@@ -1,5 +1,3 @@
-data "aws_caller_identity" "self" {}
-
 resource "aws_iam_policy" "sbcntr-accessing-ecr-repository-policy" {
   name = "sbcntr-AccessingECRRepositoryPolicy"
   policy = jsonencode(
@@ -141,10 +139,9 @@ resource "aws_iam_policy" "sbcntr-accessing-codedeploy-policy" {
   )
 }
 resource "aws_iam_role" "ecs-codedeploy-role" {
-  name        = "ecsCodeDeployRole"
-  description = "Allows CodeDeploy to read S3 objects, invoke Lambda functions, publish to SNS topics, and update ECS services on your behalf."
-  assume_role_policy = jsonencode(
-    {
+  name               = "ecs-codedeploy-role"
+  assume_role_policy = <<EOT
+{
       "Version" : "2012-10-17",
       "Statement" : [
         {
@@ -157,7 +154,31 @@ resource "aws_iam_role" "ecs-codedeploy-role" {
         }
       ]
     }
-  )
+EOT
+}
+
+resource "aws_iam_role_policy_attachment" "AWSCodeDeployRoleForECS" {
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS"
+  role       = aws_iam_role.ecs-codedeploy-role.id
+}
+
+#cloudwatch logsにデータを送信をするための権限
+resource "aws_iam_role" "ecs_task_execution_role" {
+  name = "ecs_task_execution_role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect    = "Allow"
+        Principal = { Service = "ecs-tasks.amazonaws.com" }
+        Action    = "sts:AssumeRole"
+      }
+    ]
+  })
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
+    "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
+  ]
 }
 
 resource "aws_iam_role_policy_attachment" "sbcntr-accessing-codedeploy-attachement" {

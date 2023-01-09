@@ -15,7 +15,6 @@ resource "aws_lb_target_group" "sbcntr-tg-blue" {
   vpc_id      = aws_vpc.sbcntrVpc.id
   target_type = "ip"
 
-
   health_check {
     protocol            = "HTTP"
     path                = "/healthcheck"
@@ -34,7 +33,6 @@ resource "aws_lb_target_group" "sbcntr-tg-green" {
   protocol    = "HTTP"
   vpc_id      = aws_vpc.sbcntrVpc.id
   target_type = "ip"
-
   health_check {
     protocol            = "HTTP"
     path                = "/healthcheck"
