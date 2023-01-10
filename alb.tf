@@ -64,3 +64,32 @@ resource "aws_lb_listener" "sbcntr-lisner-green" {
     target_group_arn = aws_lb_target_group.sbcntr-tg-green.id
   }
 }
+
+resource "aws_alb" "sbcntr-alb-frontend" {
+  name            = "sbcntr-alb-frontend"
+  internal        = false
+  security_groups = [aws_security_group.sbcntr-sg-front-container.id]
+  subnets = [
+    aws_subnet.sbcntr-subnet-public-ingress-1a.id,
+    aws_subnet.sbcntr-subnet-public-ingress-1c.id,
+  ]
+}
+
+resource "aws_lb_target_group" "sbcntr-tg-frontend" {
+  name        = "sbcntr-tg-frontend"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.sbcntrVpc.id
+  target_type = "ip"
+
+  health_check {
+    protocol            = "HTTP"
+    path                = "/healthcheck"
+    port                = "traffic-port"
+    healthy_threshold   = 3
+    unhealthy_threshold = 2
+    timeout             = 5
+    interval            = 15
+    matcher             = 200
+  }
+}
