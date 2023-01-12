@@ -91,7 +91,7 @@ resource "aws_security_group" "sbcntr-sg-front-container" {
   description = "Security Group of front container app"
   name        = "front-container"
   tags = {
-    "Name" = "sbcntr-sg-container"
+    "Name" = "sbcntr-sg-front-container"
   }
 }
 
@@ -156,6 +156,9 @@ resource "aws_security_group" "sbcntr-sg-vpce" {
   name        = "egress"
   description = "Security Group of VPC Endpoint"
   vpc_id      = aws_vpc.sbcntrVpc.id
+  tags = {
+    "Name" = "sbcntr-sg-vpce"
+  }
 }
 
 resource "aws_security_group_rule" "sbcntr-sg-vpce-egress" {
@@ -179,7 +182,7 @@ resource "aws_security_group_rule" "sbcntr-sg-frontcontainer-from-sg-ingress" {
   from_port                = 80
   source_security_group_id = aws_security_group.sbcntr-sg-ingress.id
   security_group_id        = aws_security_group.sbcntr-sg-front-container.id
-  protocol                 = "-1"
+  protocol                 = "tcp"
   to_port                  = 80
 }
 
@@ -191,7 +194,7 @@ resource "aws_security_group_rule" "sbcntr-sg-ingress-from-sg-frontcontainer" {
   from_port                = 80
   source_security_group_id = aws_security_group.sbcntr-sg-front-container.id
   security_group_id        = aws_security_group.sbcntr-sg-internal.id
-  protocol                 = "-1"
+  protocol                 = "tcp"
   to_port                  = 80
 }
 
@@ -200,12 +203,11 @@ resource "aws_security_group_rule" "sbcntr-sg-internal-from-sg-backcontainer" {
   type                     = "ingress"
   description              = "HTTP for internal lb"
   from_port                = 80
-  security_group_id        = aws_security_group.sbcntr-sg-internal.id
-  source_security_group_id = aws_security_group.sbcntr-sg-backend.id
+  source_security_group_id = aws_security_group.sbcntr-sg-internal.id
+  security_group_id        = aws_security_group.sbcntr-sg-backend.id
   protocol                 = "tcp"
   to_port                  = 80
 }
-
 ## Back container -> DB
 resource "aws_security_group_rule" "sbcntr-sg-backcontainer-from-db" {
   type                     = "ingress"
@@ -244,12 +246,12 @@ resource "aws_security_group_rule" "sbcntr-sg-management-from-db" {
 ## Management server -> Internal LB
 resource "aws_security_group_rule" "sbcntr-sg-management-from-internal" {
   type                     = "ingress"
-  description              = "MySQL protocol from management server"
-  from_port                = 3306
+  description              = "Http from manegement server"
+  from_port                = 80
   source_security_group_id = aws_security_group.sbcntr-sg-management.id
   security_group_id        = aws_security_group.sbcntr-sg-internal.id
   protocol                 = "tcp"
-  to_port                  = 3306
+  to_port                  = 80
 }
 
 

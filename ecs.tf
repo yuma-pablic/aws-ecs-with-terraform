@@ -211,24 +211,3 @@ resource "aws_cloudwatch_log_group" "ecs-sbcntr-frontend-def" {
   name              = "ecs-sbcntr-frontend-def"
   retention_in_days = 30
 }
-
-resource "aws_ecs_task_set" "sbcntr-frontend-task-hosting" {
-  service          = "sbcntr-frontend-task-hosting"
-  cluster          = aws_ecs_cluster.sbcntr-frontend-cluster.id
-  task_definition  = aws_ecs_task_definition.sbcntr-frontend-def.arn
-  launch_type      = "FARGATE"
-  platform_version = "LATEST"
-  network_configuration {
-    subnets = [
-      aws_subnet.sbcntr-subnet-private-container-1a.id,
-      aws_subnet.sbcntr-subnet-private-container-1c.id,
-    ]
-    security_groups  = [aws_security_group.sbcntr-sg-front-container.id]
-    assign_public_ip = false
-  }
-
-  load_balancer {
-    target_group_arn = aws_lb_target_group.sbcntr-tg-frontend.arn
-    container_name   = "app"
-  }
-}
