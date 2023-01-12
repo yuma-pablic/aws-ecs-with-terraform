@@ -9,12 +9,14 @@ resource "aws_alb" "sbcntr-alb-internal" {
 }
 
 resource "aws_lb_target_group" "sbcntr-tg-blue" {
-  name        = "sbcntr-tg-blue"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = aws_vpc.sbcntrVpc.id
   target_type = "ip"
 
+  tags = {
+    Name = "sbcntr-tg-blue"
+  }
   health_check {
     protocol            = "HTTP"
     path                = "/healthcheck"
@@ -25,14 +27,20 @@ resource "aws_lb_target_group" "sbcntr-tg-blue" {
     interval            = 15
     matcher             = 200
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_lb_target_group" "sbcntr-tg-green" {
-  name        = "sbcntr-tg-green"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = aws_vpc.sbcntrVpc.id
   target_type = "ip"
+  tags = {
+    "Name" = "sbcntr-tg-green"
+  }
   health_check {
     protocol            = "HTTP"
     path                = "/healthcheck"
@@ -42,6 +50,10 @@ resource "aws_lb_target_group" "sbcntr-tg-green" {
     timeout             = 5
     interval            = 15
     matcher             = 200
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -62,5 +74,44 @@ resource "aws_lb_listener" "sbcntr-lisner-green" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.sbcntr-tg-green.id
+  }
+}
+
+resource "aws_alb" "sbcntr-alb-frontend" {
+  name            = "sbcntr-alb-frontend"
+  internal        = false
+  security_groups = [aws_security_group.sbcntr-sg-ingress.id]
+  subnets = [
+    aws_subnet.sbcntr-subnet-public-ingress-1a.id,
+    aws_subnet.sbcntr-subnet-public-ingress-1c.id,
+  ]
+}
+
+resource "aws_lb_target_group" "sbcntr-tg-frontend" {
+  name        = "sbcntr-tg-frontend"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.sbcntrVpc.id
+  target_type = "ip"
+
+  health_check {
+    protocol            = "HTTP"
+    path                = "/healthcheck"
+    port                = "traffic-port"
+    healthy_threshold   = 3
+    unhealthy_threshold = 2
+    timeout             = 5
+    interval            = 15
+    matcher             = 200
+  }
+}
+
+resource "aws_lb_listener" "sbcntr-lisner-frontend" {
+  load_balancer_arn = aws_alb.sbcntr-alb-frontend.arn
+  port              = 80
+  protocol          = "HTTP"
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.sbcntr-tg-frontend.id
   }
 }
