@@ -42,3 +42,16 @@ resource "aws_vpc_endpoint" "sbcntr-vpce-ecr-logs" {
   ]
   security_group_ids = [aws_security_group.sbcntr-sg-vpce.id]
 }
+
+#Secret Manegerを参照する用
+resource "aws_vpc_endpoint" "sbcntr-vpce-secrets" {
+  vpc_id              = aws_vpc.sbcntrVpc.id
+  service_name        = "com.amazonaws.ap-northeast-1.secretsmanager"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+  subnet_ids = [
+    aws_subnet.sbcntr-subnet-private-egress-1a.id,
+    aws_subnet.sbcntr-subnet-private-egress-1c.id,
+  ]
+  security_group_ids = [aws_security_group.sbcntr-sg-vpce.id]
+}

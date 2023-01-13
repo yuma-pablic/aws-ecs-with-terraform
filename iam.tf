@@ -185,3 +185,27 @@ resource "aws_iam_role_policy_attachment" "sbcntr-accessing-codedeploy-attacheme
   role       = aws_iam_role.ecs-codedeploy-role.name
   policy_arn = aws_iam_policy.sbcntr-accessing-codedeploy-policy.arn
 }
+
+resource "aws_iam_policy" "sbcntr-getting-secrets-policy" {
+  name = "sbcntrGettingSecretsPolicy"
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "GetSecretForECS",
+          "Effect" : "Allow",
+          "Action" : [
+            "secretsmanager:GetSecretValue"
+          ],
+          "Resource" : ["*"]
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "sbcntr-getting-secrets-policy-attachement" {
+  role       = aws_iam_role.ecs_task_execution_role.id
+  policy_arn = aws_iam_policy.sbcntr-getting-secrets-policy.arn
+}
