@@ -25,7 +25,7 @@ resource "aws_ecs_task_definition" "sbcntr-backend-def" {
   network_mode             = "awsvpc"
   cpu                      = 512
   memory                   = 1024
-  execution_role_arn       = "arn:aws:iam::${data.aws_caller_identity.self.account_id}:role/ecsTaskExecutionRole"
+  execution_role_arn       = aws_iam_role.ecs-backend-extension-role.arn
   container_definitions = jsonencode([
     {
       name               = "app"
@@ -162,7 +162,7 @@ resource "aws_ecs_task_definition" "sbcntr-frontend-def" {
   network_mode             = "awsvpc"
   cpu                      = 512
   memory                   = 1024
-  execution_role_arn       = "arn:aws:iam::${data.aws_caller_identity.self.account_id}:role/ecsTaskExecutionRole"
+  execution_role_arn       = aws_iam_role.ecs-frontend-extension-role.arn
   container_definitions = jsonencode([
     {
       name               = "app"

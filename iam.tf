@@ -117,3 +117,52 @@ resource "aws_iam_role_policy_attachment" "AWSCodeDeployRoleForECS" {
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS"
   role       = aws_iam_role.ecs-codedeploy-role.id
 }
+
+resource "aws_iam_role" "ecs-backend-extension-role" {
+  name = "ecsBackendTaskExecutionRole"
+  assume_role_policy = jsonencode(
+    {
+      "Version" : "2008-10-17",
+      "Statement" : [
+        {
+          "Sid" : "",
+          "Effect" : "Allow",
+          "Principal" : {
+            "Service" : "ecs-tasks.amazonaws.com"
+          },
+          "Action" : "sts:AssumeRole"
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "ecs-backend-extension-role-attachement" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  role       = aws_iam_role.ecs-backend-extension-role.id
+}
+
+
+resource "aws_iam_role" "ecs-frontend-extension-role" {
+  name = "ecsFrontendTaskExecutionRole"
+  assume_role_policy = jsonencode(
+    {
+      "Version" : "2008-10-17",
+      "Statement" : [
+        {
+          "Sid" : "",
+          "Effect" : "Allow",
+          "Principal" : {
+            "Service" : "ecs-tasks.amazonaws.com"
+          },
+          "Action" : "sts:AssumeRole"
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "ecs-frontend-extension-role-attachement" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  role       = aws_iam_role.ecs-frontend-extension-role.id
+}
