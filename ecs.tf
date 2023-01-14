@@ -25,7 +25,7 @@ resource "aws_ecs_task_definition" "sbcntr-backend-def" {
   network_mode             = "awsvpc"
   cpu                      = 512
   memory                   = 1024
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  execution_role_arn       = "arn:aws:iam::${data.aws_caller_identity.self.account_id}:role/ecsTaskExecutionRole"
   container_definitions = jsonencode([
     {
       name               = "app"
@@ -132,10 +132,10 @@ resource "aws_codedeploy_deployment_group" "dpg-sbcntr-ecs-backend-cluster-sbcnt
         listener_arns = [aws_lb_listener.sbcntr-lisner-blue.arn]
       }
       target_group {
-        name = aws_lb_target_group.sbcntr-tg-blue.id
+        name = aws_lb_target_group.sbcntr-tg-blue.name
       }
       target_group {
-        name = aws_lb_target_group.sbcntr-tg-green.id
+        name = aws_lb_target_group.sbcntr-tg-green.name
       }
     }
   }
@@ -162,7 +162,7 @@ resource "aws_ecs_task_definition" "sbcntr-frontend-def" {
   network_mode             = "awsvpc"
   cpu                      = 512
   memory                   = 1024
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  execution_role_arn       = "arn:aws:iam::${data.aws_caller_identity.self.account_id}:role/ecsTaskExecutionRole"
   container_definitions = jsonencode([
     {
       name               = "app"
