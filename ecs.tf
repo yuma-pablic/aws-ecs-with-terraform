@@ -132,10 +132,10 @@ resource "aws_codedeploy_deployment_group" "dpg-sbcntr-ecs-backend-cluster-sbcnt
         listener_arns = [aws_lb_listener.sbcntr-lisner-blue.arn]
       }
       target_group {
-        name = aws_lb_target_group.sbcntr-tg-blue.id
+        name = aws_lb_target_group.sbcntr-tg-blue.name
       }
       target_group {
-        name = aws_lb_target_group.sbcntr-tg-green.id
+        name = aws_lb_target_group.sbcntr-tg-green.name
       }
     }
   }
