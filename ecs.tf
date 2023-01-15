@@ -20,7 +20,7 @@ resource "aws_cloudwatch_log_group" "ecs-sbcntr-backend-def" {
 
 #ECS Backend用タスク定義
 resource "aws_ecs_task_definition" "sbcntr-backend-def" {
-  family                   = "sbcntr-backed-def"
+  family                   = "sbcntr-backend-def"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 512
