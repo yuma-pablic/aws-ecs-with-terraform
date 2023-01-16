@@ -198,3 +198,117 @@ resource "aws_iam_role_policy_attachment" "ecs-frontend-extension-role-attacheme
   policy_arn = aws_iam_policy.sbcntr-getting-secrets-policy.arn
   role       = aws_iam_role.ecs-frontend-extension-role.id
 }
+
+resource "aws_iam_policy" "sbcntr-accessing-codecommit-policy" {
+  name = "sbcntr-AccessingCodeCommitPolicy"
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "codecommit:BatchGet*",
+            "codecommit:BatchDescribe*",
+            "codecommit:Describe*",
+            "codecommit:Get*",
+            "codecommit:List*",
+            "codecommit:Merge*",
+            "codecommit:Put*",
+            "codecommit:Post*",
+            "codecommit:Update*",
+            "codecommit:GitPull",
+            "codecommit:GitPush"
+          ],
+          "Resource" : "arn:aws:codecommit:ap-northeast-1:${data.aws_caller_identity.self.account_id}:sbcntr-backend"
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_role" "sbcntr-codebuild-role" {
+  name = "sbcntr-codebuild-role"
+  assume_role_policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Principal" : {
+            "Service" : "codebuild.amazonaws.com"
+          },
+          "Action" : "sts:AssumeRole"
+        }
+      ]
+    }
+  )
+}
+resource "aws_iam_policy" "sbcntr-codebuild-policy" {
+  name        = "sbcntr-codebuild-policy"
+  description = "Policy used in trust relationship with CodeBuild"
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Resource" : [
+            "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.self.account_id}:log-group:/aws/codebuild/sbcntr-codebuild",
+            "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.self.account_id}:log-group:/aws/codebuild/sbcntr-codebuild:*"
+          ],
+          "Action" : [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+          ]
+        },
+        {
+          "Effect" : "Allow",
+          "Resource" : [
+            "arn:aws:s3:::codepipeline-ap-northeast-1-*"
+          ],
+          "Action" : [
+            "s3:PutObject",
+            "s3:GetObject",
+            "s3:GetObjectVersion",
+            "s3:GetBucketAcl",
+            "s3:GetBucketLocation"
+          ]
+        },
+        {
+          "Effect" : "Allow",
+          "Resource" : [
+            "arn:aws:codecommit:ap-northeast-1:${data.aws_caller_identity.self.account_id}:sbcntr-backend"
+          ],
+          "Action" : [
+            "codecommit:GitPull"
+          ]
+        },
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "codebuild:CreateReportGroup",
+            "codebuild:CreateReport",
+            "codebuild:UpdateReport",
+            "codebuild:BatchPutTestCases",
+            "codebuild:BatchPutCodeCoverages"
+          ],
+          "Resource" : [
+            "arn:aws:codebuild:ap-northeast-1:${data.aws_caller_identity.self.account_id}:report-group/sbcntr-codebuild-*"
+          ]
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "sbcntr-codebuild-attachement" {
+  role       = aws_iam_role.sbcntr-codebuild-role.id
+  policy_arn = aws_iam_policy.sbcntr-codebuild-policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "sbcntr-codebuild-attachement-ecr" {
+  role       = aws_iam_role.sbcntr-codebuild-role.id
+  policy_arn = aws_iam_policy.sbcntr-accessing-ecr-repository-policy.arn
+}
