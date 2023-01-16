@@ -92,6 +92,11 @@ resource "aws_iam_role_policy_attachment" "iam-atachment-sbcntr-cloud9-role-ecr"
   role       = aws_iam_role.sbcntr-cloud9-role.name
   policy_arn = aws_iam_policy.sbcntr-accessing-ecr-repository-policy.arn
 }
+
+resource "aws_iam_instance_profile" "sbcntr-cloud9-role-profile" {
+  name = "sbcntr-cloud9-role-profile"
+  role = aws_iam_role.sbcntr-cloud9-role.name
+}
 # Blue Green Deploymentを実行する際の権限
 
 resource "aws_iam_role" "ecs-codedeploy-role" {
