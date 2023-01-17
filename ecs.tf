@@ -83,6 +83,15 @@ resource "aws_ecs_service" "sbcntr-ecs-backend-service" {
     container_name   = "app"
     container_port   = 80
   }
+  lifecycle {
+    ignore_changes = [
+      desired_count,
+      task_definition,
+      load_balancer,
+      network_configuration,
+      platform_version
+    ]
+  }
 }
 
 #Code Deploy
