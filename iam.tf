@@ -206,21 +206,44 @@ resource "aws_iam_policy" "sbcntr-accessing-codecommit-policy" {
       "Version" : "2012-10-17",
       "Statement" : [
         {
+          "Sid" : "ListImagesInRepository",
           "Effect" : "Allow",
           "Action" : [
-            "codecommit:BatchGet*",
-            "codecommit:BatchDescribe*",
-            "codecommit:Describe*",
-            "codecommit:Get*",
-            "codecommit:List*",
-            "codecommit:Merge*",
-            "codecommit:Put*",
-            "codecommit:Post*",
-            "codecommit:Update*",
-            "codecommit:GitPull",
-            "codecommit:GitPush"
+            "ecr:ListImages"
           ],
-          "Resource" : "arn:aws:codecommit:ap-northeast-1:${data.aws_caller_identity.self.account_id}:sbcntr-backend"
+          "Resource" : [
+            "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-backend",
+            "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-frontend"
+          ]
+        },
+        {
+          "Sid" : "GetAuthorizationToken",
+          "Effect" : "Allow",
+          "Action" : [
+            "ecr:GetAuthorizationToken"
+          ],
+          "Resource" : "*"
+        },
+        {
+          "Sid" : "ManageRepositoryContents",
+          "Effect" : "Allow",
+          "Action" : [
+            "ecr:BatchCheckLayerAvailability",
+            "ecr:GetDownloadUrlForLayer",
+            "ecr:GetRepositoryPolicy",
+            "ecr:DescribeRepositories",
+            "ecr:ListImages",
+            "ecr:DescribeImages",
+            "ecr:BatchGetImage",
+            "ecr:InitiateLayerUpload",
+            "ecr:UploadLayerPart",
+            "ecr:CompleteLayerUpload",
+            "ecr:PutImage"
+          ],
+          "Resource" : [
+            "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-backend",
+            "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-frontend"
+          ]
         }
       ]
     }
@@ -236,7 +259,7 @@ resource "aws_iam_role" "sbcntr-codebuild-role" {
         {
           "Effect" : "Allow",
           "Principal" : {
-            "Service" : "codebuild.amazonaws.com"
+            "Service" : "codepipeline.amazonaws.com"
           },
           "Action" : "sts:AssumeRole"
         }
