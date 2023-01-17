@@ -313,7 +313,10 @@ resource "aws_iam_role_policy_attachment" "sbcntr-codebuild-attachement-ecr" {
   policy_arn = aws_iam_policy.sbcntr-accessing-ecr-repository-policy.arn
 }
 
-
+resource "aws_iam_role_policy_attachment" "sbcntr-codebuild-attachement-role" {
+  role       = aws_iam_role.sbcntr-codebuild-role.id
+  policy_arn = aws_iam_policy.sbcntr-accessing-codecommit-policy.arn
+}
 resource "aws_iam_role" "sbcntr-pipeline-role" {
   name = "sbcntr-pipeline-role"
   assume_role_policy = jsonencode(
@@ -322,16 +325,13 @@ resource "aws_iam_role" "sbcntr-pipeline-role" {
       "Statement" : [
         {
           "Effect" : "Allow",
-          "Action" : [
-            "codepipeline:StartPipelineExecution"
-          ],
-          "Resource" : [
-            "arn:aws:codepipeline:ap-northeast-1:${data.aws_caller_identity.self.account_id}:sbcntr-pipeline"
-          ]
+          "Principal" : {
+            "Service" : "codepipeline.amazonaws.com"
+          },
+          "Action" : "sts:AssumeRole"
         }
       ]
     }
-
   )
 }
 
@@ -519,10 +519,45 @@ resource "aws_iam_role_policy_attachment" "sbcntr-piple-policy-attachement" {
   policy_arn = aws_iam_policy.sbcntr-pipeline-policy.arn
 }
 
-
 resource "aws_iam_role" "sbcntr-event-bridge-codepipeline-role" {
   name = "sbcntr-event-bridge-codepipeline-role"
-  policy = jsonencode(
-
+  assume_role_policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Principal" : {
+            "Service" : "events.amazonaws.com"
+          },
+          "Action" : "sts:AssumeRole"
+        }
+      ]
+    }
   )
+}
+
+resource "aws_iam_policy" "sbcntr-event-bridge-codepipeline-policy" {
+  name = "sbcntr-event-bridge-codepipeline-policy"
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "codepipeline:StartPipelineExecution"
+          ],
+          "Resource" : [
+            "arn:aws:codepipeline:ap-northeast-1:${data.aws_caller_identity.self.account_id}:sbcntr-pipeline"
+          ]
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "sbcntr-event-bridge-codepipeline-attachement" {
+  role       = aws_iam_role.sbcntr-event-bridge-codepipeline-role.id
+  policy_arn = aws_iam_policy.sbcntr-pipeline-policy.arn
 }

@@ -13,13 +13,13 @@ resource "aws_codepipeline" "sbcntr-pipeline" {
       name             = "Source"
       category         = "Source"
       owner            = "AWS"
-      provider         = "CodeStarSourceConnection"
+      provider         = "CodeCommit"
       version          = "1"
       output_artifacts = ["source_output"]
 
       configuration = {
-        RepositoryName = aws_codecommit_repository.sbcntr-backend.id
-        BranchName     = "main"
+        RepositoryName : aws_codecommit_repository.sbcntr-backend.repository_name
+        BranchName : "main"
       }
     }
   }
@@ -47,12 +47,16 @@ resource "aws_codepipeline" "sbcntr-pipeline" {
       name            = "Deploy"
       category        = "Deploy"
       owner           = "AWS"
-      provider        = "ECS"
+      provider        = "CodeDeployToECS"
       version         = 1
       input_artifacts = ["build_output"]
       configuration = {
-        ClusterName = aws_ecs_cluster.sbcntr-backend-cluster.id
-        ServiceName = aws_ecs_service.sbcntr-ecs-backend-service.name
+        AppSpecTemplateArtifact        = "SourceArtifact",
+        ApplicationName                = aws_codedeploy_app.app-ecs-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service.name
+        DeploymentGroupName            = aws_codedeploy_deployment_group.dpg-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service.id
+        Image1ArtifactName             = "IMAGE1_NAME"
+        AppSpecTemplatePath            = "SourceArtifact"
+        TaskDefinitionTemplateArtifact = "SourceArtifact"
       }
     }
   }
@@ -79,5 +83,5 @@ resource "aws_cloudwatch_event_rule" "sbcntr-cw-ev" {
 resource "aws_cloudwatch_event_target" "codepipeline_sample_app" {
   rule     = aws_cloudwatch_event_rule.sbcntr-cw-ev.name
   arn      = aws_codepipeline.sbcntr-pipeline.arn
-  role_arn = aws_iam_role.event_bridge_codepipeline.arn
+  role_arn = aws_iam_role.sbcntr-event-bridge-codepipeline-role.arn
 }
