@@ -38,6 +38,7 @@ resource "aws_codepipeline" "sbcntr-pipeline" {
       configuration = {
         ProjectName = aws_codebuild_project.sbcntr-codebuild.id
       }
+
     }
   }
 

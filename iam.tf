@@ -259,7 +259,7 @@ resource "aws_iam_role" "sbcntr-codebuild-role" {
         {
           "Effect" : "Allow",
           "Principal" : {
-            "Service" : "codepipeline.amazonaws.com"
+            "Service" : "codebuild.amazonaws.com"
           },
           "Action" : "sts:AssumeRole"
         }

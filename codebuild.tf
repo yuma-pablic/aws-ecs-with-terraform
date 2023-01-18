@@ -1,4 +1,7 @@
 resource "aws_codebuild_project" "sbcntr-codebuild" {
+  depends_on = [
+    aws_s3_bucket.sbcntr-codepipline-bucket
+  ]
   name = "sbcntr-codebuild"
   source {
     type            = "CODECOMMIT"
