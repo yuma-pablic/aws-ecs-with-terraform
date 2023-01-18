@@ -289,7 +289,7 @@ resource "aws_iam_policy" "sbcntr-codebuild-policy" {
         {
           "Effect" : "Allow",
           "Resource" : [
-            "arn:aws:s3:::codepipeline-ap-northeast-1-*"
+            "arn:aws:s3:::${aws_s3_bucket.sbcntr-codepipline-bucket.id}*"
           ],
           "Action" : [
             "s3:PutObject",

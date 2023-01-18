@@ -15,7 +15,7 @@ resource "aws_codepipeline" "sbcntr-pipeline" {
       owner            = "AWS"
       provider         = "CodeCommit"
       version          = "1"
-      output_artifacts = ["source_output"]
+      output_artifacts = ["SourceArtifact"]
 
       configuration = {
         RepositoryName : aws_codecommit_repository.sbcntr-backend.repository_name
@@ -32,8 +32,8 @@ resource "aws_codepipeline" "sbcntr-pipeline" {
       owner            = "AWS"
       provider         = "CodeBuild"
       version          = 1
-      input_artifacts  = ["source_output"]
-      output_artifacts = ["build_output"]
+      input_artifacts  = ["SourceArtifact"]
+      output_artifacts = ["BuildArtifact"]
 
       configuration = {
         ProjectName = aws_codebuild_project.sbcntr-codebuild.id
@@ -50,14 +50,15 @@ resource "aws_codepipeline" "sbcntr-pipeline" {
       owner           = "AWS"
       provider        = "CodeDeployToECS"
       version         = 1
-      input_artifacts = ["build_output"]
+      input_artifacts = ["SourceArtifact", "BuildArtifact"]
       configuration = {
         AppSpecTemplateArtifact        = "SourceArtifact",
         ApplicationName                = aws_codedeploy_app.app-ecs-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service.name
         DeploymentGroupName            = aws_codedeploy_deployment_group.dpg-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service.id
         Image1ArtifactName             = "IMAGE1_NAME"
+        Image1ContainerName            = "app"
         AppSpecTemplatePath            = "SourceArtifact"
-        TaskDefinitionTemplateArtifact = "SourceArtifact"
+        TaskDefinitionTemplateArtifact = "BuildArtifact"
       }
     }
   }
