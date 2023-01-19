@@ -4,6 +4,9 @@ dev-init:
 pro-init:
 	@cd environment/pro;terraform init
 
+dev-init-up:
+	@cd environment/dev;terraform init -upgrade
+
 dev-apply:
 	@cd environment/dev;terraform apply
 
