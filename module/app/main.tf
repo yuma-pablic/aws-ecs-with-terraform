@@ -1500,3 +1500,113 @@ resource "aws_cloudwatch_event_target" "codepipeline_sample_app" {
 resource "aws_s3_bucket" "sbcntr-codepipline-bucket" {
   bucket = "sbcntr-codepipline-bucket"
 }
+
+resource "aws_wafv2_web_acl" "sbcntr-waf-webacl" {
+  name  = "sbcntr-waf-webacl"
+  scope = "REGIONAL"
+  default_action {
+    allow {}
+  }
+
+  rule {
+    name     = "AWSAWSManagedRulesCommonRuleSet"
+    priority = 0
+    override_action {
+      none {}
+    }
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesCommonRuleSet"
+        vendor_name = "AWS"
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "sbcntr-waf-webacl"
+      sampled_requests_enabled   = false
+    }
+  }
+  rule {
+    name     = "AWSManagedRulesAmazonIpReputationList"
+    priority = 1
+    override_action {
+      none {}
+    }
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesAmazonIpReputationList"
+        vendor_name = "AWS"
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "sbcntr-waf-webacl"
+      sampled_requests_enabled   = false
+    }
+  }
+  rule {
+    name     = "AWSManagedRulesAnonymousIpList"
+    priority = 2
+    override_action {
+      none {}
+    }
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesAnonymousIpList"
+        vendor_name = "AWS"
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "sbcntr-waf-webacl"
+      sampled_requests_enabled   = false
+    }
+  }
+  rule {
+    name     = "AWSManagedRulesKnownBadInputsRuleSet"
+    priority = 3
+    override_action {
+      none {}
+    }
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesKnownBadInputsRuleSet"
+        vendor_name = "AWS"
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "sbcntr-waf-webacl"
+      sampled_requests_enabled   = false
+    }
+  }
+  rule {
+    name     = "AWSManagedRulesSQLiRuleSet"
+    priority = 4
+    override_action {
+      none {}
+    }
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesSQLiRuleSet"
+        vendor_name = "AWS"
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "sbcntr-waf-webacl"
+      sampled_requests_enabled   = false
+    }
+  }
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "TerraformWebACLMetric"
+    sampled_requests_enabled   = false
+  }
+}
+
+
+resource "aws_wafv2_web_acl_association" "waf-alb-front-association" {
+  resource_arn = aws_alb.sbcntr-alb-frontend.arn
+  web_acl_arn  = aws_wafv2_web_acl.sbcntr-waf-webacl.arn
+}
