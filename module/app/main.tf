@@ -649,6 +649,88 @@ resource "aws_ecs_service" "sbcntr-ecs-backend-service" {
   }
 }
 
+resource "aws_appautoscaling_target" "sbcntr-backend-auto-target" {
+  service_namespace  = "ecs"
+  resource_id        = "service/${aws_ecs_cluster.sbcntr-backend-cluster.name}/${aws_ecs_service.sbcntr-ecs-backend-service.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  min_capacity       = 2
+  max_capacity       = 4
+}
+
+resource "aws_appautoscaling_policy" "sbcntr-backend-auto-policy" {
+  name               = "scale_out"
+  policy_type        = "StepScaling"
+  service_namespace  = aws_appautoscaling_target.sbcntr-backend-auto-target.service_namespace
+  resource_id        = aws_appautoscaling_target.sbcntr-backend-auto-target.resource_id
+  scalable_dimension = aws_appautoscaling_target.sbcntr-backend-auto-target.scalable_dimension
+  step_scaling_policy_configuration {
+    adjustment_type         = "ChangeInCapacity"
+    cooldown                = 60
+    metric_aggregation_type = "Average"
+
+    step_adjustment {
+      metric_interval_lower_bound = 0
+      scaling_adjustment          = 1
+    }
+  }
+}
+
+resource "aws_appautoscaling_policy" "sbcntr-backend-scale-in" {
+  name               = "scale_in"
+  policy_type        = "StepScaling"
+  service_namespace  = aws_appautoscaling_target.sbcntr-backend-auto-target.service_namespace
+  resource_id        = aws_appautoscaling_target.sbcntr-backend-auto-target.resource_id
+  scalable_dimension = aws_appautoscaling_target.sbcntr-backend-auto-target.scalable_dimension
+
+  step_scaling_policy_configuration {
+    adjustment_type         = "ChangeInCapacity"
+    cooldown                = 60
+    metric_aggregation_type = "Average"
+
+    step_adjustment {
+      metric_interval_upper_bound = 0
+      scaling_adjustment          = -1
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sbcntr-backend-cpu-high" {
+  alarm_name          = "cpu_utilization_high"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/ECS"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 30
+  dimensions = {
+    ClusterName = aws_ecs_cluster.sbcntr-backend-cluster.name
+    ServiceName = aws_ecs_service.sbcntr-ecs-backend-service.name
+  }
+
+  alarm_actions = [
+    aws_appautoscaling_policy.sbcntr-backend-auto-policy.arn
+  ]
+}
+
+resource "aws_cloudwatch_metric_alarm" "sbcntr-backend-cpu-low" {
+  alarm_name          = "cpu_utilization_low"
+  comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/ECS"
+  period              = "60"
+  statistic           = "Average"
+  threshold           = "25"
+  dimensions = {
+    ClusterName = aws_ecs_cluster.sbcntr-backend-cluster.name
+    ServiceName = aws_ecs_service.sbcntr-ecs-backend-service.name
+  }
+
+  alarm_actions = [
+    aws_appautoscaling_policy.sbcntr-backend-scale-in.arn
+  ]
+}
 #Code Deploy
 resource "aws_codedeploy_app" "app-ecs-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service" {
   compute_platform = "ECS"
