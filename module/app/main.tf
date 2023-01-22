@@ -572,7 +572,10 @@ resource "aws_cloudwatch_log_group" "ecs-sbcntr-backend-def" {
   name              = "/ecs/sbcntr-backend-def"
   retention_in_days = 30
 }
-
+resource "aws_cloudwatch_log_group" "ecs-sbcntr-firelens-log-group" {
+  name              = "/aws/ecs/sbcntr-firelens-container"
+  retention_in_days = 14
+}
 #ECS Backend用タスク定義
 resource "aws_ecs_task_definition" "sbcntr-backend-def" {
   family                   = "sbcntr-backend-def"
@@ -597,15 +600,47 @@ resource "aws_ecs_task_definition" "sbcntr-backend-def" {
           containerPort = 80
         }
       ]
+      # アプリのログはfirelensで出力
       logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-create-group : "true",
-          awslogs-group : aws_cloudwatch_log_group.ecs-sbcntr-backend-def.name
-          awslogs-region : "ap-northeast-1"
-          awslogs-stream-prefix : "ecs"
-        }
+        logDriver = "awsfirelens"
       }
+      }, {
+      name = "log_router"
+      firelensConfiguration = {
+        type = "fluentbit",
+        options = {
+          config-file-type : "file",
+          config-file-value : "/fluent-bit/custom.conf"
+        }
+      },
+      image             = "${data.aws_caller_identity.self.account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-base:log-router"
+      memoryReservation = 128,
+      logConfiguration = {
+        logDriver = "awslogs",
+        options = {
+          awslogs-group : aws_cloudwatch_log_group.ecs-sbcntr-firelens-log-group.name,
+          awslogs-region : "ap-northeast-1",
+          awslogs-stream-prefix : "firelens"
+        }
+      },
+      environment = [
+        {
+          name : "APP_ID"
+          value : "backend-def"
+          }, {
+          name : "AWS_ACCOUNT_ID"
+          value : "${data.aws_caller_identity.self.account_id}"
+          }, {
+          name : "AWS_REGION"
+          value : "ap-northeast-1"
+          }, {
+          name : "LOG_BUCKET_NAME"
+          value : "sbcntr-${data.aws_caller_identity.self.account_id}"
+          }, {
+          name : "LOG_GORUP_NAME"
+          value : "/ecs/sbcntr-backend-def"
+        }
+      ]
     }
   ])
 }
@@ -1609,4 +1644,68 @@ resource "aws_wafv2_web_acl" "sbcntr-waf-webacl" {
 resource "aws_wafv2_web_acl_association" "waf-alb-front-association" {
   resource_arn = aws_alb.sbcntr-alb-frontend.arn
   web_acl_arn  = aws_wafv2_web_acl.sbcntr-waf-webacl.arn
+}
+
+resource "aws_s3_bucket" "sbcntr-account-id" {
+  bucket = "sbcntr-${data.aws_caller_identity.self.account_id}"
+}
+
+resource "aws_iam_role" "sbcntr-ecsTaskRole" {
+  name = "sbcntr-ecsTaskRole"
+  assume_role_policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "",
+          "Effect" : "Allow",
+          "Principal" : {
+            "Service" : [
+              "ecs-tasks.amazonaws.com"
+            ]
+          },
+          "Action" : "sts:AssumeRole"
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_policy" "sbcntr-AccessingLogDestionation" {
+  name = "sbcntr-AccessingLogDestionation"
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "s3:AbortMultipartUpload",
+            "s3:GetBucketLocation",
+            "s3:GetObject",
+            "s3:ListBucket",
+            "s3:ListBucketMultipartUploads",
+            "s3:PutObject"
+          ],
+          "Resource" : ["arn:aws:s3:::${aws_s3_bucket.sbcntr-account-id.bucket_domain_name}", "arn:aws:s3:::${aws_s3_bucket.sbcntr-account-id.bucket_domain_name}/*"]
+        },
+        {
+          "Effect" : "Allow",
+          "Action" : ["kms:Decrypt", "kms:GenerateDataKey"],
+          "Resource" : ["*"]
+        },
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:DescribeLogGroups",
+            "logs:DescribeLogStreams",
+            "logs:PutLogEvents"
+          ],
+          "Resource" : ["*"]
+        }
+      ]
+    }
+  )
 }
