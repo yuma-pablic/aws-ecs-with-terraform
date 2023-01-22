@@ -1509,7 +1509,7 @@ resource "aws_wafv2_web_acl" "sbcntr-waf-webacl" {
   }
 
   rule {
-    name     = "AWSAWSManagedRulesCommonRuleSet"
+    name     = "AWSManagedRulesCommonRuleSet"
     priority = 0
     override_action {
       none {}
