@@ -640,7 +640,7 @@ resource "aws_ecs_task_definition" "sbcntr-backend-def" {
           name : "LOG_BUCKET_NAME"
           value : "sbcntr-${data.aws_caller_identity.self.account_id}"
           }, {
-          name : "LOG_GORUP_NAME"
+          name : "LOG_GROUP_NAME"
           value : "/ecs/sbcntr-backend-def"
         }
       ],
