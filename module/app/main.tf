@@ -1717,3 +1717,118 @@ resource "aws_iam_role_policy_attachment" "sbcntr-task-role-attachement" {
   role       = aws_iam_role.sbcntr-ecsTaskRole.id
   policy_arn = aws_iam_policy.sbcntr-AccessingLogDestionation.arn
 }
+
+resource "aws_iam_policy" "sbcntr-SsmPassrolePolicy" {
+  name = "sbcntr-SsmPassrolePolicy"
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Action" : "iam:PassRole",
+          "Resource" : "*",
+          "Condition" : {
+            "StringEquals" : { "iam:PassedToService" : "ssm.amazonaws.com" }
+          }
+        },
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "ssm:DeleteActivation",
+            "ssm:RemoveTagsFromResource",
+            "ssm:AddTagsToResource",
+            "ssm:CreateActivation"
+          ],
+          "Resource" : "*"
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "sbcntr-task-role-bastion-attachement" {
+  role       = aws_iam_role.sbcntr-ecsTaskRole.id
+  policy_arn = aws_iam_policy.sbcntr-SsmPassrolePolicy.arn
+}
+
+resource "aws_iam_role" "sbcntr-SSMServiceRole" {
+  name = "sbcntr-SSMServiceRole"
+  assume_role_policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "",
+          "Effect" : "Allow",
+          "Principal" : {
+            "Service" : [
+              "ssm.amazonaws.com"
+            ]
+          },
+          "Action" : "sts:AssumeRole"
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "sbcntr-ssm-attachement" {
+  role       = aws_iam_role.sbcntr-SSMServiceRole.id
+  policy_arn = aws_iam_policy.sbcntr-SsmPassrolePolicy.arn
+}
+
+resource "aws_vpc_endpoint" "sbcntr-vpce-ssm-messages" {
+  vpc_id              = var.vpc_id
+  name                = "sbcntr-vpce-ssm-messages"
+  service_name        = "com.amazonaws.ap-northeast-1.ssmmessages"
+  private_dns_enabled = true
+  vpc_endpoint_type   = "Interface"
+  subnet_ids = [
+    aws_subnet.sbcntr-subnet-private-egress-1a.id,
+    aws_subnet.sbcntr-subnet-private-egress-1c.id,
+  ]
+  security_group_ids = [aws_security_group.sbcntr-sg-vpce.id]
+}
+
+
+resource "aws_vpc_endpoint" "sbcntr-vpce-ssm" {
+  vpc_id              = var.vpc_id
+  name                = "sbcntr-vpce-ssm"
+  service_name        = "com.amazonaws.ap-northeast-1.ssm"
+  private_dns_enabled = true
+  vpc_endpoint_type   = "Interface"
+  subnet_ids = [
+    aws_subnet.sbcntr-subnet-private-egress-1a.id,
+    aws_subnet.sbcntr-subnet-private-egress-1c.id,
+  ]
+  security_group_ids = [aws_security_group.sbcntr-sg-vpce.id]
+}
+
+resource "aws_ecs_task_definition" "sbcntr-bastion" {
+  family                   = "sbcntr-bastion"
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu                      = 256
+  memory                   = 512
+  execution_role_arn       = aws_iam_role.ecs-backend-extension-role.arn
+  task_role_arn            = aws_iam_role.sbcntr-ecsTaskRole.arn
+  container_definitions = jsonencode([
+    {
+      name               = "bastion"
+      image              = "${data.aws_caller_identity.self.account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-base:bastion"
+      cpu                = 128
+      memory_reservation = 256
+      essential          = true
+      runtime_platform = {
+        operating_system_family = "LINUX"
+      }
+
+      portMappings = [
+        {
+          containerPort = 80
+        }
+      ]
+    }
+  ])
+}
