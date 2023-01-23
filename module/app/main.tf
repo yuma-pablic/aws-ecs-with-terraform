@@ -584,6 +584,7 @@ resource "aws_ecs_task_definition" "sbcntr-backend-def" {
   cpu                      = 512
   memory                   = 1024
   execution_role_arn       = aws_iam_role.ecs-backend-extension-role.arn
+  task_role_arn            = aws_iam_role.sbcntr-ecsTaskRole.arn
   container_definitions = jsonencode([
     {
       name               = "app"
@@ -605,22 +606,24 @@ resource "aws_ecs_task_definition" "sbcntr-backend-def" {
         logDriver = "awsfirelens"
       }
       }, {
-      name = "log_router"
-      firelensConfiguration = {
-        type = "fluentbit",
-        options = {
-          config-file-type : "file",
-          config-file-value : "/fluent-bit/custom.conf"
-        }
-      },
+      essential         = true,
+      name              = "log_router"
       image             = "${data.aws_caller_identity.self.account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-base:log-router"
       memoryReservation = 128,
+      cpu               = 64
       logConfiguration = {
         logDriver = "awslogs",
         options = {
           awslogs-group : aws_cloudwatch_log_group.ecs-sbcntr-firelens-log-group.name,
           awslogs-region : "ap-northeast-1",
           awslogs-stream-prefix : "firelens"
+        }
+      },
+      firelensConfiguration = {
+        type = "fluentbit",
+        options = {
+          config-file-type  = "file",
+          config-file-value = "/fluent-bit/custom.conf"
         }
       },
       environment = [
@@ -640,7 +643,7 @@ resource "aws_ecs_task_definition" "sbcntr-backend-def" {
           name : "LOG_GORUP_NAME"
           value : "/ecs/sbcntr-backend-def"
         }
-      ]
+      ],
     }
   ])
 }
@@ -1687,7 +1690,7 @@ resource "aws_iam_policy" "sbcntr-AccessingLogDestionation" {
             "s3:ListBucketMultipartUploads",
             "s3:PutObject"
           ],
-          "Resource" : ["arn:aws:s3:::${aws_s3_bucket.sbcntr-account-id.bucket_domain_name}", "arn:aws:s3:::${aws_s3_bucket.sbcntr-account-id.bucket_domain_name}/*"]
+          "Resource" : ["arn:aws:s3:::${aws_s3_bucket.sbcntr-account-id.id}", "arn:aws:s3:::${aws_s3_bucket.sbcntr-account-id.id}/*"]
         },
         {
           "Effect" : "Allow",
@@ -1708,4 +1711,9 @@ resource "aws_iam_policy" "sbcntr-AccessingLogDestionation" {
       ]
     }
   )
+}
+
+resource "aws_iam_role_policy_attachment" "sbcntr-task-role-attachement" {
+  role       = aws_iam_role.sbcntr-ecsTaskRole.id
+  policy_arn = aws_iam_policy.sbcntr-AccessingLogDestionation.arn
 }
