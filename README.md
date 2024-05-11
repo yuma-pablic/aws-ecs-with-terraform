@@ -1,5 +1,5 @@
 # aws-infra-code
-の第五章までをコード化したもの
+[AWSコンテナ設計・構築[本格]入門](https://www.sbcr.jp/product/4815607654/)の第五章までをコード化
 ## init
 ```
 make dev-init
