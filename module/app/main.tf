@@ -1283,10 +1283,7 @@ resource "aws_wafv2_web_acl" "sbcntr-waf-webacl" {
 }
 
 
-resource "aws_wafv2_web_acl_association" "waf-alb-front-association" {
-  resource_arn = aws_alb.sbcntr-alb-frontend.arn
-  web_acl_arn  = aws_wafv2_web_acl.sbcntr-waf-webacl.arn
-}
+
 
 resource "aws_s3_bucket" "sbcntr-account-id" {
   bucket = "sbcntr-${data.aws_caller_identity.self.account_id}"
