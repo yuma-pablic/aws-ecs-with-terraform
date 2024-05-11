@@ -485,11 +485,6 @@ resource "aws_iam_role_policy_attachment" "ecs-backend-extension-role-attachemen
   role       = aws_iam_role.ecs-backend-extension-role.id
 }
 
-
-
-
-
-
 # cloudwatch event rule
 resource "aws_cloudwatch_event_rule" "sbcntr-cw-ev" {
   name = "sbcntr-cw-ev"
@@ -514,14 +509,7 @@ resource "aws_cloudwatch_event_target" "codepipeline_sample_app" {
   role_arn = aws_iam_role.sbcntr-event-bridge-codepipeline-role.arn
 }
 
-resource "aws_s3_bucket" "sbcntr-codepipline-bucket" {
-  bucket = "sbcntr-codepipline-bucket"
-}
 
-
-resource "aws_s3_bucket" "sbcntr-account-id" {
-  bucket = "sbcntr-${data.aws_caller_identity.self.account_id}"
-}
 
 resource "aws_iam_role" "sbcntr-ecsTaskRole" {
   name = "sbcntr-ecsTaskRole"
