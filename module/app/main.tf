@@ -504,31 +504,6 @@ resource "aws_iam_instance_profile" "sbcntr-cloud9-role-profile" {
   name = "sbcntr-cloud9-role-profile"
   role = aws_iam_role.sbcntr-cloud9-role.name
 }
-# Blue Green Deploymentを実行する際の権限
-
-resource "aws_iam_role" "ecs-codedeploy-role" {
-  name               = "ecs-codedeploy-role"
-  assume_role_policy = <<EOT
-{
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Sid" : "",
-          "Effect" : "Allow",
-          "Principal" : {
-            "Service" : "codedeploy.amazonaws.com"
-          },
-          "Action" : "sts:AssumeRole"
-        }
-      ]
-    }
-EOT
-}
-
-resource "aws_iam_role_policy_attachment" "AWSCodeDeployRoleForECS" {
-  policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS"
-  role       = aws_iam_role.ecs-codedeploy-role.id
-}
 
 resource "aws_iam_role" "ecs-backend-extension-role" {
   name = "ecsBackendTaskExecutionRole"
