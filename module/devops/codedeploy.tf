@@ -1,28 +1,5 @@
 #Code Deploy
 
-resource "aws_iam_role" "ecs-codedeploy-role" {
-  name               = "ecs-codedeploy-role"
-  assume_role_policy = <<EOT
-{
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Sid" : "",
-          "Effect" : "Allow",
-          "Principal" : {
-            "Service" : "codedeploy.amazonaws.com"
-          },
-          "Action" : "sts:AssumeRole"
-        }
-      ]
-    }
-EOT
-}
-resource "aws_codedeploy_app" "app-ecs-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service" {
-  compute_platform = "ECS"
-  name             = "AppECS-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service"
-}
-
 resource "aws_codedeploy_deployment_group" "dpg-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service" {
   depends_on = [
     aws_iam_role.ecs-codedeploy-role,
@@ -71,8 +48,4 @@ resource "aws_codedeploy_deployment_group" "dpg-sbcntr-ecs-backend-cluster-sbcnt
       }
     }
   }
-}
-resource "aws_iam_role_policy_attachment" "AWSCodeDeployRoleForECS" {
-  policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS"
-  role       = aws_iam_role.ecs-codedeploy-role.id
 }
