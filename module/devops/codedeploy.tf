@@ -1,5 +1,3 @@
-#Code Deploy
-
 resource "aws_codedeploy_deployment_group" "dpg-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service" {
   depends_on = [
     aws_iam_role.ecs-codedeploy-role,
