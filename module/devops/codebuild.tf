@@ -33,8 +33,6 @@ resource "aws_codebuild_project" "sbcntr-codebuild" {
     type  = "LOCAL"
     modes = ["LOCAL_DOCKER_LAYER_CACHE", "LOCAL_SOURCE_CACHE"]
   }
-
-
 }
 
 

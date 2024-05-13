@@ -509,8 +509,6 @@ resource "aws_cloudwatch_event_target" "codepipeline_sample_app" {
   role_arn = aws_iam_role.sbcntr-event-bridge-codepipeline-role.arn
 }
 
-
-
 resource "aws_iam_role" "sbcntr-ecsTaskRole" {
   name = "sbcntr-ecsTaskRole"
   assume_role_policy = jsonencode(
