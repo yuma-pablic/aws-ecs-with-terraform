@@ -31,8 +31,6 @@ resource "aws_iam_role" "sbcntr-cloud9-role" {
     ]
   })
 }
-
-
 resource "aws_iam_role_policy_attachment" "iam-atachement-sbcntr-cloud9-role-admin" {
   role       = aws_iam_role.sbcntr-cloud9-role.name
   policy_arn = aws_iam_policy.sbcntr-administrater.arn
