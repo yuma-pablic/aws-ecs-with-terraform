@@ -1,6 +1,15 @@
+resource "aws_ecs_cluster" "sbcntr-frontend-cluster" {
+  name               = "sbcntr-frontend-cluster"
+  capacity_providers = ["FARGATE"]
+  default_capacity_provider_strategy {
+    capacity_provider = "FARGATE"
+  }
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
+}
 
-
-#ECS フロンドエンド用タスク定義
 resource "aws_ecs_task_definition" "sbcntr-frontend-def" {
   depends_on               = [aws_alb.sbcntr-alb-frontend]
   family                   = "sbcntr-frontend-def"
@@ -51,19 +60,4 @@ resource "aws_ecs_task_definition" "sbcntr-frontend-def" {
 
     }
   ])
-}
-
-
-
-#ECS フロントエンド用クラスター
-resource "aws_ecs_cluster" "sbcntr-frontend-cluster" {
-  name               = "sbcntr-frontend-cluster"
-  capacity_providers = ["FARGATE"]
-  default_capacity_provider_strategy {
-    capacity_provider = "FARGATE"
-  }
-  setting {
-    name  = "containerInsights"
-    value = "enabled"
-  }
 }

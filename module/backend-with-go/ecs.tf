@@ -1,5 +1,4 @@
 
-# ECS Backend用クラスター
 resource "aws_ecs_cluster" "sbcntr-backend-cluster" {
   name               = "sbcntr-backend-cluster"
   capacity_providers = ["FARGATE"]
@@ -11,7 +10,6 @@ resource "aws_ecs_cluster" "sbcntr-backend-cluster" {
     value = "enabled"
   }
 }
-#ECS Backend用サービス
 resource "aws_ecs_service" "sbcntr-ecs-backend-service" {
   depends_on                         = [aws_lb_listener.sbcntr-lisner-blue, aws_lb_listener.sbcntr-lisner-green]
   name                               = "sbcntr-ecs-backend-service"
@@ -50,7 +48,6 @@ resource "aws_ecs_service" "sbcntr-ecs-backend-service" {
   }
 }
 
-#ECS Backend用タスク定義
 resource "aws_ecs_task_definition" "sbcntr-backend-def" {
   family                   = "sbcntr-backend-def"
   requires_compatibilities = ["FARGATE"]
