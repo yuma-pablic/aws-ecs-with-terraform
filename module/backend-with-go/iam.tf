@@ -63,31 +63,22 @@ resource "aws_iam_role" "sbcntr-ecsTaskRole" {
   )
 }
 
-
-
-
 resource "aws_iam_role_policy_attachment" "ecs-backend-extension-role-attachement" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
   role       = aws_iam_role.ecs-backend-extension-role.id
 }
-
+data "aws_iam_policy_document" "sbcntr-getting-secrets-policy_document" {
+  version = "2012-10-17"
+  statement {
+    sid       = "GetSecretForECS"
+    effect    = "Allow"
+    actions   = ["secretsmanager:GetSecretValue"]
+    resources = ["*"]
+  }
+}
 resource "aws_iam_policy" "sbcntr-getting-secrets-policy" {
-  name = "sbcntr-GettingSecretsPolicy"
-  policy = jsonencode(
-    {
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Sid" : "GetSecretForECS",
-          "Effect" : "Allow",
-          "Action" : [
-            "secretsmanager:GetSecretValue"
-          ],
-          "Resource" : ["*"]
-        }
-      ]
-    }
-  )
+  name   = "sbcntr-GettingSecretsPolicy"
+  policy = data.aws_iam_policy_document.sbcntr-getting-secrets-policy_document.json
 }
 resource "aws_iam_role_policy_attachment" "ecs-backend-extension-role-attachement-secrets" {
   policy_arn = aws_iam_policy.sbcntr-getting-secrets-policy.arn

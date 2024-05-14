@@ -1,6 +1,7 @@
 #vpcの名前だけ入れる
-module "dev-vpc" {
-  source = "../../module/vpc"
+module "dev-network" {
+  source = "../../module/network"
+  vpc_id = abs("dev")
 }
 
 module "dev-app" {
