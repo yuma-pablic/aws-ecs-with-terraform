@@ -168,16 +168,90 @@ resource "aws_iam_role" "ecs-codedeploy-role" {
     }
 EOT
 }
-resource "aws_codedeploy_app" "app-ecs-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service" {
-  compute_platform = "ECS"
-  name             = "AppECS-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service"
-}
+
 
 resource "aws_iam_role_policy_attachment" "AWSCodeDeployRoleForECS" {
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS"
   role       = aws_iam_role.ecs-codedeploy-role.id
 }
-
+data "aws_iam_policy_document" "sbcntr-pipeline-policy-document" {
+  version = "2012-10-17"
+  statement {
+    effect = "Allow"
+    actions = [
+      "codecommit:GetBranch",
+      "codecommit:GetCommit",
+      "codecommit:UploadArchive",
+      "codecommit:GetUploadArchiveStatus",
+      "codecommit:CancelUploadArchive",
+      "codecommit:ListRepositories",
+      "codecommit:ListBranches",
+      "codecommit:GetRepository",
+      "codecommit:GitPull",
+      "codecommit:GitPush"
+    ]
+    resources = [
+      "arn:aws:codecommit:ap-northeast-1:${data.aws_caller_identity.self.account_id}:sbcntr-backend"
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "codebuild:BatchGetBuilds",
+      "codebuild:StartBuild",
+      "codebuild:BatchGetProjects",
+      "codebuild:BatchGetReportGroups",
+      "codebuild:BatchGetReports",
+      "codebuild:CreateReport",
+      "codebuild:UpdateReport",
+      "codebuild:BatchPutTestCases",
+      "codebuild:BatchPutCodeCoverages"
+    ]
+    resources = [
+      "arn:aws:codebuild:ap-northeast-1:${data.aws_caller_identity.self.account_id}:project/sbcntr-codebuild"
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "codepipeline:StartPipelineExecution",
+      "codepipeline:GetPipeline",
+      "codepipeline:GetPipelineExecution",
+      "codepipeline:GetPipelineState",
+      "codepipeline:GetPipelineExecution"
+    ]
+    resources = [
+      "arn:aws:codepipeline:ap-northeast-1:${data.aws_caller_identity.self.account_id}:sbcntr-pipeline"
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "cloudformation:CreateChangeSet",
+      "cloudformation:DescribeChangeSet",
+      "cloudformation:ExecuteChangeSet",
+      "cloudformation:DeleteChangeSet",
+      "cloudformation:DescribeStacks",
+      "cloudformation:CreateStack",
+      "cloudformation:DeleteStack",
+      "cloudformation:UpdateStack",
+      "cloudformation:SetStackPolicy",
+      "cloudformation:ValidateTemplate"
+    ]
+    resources = [
+      "*"
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "iam:PassRole"
+    ]
+    resources = [
+      "*"
+    ]
+  }
+}
 resource "aws_iam_policy" "sbcntr-pipeline-policy" {
   name = "sbcntr-pipeline-policy"
   policy = jsonencode(
@@ -379,24 +453,21 @@ resource "aws_iam_role" "sbcntr-event-bridge-codepipeline-role" {
   )
 }
 
+data "aws_iam_policy_document" "sbcntr-event-bridge-codepipeline-policy-document" {
+  version = "2012-10-17"
+  statement {
+    effect = "Allow"
+    actions = [
+      "codepipeline:StartPipelineExecution"
+    ]
+    resources = [
+      "arn:aws:codepipeline:ap-northeast-1:${data.aws_caller_identity.self.account_id}:sbcntr-pipeline"
+    ]
+  }
+}
 resource "aws_iam_policy" "sbcntr-event-bridge-codepipeline-policy" {
-  name = "sbcntr-event-bridge-codepipeline-policy"
-  policy = jsonencode(
-    {
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "codepipeline:StartPipelineExecution"
-          ],
-          "Resource" : [
-            "arn:aws:codepipeline:ap-northeast-1:${data.aws_caller_identity.self.account_id}:sbcntr-pipeline"
-          ]
-        }
-      ]
-    }
-  )
+  name   = "sbcntr-event-bridge-codepipeline-policy"
+  policy = data.aws_iam_policy_document.sbcntr-event-bridge-codepipeline-policy-document.json
 }
 
 resource "aws_iam_role_policy_attachment" "sbcntr-event-bridge-codepipeline-attachement" {

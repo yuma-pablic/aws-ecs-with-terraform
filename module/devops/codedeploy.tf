@@ -1,3 +1,7 @@
+resource "aws_codedeploy_app" "app-ecs-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service" {
+  compute_platform = "ECS"
+  name             = "AppECS-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service"
+}
 resource "aws_codedeploy_deployment_group" "dpg-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service" {
   depends_on = [
     aws_iam_role.ecs-codedeploy-role,
