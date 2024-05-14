@@ -1,6 +1,3 @@
-
-data "aws_cloudwatch_event_source" "" {
-}
 resource "aws_cloudwatch_event_rule" "sbcntr-cw-ev" {
   name = "sbcntr-cw-ev"
 
