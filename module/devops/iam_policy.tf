@@ -348,3 +348,7 @@ data "aws_iam_policy_document" "sbcntr-event-bridge-codepipeline-policy-document
     ]
   }
 }
+
+data "aws_iam_policy" "AWSCodeDeployRoleForECS" {
+  arn = "arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS"
+}
