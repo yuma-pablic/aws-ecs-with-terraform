@@ -108,3 +108,7 @@ data "aws_iam_policy_document" "sbcntr-ecsTaskRole-policy_document" {
     }
   }
 }
+
+data "aws_iam_policy" "AmazonECSTaskExecutionRolePolicy" {
+  arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}

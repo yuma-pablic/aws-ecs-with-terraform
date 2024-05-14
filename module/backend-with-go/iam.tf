@@ -12,8 +12,8 @@ resource "aws_iam_role" "sbcntr-ecsTaskRole" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecs-backend-extension-role-attachement" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
   role       = aws_iam_role.ecs-backend-extension-role.id
+  policy_arn = data.aws_iam_policy.AmazonECSTaskExecutionRolePolicy.arn
 }
 
 resource "aws_iam_role" "ecs-backend-extension-role" {
