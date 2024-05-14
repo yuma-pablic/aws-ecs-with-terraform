@@ -28,3 +28,12 @@ resource "aws_iam_role_policy_attachment" "ecs-backend-extension-role-attachemen
   policy_arn = aws_iam_policy.sbcntr-getting-secrets-policy.arn
   role       = aws_iam_role.ecs-backend-extension-role.id
 }
+resource "aws_iam_policy" "sbcntr-accessing-ecr-repository-policy" {
+  name   = "sbcntr-AccessingECRRepositoryPolicy"
+  policy = data.aws_iam_policy_document.sbcntr-accessing-ecr-repository-policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "sbcntr-codebuild-attachement-ecr" {
+  role       = aws_iam_role.sbcntr-codebuild-role.id
+  policy_arn = aws_iam_policy.sbcntr-accessing-ecr-repository-policy.arn
+}
