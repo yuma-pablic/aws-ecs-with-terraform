@@ -176,257 +176,188 @@ data "aws_iam_policy_document" "sbcntr-pipeline-policy-document" {
   statement {
     effect = "Allow"
     actions = [
+      "codecommit:CancelUploadArchive",
       "codecommit:GetBranch",
       "codecommit:GetCommit",
-      "codecommit:UploadArchive",
-      "codecommit:GetUploadArchiveStatus",
-      "codecommit:CancelUploadArchive",
-      "codecommit:ListRepositories",
-      "codecommit:ListBranches",
       "codecommit:GetRepository",
-      "codecommit:GitPull",
-      "codecommit:GitPush"
+      "codecommit:GetUploadArchiveStatus",
+      "codecommit:UploadArchive"
     ]
-    resources = [
-      "arn:aws:codecommit:ap-northeast-1:${data.aws_caller_identity.self.account_id}:sbcntr-backend"
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "codedeploy:CreateDeployment",
+      "codedeploy:GetApplication",
+      "codedeploy:GetApplicationRevision",
+      "codedeploy:GetDeployment",
+      "codedeploy:GetDeploymentConfig",
+      "codedeploy:RegisterApplicationRevision"
     ]
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "codestar-connections:UseConnection"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "elasticbeanstalk:*",
+      "ec2:*",
+      "elasticloadbalancing:*",
+      "autoscaling:*",
+      "cloudwatch:*",
+      "s3:*",
+      "sns:*",
+      "cloudformation:*",
+      "rds:*",
+      "sqs:*",
+      "ecs:*"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "lambda:InvokeFunction",
+      "lambda:ListFunctions"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "opsworks:CreateDeployment",
+      "opsworks:DescribeApps",
+      "opsworks:DescribeCommands",
+      "opsworks:DescribeDeployments",
+      "opsworks:DescribeInstances",
+      "opsworks:DescribeStacks",
+      "opsworks:UpdateApp",
+      "opsworks:UpdateStack"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "opsworks:CreateDeployment",
+      "opsworks:DescribeApps",
+      "opsworks:DescribeCommands",
+      "opsworks:DescribeDeployments",
+      "opsworks:DescribeInstances",
+      "opsworks:DescribeStacks",
+      "opsworks:UpdateApp",
+      "opsworks:UpdateStack"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "cloudformation:CreateStack",
+      "cloudformation:DeleteStack",
+      "cloudformation:DescribeStacks",
+      "cloudformation:UpdateStack",
+      "cloudformation:CreateChangeSet",
+      "cloudformation:DeleteChangeSet",
+      "cloudformation:DescribeChangeSet",
+      "cloudformation:ExecuteChangeSet",
+      "cloudformation:SetStackPolicy",
+      "cloudformation:ValidateTemplate"
+    ]
+    resources = ["*"]
   }
   statement {
     effect = "Allow"
     actions = [
       "codebuild:BatchGetBuilds",
       "codebuild:StartBuild",
-      "codebuild:BatchGetProjects",
-      "codebuild:BatchGetReportGroups",
-      "codebuild:BatchGetReports",
-      "codebuild:CreateReport",
-      "codebuild:UpdateReport",
-      "codebuild:BatchPutTestCases",
-      "codebuild:BatchPutCodeCoverages"
+      "codebuild:BatchGetBuildBatches",
+      "codebuild:StartBuildBatch"
     ]
-    resources = [
-      "arn:aws:codebuild:ap-northeast-1:${data.aws_caller_identity.self.account_id}:project/sbcntr-codebuild"
-    ]
+    resources = ["*"]
   }
   statement {
     effect = "Allow"
     actions = [
-      "codepipeline:StartPipelineExecution",
-      "codepipeline:GetPipeline",
-      "codepipeline:GetPipelineExecution",
-      "codepipeline:GetPipelineState",
-      "codepipeline:GetPipelineExecution"
+      "devicefarm:ListProjects",
+      "devicefarm:ListDevicePools",
+      "devicefarm:GetRun",
+      "devicefarm:GetUpload",
+      "devicefarm:CreateUpload",
+      "devicefarm:ScheduleRun"
     ]
-    resources = [
-      "arn:aws:codepipeline:ap-northeast-1:${data.aws_caller_identity.self.account_id}:sbcntr-pipeline"
-    ]
+    resources = ["*"]
   }
   statement {
     effect = "Allow"
     actions = [
-      "cloudformation:CreateChangeSet",
-      "cloudformation:DescribeChangeSet",
-      "cloudformation:ExecuteChangeSet",
-      "cloudformation:DeleteChangeSet",
-      "cloudformation:DescribeStacks",
-      "cloudformation:CreateStack",
-      "cloudformation:DeleteStack",
-      "cloudformation:UpdateStack",
-      "cloudformation:SetStackPolicy",
+      "servicecatalog:ListProvisioningArtifacts",
+      "servicecatalog:CreateProvisioningArtifact",
+      "servicecatalog:DescribeProvisioningArtifact",
+      "servicecatalog:DeleteProvisioningArtifact",
+      "servicecatalog:UpdateProduct"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
       "cloudformation:ValidateTemplate"
     ]
-    resources = [
-      "*"
-    ]
+    resources = ["*"]
   }
   statement {
     effect = "Allow"
     actions = [
-      "iam:PassRole"
+      "ecr:DescribeImages"
     ]
-    resources = [
-      "*"
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "states:DescribeExecution",
+      "states:DescribeStateMachine",
+      "states:StartExecution"
     ]
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "appconfig:StartDeployment",
+      "appconfig:StopDeployment",
+      "appconfig:GetDeployment"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    actions   = ["iam:PassRole"]
+    resources = ["*"]
+    effect    = "Allow"
+
+    condition {
+      test     = "StringEqualsIfExists"
+      variable = "iam:PassedToService"
+      values = [
+        "cloudformation.amazonaws.com",
+        "elasticbeanstalk.amazonaws.com",
+        "ec2.amazonaws.com",
+        "ecs-tasks.amazonaws.com"
+      ]
+    }
   }
 }
-
 resource "aws_iam_policy" "sbcntr-pipeline-policy" {
-  name = "sbcntr-pipeline-policy"
-  policy = jsonencode(
-    {
-      "Statement" : [
-        {
-          "Action" : [
-            "iam:PassRole"
-          ],
-          "Resource" : "*",
-          "Effect" : "Allow",
-          "Condition" : {
-            "StringEqualsIfExists" : {
-              "iam:PassedToService" : [
-                "cloudformation.amazonaws.com",
-                "elasticbeanstalk.amazonaws.com",
-                "ec2.amazonaws.com",
-                "ecs-tasks.amazonaws.com"
-              ]
-            }
-          }
-        },
-        {
-          "Action" : [
-            "codecommit:CancelUploadArchive",
-            "codecommit:GetBranch",
-            "codecommit:GetCommit",
-            "codecommit:GetRepository",
-            "codecommit:GetUploadArchiveStatus",
-            "codecommit:UploadArchive"
-          ],
-          "Resource" : "*",
-          "Effect" : "Allow"
-        },
-        {
-          "Action" : [
-            "codedeploy:CreateDeployment",
-            "codedeploy:GetApplication",
-            "codedeploy:GetApplicationRevision",
-            "codedeploy:GetDeployment",
-            "codedeploy:GetDeploymentConfig",
-            "codedeploy:RegisterApplicationRevision"
-          ],
-          "Resource" : "*",
-          "Effect" : "Allow"
-        },
-        {
-          "Action" : [
-            "codestar-connections:UseConnection"
-          ],
-          "Resource" : "*",
-          "Effect" : "Allow"
-        },
-        {
-          "Action" : [
-            "elasticbeanstalk:*",
-            "ec2:*",
-            "elasticloadbalancing:*",
-            "autoscaling:*",
-            "cloudwatch:*",
-            "s3:*",
-            "sns:*",
-            "cloudformation:*",
-            "rds:*",
-            "sqs:*",
-            "ecs:*"
-          ],
-          "Resource" : "*",
-          "Effect" : "Allow"
-        },
-        {
-          "Action" : [
-            "lambda:InvokeFunction",
-            "lambda:ListFunctions"
-          ],
-          "Resource" : "*",
-          "Effect" : "Allow"
-        },
-        {
-          "Action" : [
-            "opsworks:CreateDeployment",
-            "opsworks:DescribeApps",
-            "opsworks:DescribeCommands",
-            "opsworks:DescribeDeployments",
-            "opsworks:DescribeInstances",
-            "opsworks:DescribeStacks",
-            "opsworks:UpdateApp",
-            "opsworks:UpdateStack"
-          ],
-          "Resource" : "*",
-          "Effect" : "Allow"
-        },
-        {
-          "Action" : [
-            "cloudformation:CreateStack",
-            "cloudformation:DeleteStack",
-            "cloudformation:DescribeStacks",
-            "cloudformation:UpdateStack",
-            "cloudformation:CreateChangeSet",
-            "cloudformation:DeleteChangeSet",
-            "cloudformation:DescribeChangeSet",
-            "cloudformation:ExecuteChangeSet",
-            "cloudformation:SetStackPolicy",
-            "cloudformation:ValidateTemplate"
-          ],
-          "Resource" : "*",
-          "Effect" : "Allow"
-        },
-        {
-          "Action" : [
-            "codebuild:BatchGetBuilds",
-            "codebuild:StartBuild",
-            "codebuild:BatchGetBuildBatches",
-            "codebuild:StartBuildBatch"
-          ],
-          "Resource" : "*",
-          "Effect" : "Allow"
-        },
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "devicefarm:ListProjects",
-            "devicefarm:ListDevicePools",
-            "devicefarm:GetRun",
-            "devicefarm:GetUpload",
-            "devicefarm:CreateUpload",
-            "devicefarm:ScheduleRun"
-          ],
-          "Resource" : "*"
-        },
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "servicecatalog:ListProvisioningArtifacts",
-            "servicecatalog:CreateProvisioningArtifact",
-            "servicecatalog:DescribeProvisioningArtifact",
-            "servicecatalog:DeleteProvisioningArtifact",
-            "servicecatalog:UpdateProduct"
-          ],
-          "Resource" : "*"
-        },
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "cloudformation:ValidateTemplate"
-          ],
-          "Resource" : "*"
-        },
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "ecr:DescribeImages"
-          ],
-          "Resource" : "*"
-        },
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "states:DescribeExecution",
-            "states:DescribeStateMachine",
-            "states:StartExecution"
-          ],
-          "Resource" : "*"
-        },
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "appconfig:StartDeployment",
-            "appconfig:StopDeployment",
-            "appconfig:GetDeployment"
-          ],
-          "Resource" : "*"
-        }
-      ],
-      "Version" : "2012-10-17"
-    }
-  )
+  name   = "sbcntr-pipeline-policy"
+  policy = data.aws_iam_policy_document.sbcntr-pipeline-policy-document.json
 }
 resource "aws_iam_role_policy_attachment" "sbcntr-piple-policy-attachement" {
   role       = aws_iam_role.sbcntr-pipeline-role.id
@@ -445,7 +376,6 @@ data "aws_iam_policy_document" "sbcntr-event-bridge-codepipeline-role-policy_doc
       identifiers = ["events.amazonaws.com"]
     }
   }
-
 }
 resource "aws_iam_role" "sbcntr-event-bridge-codepipeline-role" {
   name               = "sbcntr-event-bridge-codepipeline-role"
