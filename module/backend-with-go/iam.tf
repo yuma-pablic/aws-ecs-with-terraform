@@ -72,6 +72,22 @@ resource "aws_iam_policy" "sbcntr-getting-secrets-policy" {
   name   = "sbcntr-GettingSecretsPolicy"
   policy = data.aws_iam_policy_document.sbcntr-getting-secrets-policy_document.json
 }
+data "aws_iam_policy_document" "sbcntr-ecsTaskRole-policy_document" {
+  version = "2008-10-17"
+  statement {
+    sid     = ""
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+}
+resource "aws_iam_role" "ecs-backend-extension-role" {
+  name               = "ecsBackendTaskExecutionRole"
+  assume_role_policy = data.aws_iam_policy_document.sbcntr-ecsTaskRole-policy_document.json
+}
 resource "aws_iam_role_policy_attachment" "ecs-backend-extension-role-attachement-secrets" {
   policy_arn = aws_iam_policy.sbcntr-getting-secrets-policy.arn
   role       = aws_iam_role.ecs-backend-extension-role.id
