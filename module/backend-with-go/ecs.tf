@@ -1,13 +1,16 @@
 
 resource "aws_ecs_cluster" "sbcntr-backend-cluster" {
-  name               = "sbcntr-backend-cluster"
-  capacity_providers = ["FARGATE"]
-  default_capacity_provider_strategy {
-    capacity_provider = "FARGATE"
-  }
+  name = "sbcntr-backend-cluster"
   setting {
     name  = "containerInsights"
     value = "enabled"
+  }
+}
+resource "aws_ecs_cluster_capacity_providers" "sbcntr-backend-cluster-capacity-providers" {
+  cluster_name       = aws_ecs_cluster.sbcntr-backend-cluster.name
+  capacity_providers = ["FARGATE"]
+  default_capacity_provider_strategy {
+    capacity_provider = "FARGATE"
   }
 }
 resource "aws_ecs_service" "sbcntr-ecs-backend-service" {
