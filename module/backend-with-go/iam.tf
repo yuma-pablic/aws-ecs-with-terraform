@@ -38,25 +38,21 @@ resource "aws_iam_policy" "sbcntr-AccessingLogDestionation" {
   name   = "sbcntr-AccessingLogDestionation"
   policy = data.aws_iam_policy_document.sbcntr-AccessingLogDestionation.json
 }
-resource "aws_iam_role" "sbcntr-ecsTaskRole" {
-  name = "sbcntr-ecsTaskRole"
-  assume_role_policy = jsonencode(
-    {
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Sid" : "",
-          "Effect" : "Allow",
-          "Principal" : {
-            "Service" : [
-              "ecs-tasks.amazonaws.com"
-            ]
-          },
-          "Action" : "sts:AssumeRole"
-        }
-      ]
+data "aws_iam_policy_document" "sbcntr-ecsTaskRole-policy_document" {
+  version = "2012-10-17"
+  statement {
+    sid     = ""
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
     }
-  )
+  }
+}
+resource "aws_iam_role" "sbcntr-ecsTaskRole" {
+  name               = "sbcntr-ecsTaskRole"
+  assume_role_policy = data.aws_iam_policy_document.sbcntr-ecsTaskRole-policy_document.json
 }
 
 resource "aws_iam_role_policy_attachment" "ecs-backend-extension-role-attachement" {

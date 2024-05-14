@@ -76,6 +76,7 @@ resource "aws_iam_policy" "sbcntr-codebuild-policy" {
   description = "Policy used in trust relationship with CodeBuild"
   policy      = data.aws_iam_policy_document.name.json
 }
+
 resource "aws_iam_role" "sbcntr-pipeline-role" {
   name = "sbcntr-pipeline-role"
   assume_role_policy = jsonencode(
