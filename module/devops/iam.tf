@@ -21,66 +21,60 @@ resource "aws_iam_role_policy_attachment" "sbcntr-codebuild-attachement-role" {
   policy_arn = aws_iam_policy.sbcntr-accessing-codecommit-policy.arn
 }
 
-resource "aws_" "name" {
-
+data "aws_iam_policy_document" "name" {
+  version = "2012-10-17"
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.self.account_id}:log-group:/aws/codebuild/sbcntr-codebuild",
+      "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.self.account_id}:log-group:/aws/codebuild/sbcntr-codebuild:*"
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:GetBucketAcl",
+      "s3:GetBucketLocation"
+    ]
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.sbcntr-codepipline-bucket.id}*"
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "codecommit:GitPull"
+    ]
+    resources = [
+      "arn:aws:codecommit:ap-northeast-1:${data.aws_caller_identity.self.account_id}:sbcntr-backend"
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "codebuild:CreateReportGroup",
+      "codebuild:CreateReport",
+      "codebuild:UpdateReport",
+      "codebuild:BatchPutTestCases",
+      "codebuild:BatchPutCodeCoverages"
+    ]
+    resources = [
+      "arn:aws:codebuild:ap-northeast-1:${data.aws_caller_identity.self.account_id}:report-group/sbcntr-codebuild-*"
+    ]
+  }
 }
 resource "aws_iam_policy" "sbcntr-codebuild-policy" {
   name        = "sbcntr-codebuild-policy"
   description = "Policy used in trust relationship with CodeBuild"
-  policy = jsonencode(
-    {
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Effect" : "Allow",
-          "Resource" : [
-            "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.self.account_id}:log-group:/aws/codebuild/sbcntr-codebuild",
-            "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.self.account_id}:log-group:/aws/codebuild/sbcntr-codebuild:*"
-          ],
-          "Action" : [
-            "logs:CreateLogGroup",
-            "logs:CreateLogStream",
-            "logs:PutLogEvents"
-          ]
-        },
-        {
-          "Effect" : "Allow",
-          "Resource" : [
-            "arn:aws:s3:::${aws_s3_bucket.sbcntr-codepipline-bucket.id}*"
-          ],
-          "Action" : [
-            "s3:PutObject",
-            "s3:GetObject",
-            "s3:GetObjectVersion",
-            "s3:GetBucketAcl",
-            "s3:GetBucketLocation"
-          ]
-        },
-        {
-          "Effect" : "Allow",
-          "Resource" : [
-            "arn:aws:codecommit:ap-northeast-1:${data.aws_caller_identity.self.account_id}:sbcntr-backend"
-          ],
-          "Action" : [
-            "codecommit:GitPull"
-          ]
-        },
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "codebuild:CreateReportGroup",
-            "codebuild:CreateReport",
-            "codebuild:UpdateReport",
-            "codebuild:BatchPutTestCases",
-            "codebuild:BatchPutCodeCoverages"
-          ],
-          "Resource" : [
-            "arn:aws:codebuild:ap-northeast-1:${data.aws_caller_identity.self.account_id}:report-group/sbcntr-codebuild-*"
-          ]
-        }
-      ]
-    }
-  )
+  policy      = data.aws_iam_policy_document.name.json
 }
 resource "aws_iam_role" "sbcntr-pipeline-role" {
   name = "sbcntr-pipeline-role"
