@@ -10,3 +10,7 @@ data "aws_iam_policy_document" "ecs-frontend-extension-role-assume_role_policy" 
     }
   }
 }
+
+data "aws_iam_policy" "AmazonECSTaskExecutionRolePolicy" {
+  arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}

@@ -4,7 +4,7 @@ resource "aws_iam_role" "ecs-frontend-extension-role" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecs-frontend-extension-role-attachement" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  policy_arn = data.aws_iam_policy.AmazonECSTaskExecutionRolePolicy.arn
   role       = aws_iam_role.ecs-frontend-extension-role.id
 }
 
