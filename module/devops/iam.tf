@@ -1,20 +1,20 @@
 
-resource "aws_iam_role" "sbcntr-codebuild-role" {
-  name = "sbcntr-codebuild-role"
-  assume_role_policy = jsonencode(
-    {
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Effect" : "Allow",
-          "Principal" : {
-            "Service" : "codebuild.amazonaws.com"
-          },
-          "Action" : "sts:AssumeRole"
-        }
-      ]
+data "aws_iam_policy_document" "sbcntr-codebuild-role-document" {
+  version = "2012-10-17"
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole"
+    ]
+    principals {
+      type        = "Service"
+      identifiers = ["codebuild.amazonaws.com"]
     }
-  )
+  }
+}
+resource "aws_iam_role" "sbcntr-codebuild-role" {
+  name               = "sbcntr-codebuild-role"
+  assume_role_policy = data.aws_iam_policy_document.sbcntr-codebuild-role-document.json
 }
 resource "aws_iam_role_policy_attachment" "sbcntr-codebuild-attachement-role" {
   role       = aws_iam_role.sbcntr-codebuild-role.id
@@ -76,23 +76,20 @@ resource "aws_iam_policy" "sbcntr-codebuild-policy" {
   description = "Policy used in trust relationship with CodeBuild"
   policy      = data.aws_iam_policy_document.name.json
 }
-
-resource "aws_iam_role" "sbcntr-pipeline-role" {
-  name = "sbcntr-pipeline-role"
-  assume_role_policy = jsonencode(
-    {
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Effect" : "Allow",
-          "Principal" : {
-            "Service" : "codepipeline.amazonaws.com"
-          },
-          "Action" : "sts:AssumeRole"
-        }
-      ]
+data "aws_iam_policy_document" "sbcntr-pipeline-role-policy-document" {
+  version = "2012-10-17"
+  statement {
+    effect  = "Allow"
+    actions = "sts:AssumeRole"
+    principals {
+      type        = "Service"
+      identifiers = ["codepipeline.amazonaws.com"]
     }
-  )
+  }
+}
+resource "aws_iam_role" "sbcntr-pipeline-role" {
+  name               = "sbcntr-pipeline-role"
+  assume_role_policy = data.aws_iam_policy_document.sbcntr-pipeline-role-policy-document.json
 }
 resource "aws_iam_role_policy_attachment" "sbcntr-codebuild-attachement" {
   role       = aws_iam_role.sbcntr-codebuild-role.id
@@ -151,23 +148,22 @@ resource "aws_iam_policy" "sbcntr-accessing-codecommit-policy" {
     }
   )
 }
+data "aws_iam_policy_document" "ecs-codedeploy-role-policy-document" {
+  version = "2012-10-17"
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole"
+    ]
+    principals {
+      type        = "Service"
+      identifiers = ["codedeploy.amazonaws.com"]
+    }
+  }
+}
 resource "aws_iam_role" "ecs-codedeploy-role" {
   name               = "ecs-codedeploy-role"
-  assume_role_policy = <<EOT
-{
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Sid" : "",
-          "Effect" : "Allow",
-          "Principal" : {
-            "Service" : "codedeploy.amazonaws.com"
-          },
-          "Action" : "sts:AssumeRole"
-        }
-      ]
-    }
-EOT
+  assume_role_policy = data.aws_iam_policy_document.ecs-codedeploy-role-policy-document.json
 }
 
 
@@ -436,22 +432,23 @@ resource "aws_iam_role_policy_attachment" "sbcntr-piple-policy-attachement" {
   policy_arn = aws_iam_policy.sbcntr-pipeline-policy.arn
 }
 
-resource "aws_iam_role" "sbcntr-event-bridge-codepipeline-role" {
-  name = "sbcntr-event-bridge-codepipeline-role"
-  assume_role_policy = jsonencode(
-    {
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Effect" : "Allow",
-          "Principal" : {
-            "Service" : "events.amazonaws.com"
-          },
-          "Action" : "sts:AssumeRole"
-        }
-      ]
+data "aws_iam_policy_document" "sbcntr-event-bridge-codepipeline-role-policy_document" {
+  version = "2012-10-17"
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole"
+    ]
+    principals {
+      type        = "Service"
+      identifiers = ["events.amazonaws.com"]
     }
-  )
+  }
+
+}
+resource "aws_iam_role" "sbcntr-event-bridge-codepipeline-role" {
+  name               = "sbcntr-event-bridge-codepipeline-role"
+  assume_role_policy = data.aws_iam_policy_document.sbcntr-event-bridge-codepipeline-role-policy_document.json
 }
 
 data "aws_iam_policy_document" "sbcntr-event-bridge-codepipeline-policy-document" {
