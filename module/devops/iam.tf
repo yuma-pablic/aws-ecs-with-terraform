@@ -249,6 +249,7 @@ data "aws_iam_policy_document" "sbcntr-pipeline-policy-document" {
     ]
   }
 }
+
 resource "aws_iam_policy" "sbcntr-pipeline-policy" {
   name = "sbcntr-pipeline-policy"
   policy = jsonencode(
