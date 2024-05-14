@@ -21,6 +21,9 @@ resource "aws_iam_role_policy_attachment" "sbcntr-codebuild-attachement-role" {
   policy_arn = aws_iam_policy.sbcntr-accessing-codecommit-policy.arn
 }
 
+resource "aws_" "name" {
+
+}
 resource "aws_iam_policy" "sbcntr-codebuild-policy" {
   name        = "sbcntr-codebuild-policy"
   description = "Policy used in trust relationship with CodeBuild"
