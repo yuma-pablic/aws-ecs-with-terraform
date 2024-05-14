@@ -96,57 +96,57 @@ resource "aws_iam_role_policy_attachment" "sbcntr-codebuild-attachement" {
   policy_arn = aws_iam_policy.sbcntr-codebuild-policy.arn
 }
 
+data "aws_iam_policy_document" "sbcntr-accessing-codecommit-policy-document" {
+  version = "2012-10-17"
+  statement {
+    sid    = "ListImagesInRepository"
+    effect = "Allow"
+    actions = [
+      "ecr:ListImages"
+    ]
+    resources = [
+      "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-backend",
+      "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-frontend",
+      "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-base"
+    ]
+  }
+  statement {
+    sid    = "GetAuthorizationToken"
+    effect = "Allow"
+    actions = [
+      "ecr:GetAuthorizationToken"
+    ]
+    resources = [
+      "*"
+    ]
+  }
+  statement {
+    sid    = "ManageRepositoryContents"
+    effect = "Allow"
+    actions = [
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:GetRepositoryPolicy",
+      "ecr:DescribeRepositories",
+      "ecr:ListImages",
+      "ecr:DescribeImages",
+      "ecr:BatchGetImage",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload",
+      "ecr:PutImage"
+    ]
+    resources = [
+      "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-backend",
+      "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-frontend",
+      "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-base"
+    ]
+  }
+}
+
 resource "aws_iam_policy" "sbcntr-accessing-codecommit-policy" {
-  name = "sbcntr-AccessingCodeCommitPolicy"
-  policy = jsonencode(
-    {
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Sid" : "ListImagesInRepository",
-          "Effect" : "Allow",
-          "Action" : [
-            "ecr:ListImages"
-          ],
-          "Resource" : [
-            "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-backend",
-            "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-frontend",
-            "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-base"
-          ]
-        },
-        {
-          "Sid" : "GetAuthorizationToken",
-          "Effect" : "Allow",
-          "Action" : [
-            "ecr:GetAuthorizationToken"
-          ],
-          "Resource" : "*"
-        },
-        {
-          "Sid" : "ManageRepositoryContents",
-          "Effect" : "Allow",
-          "Action" : [
-            "ecr:BatchCheckLayerAvailability",
-            "ecr:GetDownloadUrlForLayer",
-            "ecr:GetRepositoryPolicy",
-            "ecr:DescribeRepositories",
-            "ecr:ListImages",
-            "ecr:DescribeImages",
-            "ecr:BatchGetImage",
-            "ecr:InitiateLayerUpload",
-            "ecr:UploadLayerPart",
-            "ecr:CompleteLayerUpload",
-            "ecr:PutImage"
-          ],
-          "Resource" : [
-            "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-backend",
-            "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-frontend",
-            "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-base"
-          ]
-        }
-      ]
-    }
-  )
+  name   = "sbcntr-AccessingCodeCommitPolicy"
+  policy = data.aws_iam_policy_document.sbcntr-accessing-codecommit-policy-document.json
 }
 data "aws_iam_policy_document" "ecs-codedeploy-role-policy-document" {
   version = "2012-10-17"
