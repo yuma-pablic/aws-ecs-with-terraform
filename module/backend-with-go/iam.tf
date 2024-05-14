@@ -3,44 +3,40 @@ resource "aws_iam_role_policy_attachment" "sbcntr-task-role-attachement" {
   role       = aws_iam_role.sbcntr-ecsTaskRole.id
   policy_arn = aws_iam_policy.sbcntr-AccessingLogDestionation.arn
 }
-
+data "aws_iam_policy_document" "sbcntr-AccessingLogDestionation" {
+  version = "2012-10-17"
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:AbortMultipartUpload",
+      "s3:GetBucketLocation",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:ListBucketMultipartUploads",
+      "s3:PutObject"
+    ]
+    resources = ["arn:aws:s3:::${aws_s3_bucket.sbcntr-account-id.id}", "arn:aws:s3:::${aws_s3_bucket.sbcntr-account-id.id}/*"]
+  }
+  statement {
+    effect    = "Allow"
+    actions   = ["kms:Decrypt", "kms:GenerateDataKey"]
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+      "logs:PutLogEvents"
+    ]
+    resources = []
+  }
+}
 resource "aws_iam_policy" "sbcntr-AccessingLogDestionation" {
-  name = "sbcntr-AccessingLogDestionation"
-  policy = jsonencode(
-    {
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "s3:AbortMultipartUpload",
-            "s3:GetBucketLocation",
-            "s3:GetObject",
-            "s3:ListBucket",
-            "s3:ListBucketMultipartUploads",
-            "s3:PutObject"
-          ],
-          "Resource" : ["arn:aws:s3:::${aws_s3_bucket.sbcntr-account-id.id}", "arn:aws:s3:::${aws_s3_bucket.sbcntr-account-id.id}/*"]
-        },
-        {
-          "Effect" : "Allow",
-          "Action" : ["kms:Decrypt", "kms:GenerateDataKey"],
-          "Resource" : ["*"]
-        },
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "logs:CreateLogGroup",
-            "logs:CreateLogStream",
-            "logs:DescribeLogGroups",
-            "logs:DescribeLogStreams",
-            "logs:PutLogEvents"
-          ],
-          "Resource" : ["*"]
-        }
-      ]
-    }
-  )
+  name   = "sbcntr-AccessingLogDestionation"
+  policy = data.aws_iam_policy_document.sbcntr-AccessingLogDestionation.json
 }
 resource "aws_iam_role" "sbcntr-ecsTaskRole" {
   name = "sbcntr-ecsTaskRole"
