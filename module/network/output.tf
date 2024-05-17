@@ -23,3 +23,15 @@ output "subnet-private-egress-1a-id" {
 output "subnet-private-egress-1c-id" {
   value = aws_subnet.sbcntr-subnet-private-egress-1c.id
 }
+
+output "aws_lb_target_group.sbcntr-tg-blue.name" {
+  value = aws_lb_target_group.sbcntr-tg-blue.name
+}
+
+output "aws_lb_target_group.sbcntr-tg-green.name" {
+  value = aws_lb_target_group.sbcntr-tg-green.name
+}
+
+output "sbcntr-alb-front-arn" {
+  value = aws_alb.sbcntr-alb-frontend.arn
+}

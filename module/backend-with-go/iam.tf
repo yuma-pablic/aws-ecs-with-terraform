@@ -34,6 +34,6 @@ resource "aws_iam_policy" "sbcntr-accessing-ecr-repository-policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "sbcntr-codebuild-attachement-ecr" {
-  role       = aws_iam_role.sbcntr-codebuild-role.id
+  role       = module.devops.aws_iam_role.sbcntr-codebuild-role.id
   policy_arn = aws_iam_policy.sbcntr-accessing-ecr-repository-policy.arn
 }

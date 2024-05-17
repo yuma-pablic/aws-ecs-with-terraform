@@ -33,8 +33,8 @@ resource "aws_codedeploy_deployment_group" "dpg-sbcntr-ecs-backend-cluster-sbcnt
   }
 
   ecs_service {
-    cluster_name = aws_ecs_cluster.sbcntr-backend-cluster.name
-    service_name = aws_ecs_service.sbcntr-ecs-backend-service.name
+    cluster_name = module.aws_ecs_cluster.sbcntr-backend-cluster-name
+    service_name = module.aws_ecs_service.sbcntr-ecs-backend-service-name
   }
 
   load_balancer_info {
@@ -43,10 +43,10 @@ resource "aws_codedeploy_deployment_group" "dpg-sbcntr-ecs-backend-cluster-sbcnt
         listener_arns = [aws_lb_listener.sbcntr-lisner-blue.arn]
       }
       target_group {
-        name = aws_lb_target_group.sbcntr-tg-blue.name
+        name = module.aws_lb_target_group.sbcntr-tg-blue.name
       }
       target_group {
-        name = aws_lb_target_group.sbcntr-tg-green.name
+        name = module.aws_lb_target_group.sbcntr-tg-green.name
       }
     }
   }
