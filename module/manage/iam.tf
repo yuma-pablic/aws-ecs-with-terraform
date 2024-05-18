@@ -16,5 +16,5 @@ resource "aws_iam_role_policy_attachment" "cloud9" {
 
 resource "aws_iam_role_policy_attachment" "cloud9" {
   role       = aws_iam_role.cloud9.name
-  policy_arn = aws_iam_policy.ecr-repository-policy.arn
+  policy_arn = aws_iam_policy.ecr.arn
 }
