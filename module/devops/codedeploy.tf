@@ -33,7 +33,7 @@ resource "aws_codedeploy_deployment_group" "dpg-sbcntr-ecs-backend-cluster-sbcnt
   }
 
   ecs_service {
-    cluster_name = module.aws_ecs_cluster.sbcntr-backend-cluster-name
+    cluster_name = module.aws_ecs_cluster.sbcntr-backend-cluster-name.name
     service_name = module.aws_ecs_service.sbcntr-ecs-backend-service-name
   }
 

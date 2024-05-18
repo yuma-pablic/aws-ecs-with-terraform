@@ -1,22 +1,22 @@
 
-resource "aws_ecs_cluster" "sbcntr-backend-cluster" {
+resource "aws_ecs_cluster" "sbcntr_backend" {
   name = "sbcntr-backend-cluster"
   setting {
     name  = "containerInsights"
     value = "enabled"
   }
 }
-resource "aws_ecs_cluster_capacity_providers" "sbcntr-backend-cluster-capacity-providers" {
-  cluster_name       = aws_ecs_cluster.sbcntr-backend-cluster.name
+resource "aws_ecs_cluster_capacity_providers" "sbcntr_backend" {
+  cluster_name       = aws_ecs_cluster.sbcntr_backend.name
   capacity_providers = ["FARGATE"]
   default_capacity_provider_strategy {
     capacity_provider = "FARGATE"
   }
 }
-resource "aws_ecs_service" "sbcntr-ecs-backend-service" {
+resource "aws_ecs_service" "sbcntr_backend" {
   depends_on                         = [aws_lb_listener.sbcntr-lisner-blue, aws_lb_listener.sbcntr-lisner-green]
   name                               = "sbcntr-ecs-backend-service"
-  cluster                            = aws_ecs_cluster.sbcntr-backend-cluster.id
+  cluster                            = aws_ecs_cluster.sbcntr_backend.id
   platform_version                   = "LATEST"
   task_definition                    = aws_ecs_task_definition.sbcntr-backend-def.arn
   desired_count                      = 2
