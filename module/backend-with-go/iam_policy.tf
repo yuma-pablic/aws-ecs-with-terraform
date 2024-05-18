@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "sbcntr-accessing-ecr-repository-policy" {
+data "aws_iam_policy_document" "sbcntr_ecr" {
   version = "2012-10-17"
   statement {
     sid    = "ListImagesInRepository"
@@ -41,7 +41,7 @@ data "aws_iam_policy_document" "sbcntr-accessing-ecr-repository-policy" {
     ]
   }
 }
-data "aws_iam_policy_document" "sbcntr-AccessingLogDestionation" {
+data "aws_iam_policy_document" "sbcntr_log_dst" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -73,7 +73,7 @@ data "aws_iam_policy_document" "sbcntr-AccessingLogDestionation" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr-ecsTaskRole-policy_document" {
+data "aws_iam_policy_document" "sbcntr_ecs_task_role" {
   version = "2012-10-17"
   statement {
     sid     = ""
@@ -86,7 +86,7 @@ data "aws_iam_policy_document" "sbcntr-ecsTaskRole-policy_document" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr-getting-secrets-policy_document" {
+data "aws_iam_policy_document" "sbcntr_getting_secrets" {
   version = "2012-10-17"
   statement {
     sid       = "GetSecretForECS"
@@ -96,7 +96,7 @@ data "aws_iam_policy_document" "sbcntr-getting-secrets-policy_document" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr-ecsTaskRole-policy_document" {
+data "aws_iam_policy_document" "sbcntr_ecs_task_role" {
   version = "2008-10-17"
   statement {
     sid     = ""
