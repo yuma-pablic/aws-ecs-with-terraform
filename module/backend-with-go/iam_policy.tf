@@ -41,7 +41,7 @@ data "aws_iam_policy_document" "ecr" {
     ]
   }
 }
-data "aws_iam_policy_document" "sbcntr_log_dst" {
+data "aws_iam_policy_document" "log_dst" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -109,6 +109,6 @@ data "aws_iam_policy_document" "ecs_task_role" {
   }
 }
 
-data "aws_iam_policy" "AmazonECSTaskExecutionRolePolicy" {
+data "aws_iam_policy" "ecs_task_execution_role" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }

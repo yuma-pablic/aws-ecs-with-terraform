@@ -1,23 +1,23 @@
-resource "aws_iam_policy" "sbcntr-AccessingLogDestionation" {
-  name   = "sbcntr-AccessingLogDestionation"
+resource "aws_iam_policy" "log_destionation" {
+  name   = "${var.env}-${var.service}-accessing-log-destionation"
   policy = data.aws_iam_policy_document.sbcntr-AccessingLogDestionation.json
 }
 resource "aws_iam_role_policy_attachment" "task_role" {
-  role       = aws_iam_role.sbcntr-ecsTaskRole.id
-  policy_arn = aws_iam_policy.sbcntr-AccessingLogDestionation.arn
+  role       = aws_iam_role.ecsTaskRole.id
+  policy_arn = aws_iam_policy.log_destionation.arn
 }
 resource "aws_iam_role" "ecsTaskRole" {
   name               = "sbcntr-ecsTaskRole"
   assume_role_policy = data.aws_iam_policy_document.sbcntr-ecsTaskRole-policy_document.json
 }
 
-resource "aws_iam_role_policy_attachment" "ecs-backend-extension-role-attachement" {
-  role       = aws_iam_role.ecs-backend-extension-role.id
+resource "aws_iam_role_policy_attachment" "ecs_backend_extension" {
+  role       = aws_iam_role.ecs_backend_extension_role.id
   policy_arn = data.aws_iam_policy.AmazonECSTaskExecutionRolePolicy.arn
 }
 
 resource "aws_iam_role" "ecs_backend_extension" {
-  name               = "ecsBackendTaskExecutionRole"
+  name               = "${var.env}-${var.service}-ecs-backend-task-execution"
   assume_role_policy = data.aws_iam_policy_document.sbcntr-ecsTaskRole-policy_document.json
 }
 resource "aws_iam_policy" "secrets" {
@@ -25,8 +25,8 @@ resource "aws_iam_policy" "secrets" {
   policy = data.aws_iam_policy_document.sbcntr-getting-secrets-policy_document.json
 }
 resource "aws_iam_role_policy_attachment" "ecs_backend_extension_role_attachement_secrets" {
-  policy_arn = aws_iam_policy.sbcntr-getting-secrets-policy.arn
-  role       = aws_iam_role.ecs-backend-extension-role.id
+  policy_arn = aws_iam_policy.secrets.arn
+  role       = aws_iam_role.ecs_backend_extension.id
 }
 resource "aws_iam_policy" "ecr" {
   name   = "sbcntr-AccessingECRRepositoryPolicy"
@@ -35,5 +35,5 @@ resource "aws_iam_policy" "ecr" {
 
 resource "aws_iam_role_policy_attachment" "codebuild_ecr" {
   role       = module.devops.aws_iam_role.sbcntr-codebuild-role.id
-  policy_arn = aws_iam_policy.sbcntr-accessing-ecr-repository-policy.arn
+  policy_arn = aws_iam_policy.ecr.arn
 }
