@@ -141,6 +141,7 @@ resource "aws_security_group_rule" "egress_v6" {
   protocol          = "tcp"
   to_port           = 80
   security_group_id = aws_security_group.ingress.id
+
 }
 
 # 管理用サーバ向けのセキュリティグループの生成
@@ -171,7 +172,7 @@ resource "aws_security_group" "backend" {
   description = "Security Group of backend app"
   name        = "container"
   tags = {
-    "Name" = "${var.env}-${var.service}-sg-container"
+    "Name" = "${var.env}-${var.service}-sg-backend-container"
   }
 }
 
@@ -215,7 +216,7 @@ resource "aws_security_group" "internal" {
   description = "Security group for internal load balancer"
   name        = "internal"
   tags = {
-    "Name" = "sbcntr-sg-internal"
+    "Name" = "${var.env}-${var.service}-sg-internal"
   }
 }
 
@@ -237,7 +238,7 @@ resource "aws_security_group" "vpce" {
   description = "Security Group of VPC Endpoint"
   vpc_id      = var.vpc_id
   tags = {
-    "Name" = "sbcntr-sg-vpce"
+    "Name" = "${var.env}-${var.service}-sg-vpce"
   }
 }
 
@@ -254,19 +255,19 @@ resource "aws_security_group_rule" "vpce_egress" {
 }
 
 ## Internet LB -> Front Container
-resource "aws_security_group_rule" "frontcontainer_ingress" {
+resource "aws_security_group_rule" "front_container_ingress" {
   type                     = "ingress"
   description              = "HTTP for Ingress"
   from_port                = 80
   source_security_group_id = aws_security_group.ingress.id
-  security_group_id        = aws_security_group.container.id
+  security_group_id        = aws_security_group.front_container.id
   protocol                 = "tcp"
   to_port                  = 80
 }
 
 
 ## Front Container -> Internal LB
-resource "aws_security_group_rule" "ingress_from_frontcontainer" {
+resource "aws_security_group_rule" "ingress_from_front_container" {
   type                     = "ingress"
   description              = "HTTP for front container"
   from_port                = 80
@@ -277,7 +278,7 @@ resource "aws_security_group_rule" "ingress_from_frontcontainer" {
 }
 
 ## Internal LB -> Back Container
-resource "aws_security_group_rule" "internal_from_backcontainer" {
+resource "aws_security_group_rule" "internal_from_back_container" {
   type                     = "ingress"
   description              = "HTTP for internal lb"
   from_port                = 80
@@ -336,7 +337,7 @@ resource "aws_security_group_rule" "management_server_from_internal" {
 resource "aws_route_table" "sbcntr-route-app" {
   vpc_id = var.vpc_id
   tags = {
-    Name = "sbcntr-route-app"
+    Name = "${var.env}-${var.service}-route-app"
   }
 }
 
@@ -352,39 +353,39 @@ resource "aws_route_table_association" "private_1c" {
 }
 
 #Ingress用のルートテーブル
-resource "aws_route_table" "sbcntr_route_ingress" {
+resource "aws_route_table" "route_ingress" {
   vpc_id = var.vpc_id
   tags = {
-    Name = "sbcntr-route-ingress"
+    Name = "${var.env}-${var.service}-route-ingress"
   }
 }
 ## Ingressサブネットへルート紐付け
 resource "aws_route_table_association" "public_ingress_1a" {
   subnet_id      = aws_subnet.public_ingress_1a.id
-  route_table_id = aws_route_table.sbcntr-route-ingress.id
+  route_table_id = aws_route_table.route_ingress.id
 }
 
 resource "aws_route_table_association" "public_ingress_1c" {
   subnet_id      = aws_subnet.public_ingress_1c.id
-  route_table_id = aws_route_table.sbcntr-route-ingress.id
+  route_table_id = aws_route_table.route_ingress.id
 }
 
 ## Ingress用ルートテーブルのデフォルトルート
 resource "aws_route" "PublicRouteTable_Connect_InternetGateway" {
-  route_table_id         = aws_route_table.sbcntr-route-ingress.id
+  route_table_id         = aws_route_table.route_ingress.id
   destination_cidr_block = "0.0.0.0/0" # internet_gatewayの外への通信許可設定
-  gateway_id             = aws_internet_gateway.sbcntr-igw.id
+  gateway_id             = aws_internet_gateway.igw.id
 }
 
 ## 管理用サブネットのルートはIngressと同様として作成する
 resource "aws_route_table_association" "public_management_1a" {
   subnet_id      = aws_subnet.public_management_1a.id
-  route_table_id = aws_route_table.sbcntr-route-ingress.id
+  route_table_id = aws_route_table.route_ingress.id
 }
 
 resource "aws_route_table_association" "public_management_1c" {
   subnet_id      = aws_subnet.public_management_1c.id
-  route_table_id = aws_route_table.sbcntr-route-ingress.id
+  route_table_id = aws_route_table.route_ingress.id
 }
 
 ############################################################################
