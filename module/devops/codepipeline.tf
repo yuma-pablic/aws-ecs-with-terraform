@@ -1,4 +1,4 @@
-resource "aws_codepipeline" "sbcntr_backend" {
+resource "aws_codepipeline" "backend" {
   name     = "sbcntr-pipeline"
   role_arn = aws_iam_role.sbcntr-pipeline-role.arn
 

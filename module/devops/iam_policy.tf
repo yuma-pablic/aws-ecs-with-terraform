@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "sbcntr_codebuild" {
+data "aws_iam_policy_document" "codebuild" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "name" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr_pipeline" {
+data "aws_iam_policy_document" "pipeline" {
   version = "2012-10-17"
   statement {
     effect  = "Allow"
@@ -75,7 +75,7 @@ data "aws_iam_policy_document" "sbcntr_pipeline" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr_codecommit" {
+data "aws_iam_policy_document" "codecommit" {
   version = "2012-10-17"
   statement {
     sid    = "ListImagesInRepository"
@@ -123,7 +123,7 @@ data "aws_iam_policy_document" "sbcntr_codecommit" {
   }
 }
 
-data "aws_iam_policy_document" "ecs_codedeploy" {
+data "aws_iam_policy_document" "codedeploy" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -137,7 +137,7 @@ data "aws_iam_policy_document" "ecs_codedeploy" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr_pipeline" {
+data "aws_iam_policy_document" "pipeline" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -322,7 +322,7 @@ data "aws_iam_policy_document" "sbcntr_pipeline" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr_event_bridge_codepipeline" {
+data "aws_iam_policy_document" "event_bridge_codepipeline" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -336,7 +336,7 @@ data "aws_iam_policy_document" "sbcntr_event_bridge_codepipeline" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr_event_bridge_codepipeline" {
+data "aws_iam_policy_document" "event_bridge_codepipeline" {
   version = "2012-10-17"
   statement {
     effect = "Allow"

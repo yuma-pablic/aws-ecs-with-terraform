@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "sbcntr_ecr" {
+data "aws_iam_policy_document" "ecr" {
   version = "2012-10-17"
   statement {
     sid    = "ListImagesInRepository"
@@ -73,7 +73,7 @@ data "aws_iam_policy_document" "sbcntr_log_dst" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr_ecs_task_role" {
+data "aws_iam_policy_document" "ecs_task_role" {
   version = "2012-10-17"
   statement {
     sid     = ""
@@ -86,7 +86,7 @@ data "aws_iam_policy_document" "sbcntr_ecs_task_role" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr_getting_secrets" {
+data "aws_iam_policy_document" "secrets" {
   version = "2012-10-17"
   statement {
     sid       = "GetSecretForECS"
@@ -96,7 +96,7 @@ data "aws_iam_policy_document" "sbcntr_getting_secrets" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr_ecs_task_role" {
+data "aws_iam_policy_document" "ecs_task_role" {
   version = "2008-10-17"
   statement {
     sid     = ""

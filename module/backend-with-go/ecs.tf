@@ -1,13 +1,13 @@
 
-resource "aws_ecs_cluster" "sbcntr_backend" {
+resource "aws_ecs_cluster" "backend" {
   name = "sbcntr-backend-cluster"
   setting {
     name  = "containerInsights"
     value = "enabled"
   }
 }
-resource "aws_ecs_cluster_capacity_providers" "sbcntr_backend" {
-  cluster_name       = aws_ecs_cluster.sbcntr_backend.name
+resource "aws_ecs_cluster_capacity_providers" "backend" {
+  cluster_name       = aws_ecs_cluster.backend.name
   capacity_providers = ["FARGATE"]
   default_capacity_provider_strategy {
     capacity_provider = "FARGATE"
@@ -16,9 +16,9 @@ resource "aws_ecs_cluster_capacity_providers" "sbcntr_backend" {
 resource "aws_ecs_service" "sbcntr_backend" {
   depends_on                         = [aws_lb_listener.sbcntr-lisner-blue, aws_lb_listener.sbcntr-lisner-green]
   name                               = "sbcntr-ecs-backend-service"
-  cluster                            = aws_ecs_cluster.sbcntr_backend.id
+  cluster                            = aws_ecs_cluster.backend.id
   platform_version                   = "LATEST"
-  task_definition                    = aws_ecs_task_definition.sbcntr-backend-def.arn
+  task_definition                    = aws_ecs_task_definition.backend.arn
   desired_count                      = 2
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent         = 200
@@ -36,7 +36,7 @@ resource "aws_ecs_service" "sbcntr_backend" {
   }
   health_check_grace_period_seconds = 120
   load_balancer {
-    target_group_arn = aws_lb_target_group.sbcntr-tg-blue.arn
+    target_group_arn = aws_lb_target_group.sbcntr_blue.arn
     container_name   = "app"
     container_port   = 80
   }
@@ -51,7 +51,7 @@ resource "aws_ecs_service" "sbcntr_backend" {
   }
 }
 
-resource "aws_ecs_task_definition" "sbcntr-backend-def" {
+resource "aws_ecs_task_definition" "backend" {
   family                   = "sbcntr-backend-def"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"

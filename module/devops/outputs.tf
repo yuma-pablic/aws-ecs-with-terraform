@@ -1,3 +1,3 @@
 output "aws_codebuild_project_sbcntr_codebuild_id" {
-  value = aws_codebuild_project.sbcntr_codebuild.id
+  value = aws_codebuild_project.codebuild.id
 }
