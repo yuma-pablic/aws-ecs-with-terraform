@@ -5,7 +5,6 @@
 brew install terraform tfsec tflint
 brew unlink tfenv
 brew install tfenv
-
 ```
 ## init
 ```
