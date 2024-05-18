@@ -1,111 +1,111 @@
 #コンテナアプリ用のプライベートサブネット
-resource "aws_subnet" "sbcntr-subnet-private-container-1a" {
+resource "aws_subnet" "private_container_1a" {
   vpc_id                  = var.vpc_id
   cidr_block              = "10.0.8.0/24"
   availability_zone       = "ap-northeast-1a"
   map_public_ip_on_launch = false
   tags = {
-    Name = "sbcntr-subnet-private-container-1a"
+    Name = "${var.env}-${var.service}-subnet-private-container-1a"
     Type = "Isolated"
   }
 }
 
 
-resource "aws_subnet" "sbcntr-subnet-private-container-1c" {
+resource "aws_subnet" "private_container_1c" {
   vpc_id                  = var.vpc_id
   cidr_block              = "10.0.9.0/24"
   availability_zone       = "ap-northeast-1c"
   map_public_ip_on_launch = false
   tags = {
-    Name = "sbcntr-subnet-private-container-1c"
+    Name = "${var.env}-${var.service}-subnet-private-container-1c"
     Type = "Isolated"
   }
 }
 
 
 #Ingress用のパブリックサブネット
-resource "aws_subnet" "sbcntr-subnet-public-ingress-1a" {
+resource "aws_subnet" "public_ingress_1a" {
   vpc_id                  = var.vpc_id
   cidr_block              = "10.0.0.0/24"
   availability_zone       = "ap-northeast-1a"
   map_public_ip_on_launch = true
   tags = {
-    Name = "sbcntr-subnet-public-ingress-1a"
+    Name = "${var.env}-${var.service}-subnet-public-ingress-1a"
     Type = "public"
   }
 }
 
-resource "aws_subnet" "sbcntr-subnet-public-ingress-1c" {
+resource "aws_subnet" "public_ingress_1c" {
   vpc_id                  = var.vpc_id
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "ap-northeast-1c"
   map_public_ip_on_launch = true
   tags = {
-    Name = "sbcntr-subnet-public-ingress-1c"
+    Name = "${var.env}-${var.service}-subnet-public-ingress-1c"
     Type = "public"
   }
 }
 
 ## 管理サーバ用のサブネット
-resource "aws_subnet" "sbcntr-subnet-public-management-1a" {
+resource "aws_subnet" "public_management_1a" {
   vpc_id                  = var.vpc_id
   cidr_block              = "10.0.240.0/24"
   availability_zone       = "ap-northeast-1a"
   map_public_ip_on_launch = true
   tags = {
-    Name = "sbcntr-subnet-public-management-1a"
+    Name = "${var.env}-${var.service}-subnet-public-management-1a"
     Type = "Public"
   }
 }
 
-resource "aws_subnet" "sbcntr-subnet-public-management-1c" {
+resource "aws_subnet" "public_management_1c" {
   vpc_id                  = var.vpc_id
   cidr_block              = "10.0.241.0/24"
   availability_zone       = "ap-northeast-1c"
   map_public_ip_on_launch = true
   tags = {
-    Name = "sbcntr-subnet-public-management-1c"
+    Name = "${var.env}-${var.service}-subnet-public-management-1c"
     Type = "Public"
   }
 }
 
 ## VPC Endpoint用のサブネット
-resource "aws_subnet" "sbcntr-subnet-private-egress-1a" {
+resource "aws_subnet" "private_egress_1a" {
   vpc_id                  = var.vpc_id
   cidr_block              = "10.0.248.0/24"
   availability_zone       = "ap-northeast-1a"
   map_public_ip_on_launch = false
   tags = {
-    Name = "sbcntr-subnet-private-egress-1a"
+    Name = "${var.env}-${var.service}-subnet-private-egress-1a"
     Type = "Isolated"
   }
 }
 
-resource "aws_subnet" "sbcntr-subnet-private-egress-1c" {
+resource "aws_subnet" "private_egress_1c" {
   vpc_id                  = var.vpc_id
   cidr_block              = "10.0.249.0/24"
   availability_zone       = "ap-northeast-1c"
   map_public_ip_on_launch = false
   tags = {
-    Name = "sbcntr-subnet-private-egress-1c"
+    Name = "${var.env}-${var.service}-subnet-private-egress-1c"
     Type = "Isolated"
   }
 }
 
 # インターネットへ通信するためのゲートウェイの作成
-resource "aws_internet_gateway" "sbcntr-igw" {
+resource "aws_internet_gateway" "igw" {
   vpc_id = var.vpc_id
   tags = {
-    Name = "sbcntr-igw"
+    Name = "${var.env}-${var.service}-igw"
   }
 }
 
-resource "aws_security_group" "sbcntr-sg-ingress" {
+resource "aws_security_group" "ingress" {
   vpc_id      = var.vpc_id
   description = "Security group for ingress"
   name        = "ingress"
   tags = {
-    "Name" = "sbcntr-sg-ingress"
+    "Name" = "${var.env}-${var.service}-sg-ingress"
   }
 }
 
@@ -118,10 +118,10 @@ resource "aws_security_group_rule" "inbaund" {
   from_port         = 80
   to_port           = 80
   protocol          = "-1"
-  security_group_id = aws_security_group.sbcntr-sg-ingress.id
+  security_group_id = aws_security_group.ingress.id
 }
 
-resource "aws_security_group_rule" "egress-v4" {
+resource "aws_security_group_rule" "egress_v4" {
   type = "egress"
   cidr_blocks = [
     "0.0.0.0/0"
@@ -130,30 +130,30 @@ resource "aws_security_group_rule" "egress-v4" {
   from_port         = 80
   protocol          = "tcp"
   to_port           = 80
-  security_group_id = aws_security_group.sbcntr-sg-ingress.id
+  security_group_id = aws_security_group.ingress.id
 }
 
-resource "aws_security_group_rule" "egress-v6" {
+resource "aws_security_group_rule" "egress_v6" {
   type              = "egress"
   ipv6_cidr_blocks  = ["::/0"]
   description       = "from ::/0:80"
   from_port         = 80
   protocol          = "tcp"
   to_port           = 80
-  security_group_id = aws_security_group.sbcntr-sg-ingress.id
+  security_group_id = aws_security_group.ingress.id
 }
 
 # 管理用サーバ向けのセキュリティグループの生成
-resource "aws_security_group" "sbcntr-sg-management" {
+resource "aws_security_group" "management" {
   vpc_id      = var.vpc_id
   description = "Security Group of management server"
-  name        = "management"
+  name        = "${var.env}-${var.service}-management"
   tags = {
     "Name" = "sbcntr-sg-management"
   }
 }
 
-resource "aws_security_group_rule" "management-egress-v4" {
+resource "aws_security_group_rule" "management_egress_v4" {
   type = "egress"
   cidr_blocks = [
     "0.0.0.0/0"
@@ -162,20 +162,20 @@ resource "aws_security_group_rule" "management-egress-v4" {
   from_port         = 80
   protocol          = "-1"
   to_port           = 80
-  security_group_id = aws_security_group.sbcntr-sg-management.id
+  security_group_id = aws_security_group.management.id
 }
 
 ## バックエンドコンテナアプリ用セキュリティグループの生成
-resource "aws_security_group" "sbcntr-sg-backend" {
+resource "aws_security_group" "backend" {
   vpc_id      = var.vpc_id
   description = "Security Group of backend app"
   name        = "container"
   tags = {
-    "Name" = "sbcntr-sg-container"
+    "Name" = "${var.env}-${var.service}-sg-container"
   }
 }
 
-resource "aws_security_group_rule" "backdend-egress-v4" {
+resource "aws_security_group_rule" "backdend_egress_v4" {
   type = "egress"
   cidr_blocks = [
     "0.0.0.0/0"
@@ -184,20 +184,20 @@ resource "aws_security_group_rule" "backdend-egress-v4" {
   from_port         = 80
   protocol          = "-1"
   to_port           = 80
-  security_group_id = aws_security_group.sbcntr-sg-backend.id
+  security_group_id = aws_security_group.backend.id
 }
 
 ## フロントエンドコンテナアプリ用セキュリティグループの生成
-resource "aws_security_group" "sbcntr-sg-front-container" {
+resource "aws_security_group" "front_container" {
   vpc_id      = var.vpc_id
   description = "Security Group of front container app"
   name        = "front-container"
   tags = {
-    "Name" = "sbcntr-sg-front-container"
+    "Name" = "${var.env}-${var.service}-sg-front-container"
   }
 }
 
-resource "aws_security_group_rule" "frontend-egress-v4" {
+resource "aws_security_group_rule" "frontend_egress_v4" {
   type = "egress"
   cidr_blocks = [
     "0.0.0.0/0"
@@ -206,11 +206,11 @@ resource "aws_security_group_rule" "frontend-egress-v4" {
   from_port         = 80
   protocol          = "-1"
   to_port           = 80
-  security_group_id = aws_security_group.sbcntr-sg-front-container.id
+  security_group_id = aws_security_group.front_container.id
 }
 
 ## 内部用ロードバランサ用のセキュリティグループの生成
-resource "aws_security_group" "sbcntr-sg-internal" {
+resource "aws_security_group" "internal" {
   vpc_id      = var.vpc_id
   description = "Security group for internal load balancer"
   name        = "internal"
@@ -219,7 +219,7 @@ resource "aws_security_group" "sbcntr-sg-internal" {
   }
 }
 
-resource "aws_security_group_rule" "internal-egress-v4" {
+resource "aws_security_group_rule" "internal_egress_v4" {
   type = "egress"
   cidr_blocks = [
     "0.0.0.0/0"
@@ -228,11 +228,11 @@ resource "aws_security_group_rule" "internal-egress-v4" {
   from_port         = 80
   protocol          = "-1"
   to_port           = 80
-  security_group_id = aws_security_group.sbcntr-sg-internal.id
+  security_group_id = aws_security_group.internal.id
 }
 
 ## VPCエンドポイント用セキュリティグループの生成
-resource "aws_security_group" "sbcntr-sg-vpce" {
+resource "aws_security_group" "vpce" {
   name        = "egress"
   description = "Security Group of VPC Endpoint"
   vpc_id      = var.vpc_id
@@ -241,7 +241,7 @@ resource "aws_security_group" "sbcntr-sg-vpce" {
   }
 }
 
-resource "aws_security_group_rule" "sbcntr-sg-vpce-egress" {
+resource "aws_security_group_rule" "vpce_egress" {
   type = "egress"
   cidr_blocks = [
     "0.0.0.0/0"
@@ -250,84 +250,84 @@ resource "aws_security_group_rule" "sbcntr-sg-vpce-egress" {
   from_port         = 80
   protocol          = "-1"
   to_port           = 80
-  security_group_id = aws_security_group.sbcntr-sg-vpce.id
+  security_group_id = aws_security_group.vpce.id
 }
 
 ## Internet LB -> Front Container
-resource "aws_security_group_rule" "sbcntr-sg-frontcontainer-from-sg-ingress" {
+resource "aws_security_group_rule" "frontcontainer_ingress" {
   type                     = "ingress"
   description              = "HTTP for Ingress"
   from_port                = 80
-  source_security_group_id = aws_security_group.sbcntr-sg-ingress.id
-  security_group_id        = aws_security_group.sbcntr-sg-front-container.id
+  source_security_group_id = aws_security_group.ingress.id
+  security_group_id        = aws_security_group.container.id
   protocol                 = "tcp"
   to_port                  = 80
 }
 
 
 ## Front Container -> Internal LB
-resource "aws_security_group_rule" "sbcntr-sg-ingress-from-sg-frontcontainer" {
+resource "aws_security_group_rule" "ingress_from_frontcontainer" {
   type                     = "ingress"
   description              = "HTTP for front container"
   from_port                = 80
-  source_security_group_id = aws_security_group.sbcntr-sg-front-container.id
-  security_group_id        = aws_security_group.sbcntr-sg-internal.id
+  source_security_group_id = aws_security_group.front_container.id
+  security_group_id        = aws_security_group.internal.id
   protocol                 = "tcp"
   to_port                  = 80
 }
 
 ## Internal LB -> Back Container
-resource "aws_security_group_rule" "sbcntr-sg-internal-from-sg-backcontainer" {
+resource "aws_security_group_rule" "internal_from_backcontainer" {
   type                     = "ingress"
   description              = "HTTP for internal lb"
   from_port                = 80
-  source_security_group_id = aws_security_group.sbcntr-sg-internal.id
-  security_group_id        = aws_security_group.sbcntr-sg-backend.id
+  source_security_group_id = aws_security_group.internal.id
+  security_group_id        = aws_security_group.backend.id
   protocol                 = "tcp"
   to_port                  = 80
 }
 
 
 ### Back container -> VPC endpoint
-resource "aws_security_group_rule" "sbcntr-sg-back-container-from-vpce" {
+resource "aws_security_group_rule" "back_container_from_vpce" {
   type                     = "ingress"
   description              = " HTTPS for Container App"
   from_port                = 443
-  source_security_group_id = aws_security_group.sbcntr-sg-backend.id
-  security_group_id        = aws_security_group.sbcntr-sg-vpce.id
+  source_security_group_id = aws_security_group.backend.id
+  security_group_id        = aws_security_group.vpce.id
   protocol                 = "tcp"
   to_port                  = 443
 }
 
 ### Front container -> VPC endpoint
-resource "aws_security_group_rule" "sbcntr-sg-front-container-from-vpce" {
+resource "aws_security_group_rule" "front_container_from_vpce" {
   type                     = "ingress"
   description              = "HTTPS for Front Container App"
   from_port                = 443
-  source_security_group_id = aws_security_group.sbcntr-sg-front-container.id
-  security_group_id        = aws_security_group.sbcntr-sg-vpce.id
+  source_security_group_id = aws_security_group.front_container.id
+  security_group_id        = aws_security_group.vpce.id
   protocol                 = "tcp"
   to_port                  = 443
 }
 
 ### Management Server -> VPC endpoint
-resource "aws_security_group_rule" "sbcntr-sg-management-server-from-vpce" {
+resource "aws_security_group_rule" "management_server_from_vpce" {
   type                     = "ingress"
   description              = "HTTPS for management server"
   from_port                = 443
-  source_security_group_id = aws_security_group.sbcntr-sg-management.id
-  security_group_id        = aws_security_group.sbcntr-sg-vpce.id
+  source_security_group_id = aws_security_group.management.id
+  security_group_id        = aws_security_group.vpce.id
   protocol                 = "tcp"
   to_port                  = 443
 }
 
 ### Management -> Internal
-resource "aws_security_group_rule" "sbcntr-sg-management-server-from-internal" {
+resource "aws_security_group_rule" "management_server_from_internal" {
   type                     = "ingress"
   description              = "HTTPS for management server"
   from_port                = 10080
-  source_security_group_id = aws_security_group.sbcntr-sg-management.id
-  security_group_id        = aws_security_group.sbcntr-sg-internal.id
+  source_security_group_id = aws_security_group.management.id
+  security_group_id        = aws_security_group.internal.id
   protocol                 = "tcp"
   to_port                  = 10080
 }
@@ -341,31 +341,31 @@ resource "aws_route_table" "sbcntr-route-app" {
 }
 
 #コンテナアプリ用サブネットルート紐付け
-resource "aws_route_table_association" "private-1a" {
-  subnet_id      = aws_subnet.sbcntr-subnet-private-container-1a.id
+resource "aws_route_table_association" "private_1a" {
+  subnet_id      = aws_subnet.private_container_1a.id
   route_table_id = aws_route_table.sbcntr-route-app.id
 }
 
-resource "aws_route_table_association" "private-1c" {
-  subnet_id      = aws_subnet.sbcntr-subnet-private-container-1c.id
+resource "aws_route_table_association" "private_1c" {
+  subnet_id      = aws_subnet.private_container_1c.id
   route_table_id = aws_route_table.sbcntr-route-app.id
 }
 
 #Ingress用のルートテーブル
-resource "aws_route_table" "sbcntr-route-ingress" {
+resource "aws_route_table" "sbcntr_route_ingress" {
   vpc_id = var.vpc_id
   tags = {
     Name = "sbcntr-route-ingress"
   }
 }
 ## Ingressサブネットへルート紐付け
-resource "aws_route_table_association" "public-ingress-1a" {
-  subnet_id      = aws_subnet.sbcntr-subnet-public-ingress-1a.id
+resource "aws_route_table_association" "public_ingress_1a" {
+  subnet_id      = aws_subnet.public_ingress_1a.id
   route_table_id = aws_route_table.sbcntr-route-ingress.id
 }
 
-resource "aws_route_table_association" "public-ingress-1c" {
-  subnet_id      = aws_subnet.sbcntr-subnet-public-ingress-1c.id
+resource "aws_route_table_association" "public_ingress_1c" {
+  subnet_id      = aws_subnet.public_ingress_1c.id
   route_table_id = aws_route_table.sbcntr-route-ingress.id
 }
 
@@ -377,20 +377,20 @@ resource "aws_route" "PublicRouteTable_Connect_InternetGateway" {
 }
 
 ## 管理用サブネットのルートはIngressと同様として作成する
-resource "aws_route_table_association" "public-management-1a" {
-  subnet_id      = aws_subnet.sbcntr-subnet-public-management-1a.id
+resource "aws_route_table_association" "public_management_1a" {
+  subnet_id      = aws_subnet.public_management_1a.id
   route_table_id = aws_route_table.sbcntr-route-ingress.id
 }
 
-resource "aws_route_table_association" "public-management-1c" {
-  subnet_id      = aws_subnet.sbcntr-subnet-public-management-1c.id
+resource "aws_route_table_association" "public_management_1c" {
+  subnet_id      = aws_subnet.public_management_1c.id
   route_table_id = aws_route_table.sbcntr-route-ingress.id
 }
 
 ############################################################################
 
 # ECRからImageを取得する用
-resource "aws_vpc_endpoint" "sbcntr-vpce-ecr-api" {
+resource "aws_vpc_endpoint" "ecr_api" {
   vpc_id              = var.vpc_id
   service_name        = "com.amazonaws.ap-northeast-1.ecr.api"
   private_dns_enabled = true
@@ -402,7 +402,7 @@ resource "aws_vpc_endpoint" "sbcntr-vpce-ecr-api" {
   security_group_ids = [aws_security_group.sbcntr-sg-vpce.id]
 }
 
-resource "aws_vpc_endpoint" "sbcntr-vpce-ecr-dkr" {
+resource "aws_vpc_endpoint" "ecr_dkr" {
   vpc_id              = var.vpc_id
   service_name        = "com.amazonaws.ap-northeast-1.ecr.dkr"
   private_dns_enabled = true
@@ -414,7 +414,7 @@ resource "aws_vpc_endpoint" "sbcntr-vpce-ecr-dkr" {
   security_group_ids = [aws_security_group.sbcntr-sg-vpce.id]
 }
 
-resource "aws_vpc_endpoint" "sbcntr-vpce-s3" {
+resource "aws_vpc_endpoint" "s3" {
   vpc_id            = var.vpc_id
   service_name      = "com.amazonaws.ap-northeast-1.s3"
   vpc_endpoint_type = "Gateway"
@@ -422,7 +422,7 @@ resource "aws_vpc_endpoint" "sbcntr-vpce-s3" {
 }
 
 #Cloud watch logsにデータを送信する用
-resource "aws_vpc_endpoint" "sbcntr-vpce-logs" {
+resource "aws_vpc_endpoint" "logs" {
   vpc_id              = var.vpc_id
   service_name        = "com.amazonaws.ap-northeast-1.logs"
   vpc_endpoint_type   = "Interface"

@@ -1,6 +1,6 @@
 
 resource "aws_wafv2_web_acl" "frontend" {
-  name  = "sbcntr-waf-webacl"
+  name  = "${var.env}-${var.service}-waf-webacl"
   scope = "REGIONAL"
   default_action {
     allow {}

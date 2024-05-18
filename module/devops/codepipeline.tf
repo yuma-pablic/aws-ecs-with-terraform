@@ -3,7 +3,7 @@ resource "aws_codepipeline" "backend" {
   role_arn = aws_iam_role.pipeline.arn
 
   artifact_store {
-    location = aws_s3_bucket.sbcntr-codepipline-bucket.bucket
+    location = aws_s3_bucket.codepipline_bucket.bucket
     type     = "S3"
   }
   stage {

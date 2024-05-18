@@ -1,4 +1,3 @@
-#DB用プライベートサブネット
 resource "aws_subnet" "sbcntr-subnet-private-db-1a" {
   vpc_id                  = var.vpc_id
   cidr_block              = "10.0.16.0/24"
@@ -21,7 +20,6 @@ resource "aws_subnet" "sbcntr-subnet-private-db-1c" {
   }
 }
 
-# DB用ルートテーブル
 resource "aws_route_table" "sbcntr-route-db" {
   vpc_id = var.vpc_id
   tags = {
@@ -29,7 +27,6 @@ resource "aws_route_table" "sbcntr-route-db" {
   }
 }
 
-#コンテナアプリ用サブネットルート紐付け
 resource "aws_route_table_association" "private-db-1a" {
   subnet_id      = aws_subnet.sbcntr-subnet-private-db-1a.id
   route_table_id = aws_route_table.sbcntr-route-db.id
@@ -40,7 +37,6 @@ resource "aws_route_table_association" "private-db-1c" {
   route_table_id = aws_route_table.sbcntr-route-db.id
 }
 
-## DB用セキュリティグループの生成
 resource "aws_security_group" "sbcntr-sg-db" {
   vpc_id      = var.vpc_id
   description = "Security Group of database"
@@ -62,7 +58,6 @@ resource "aws_security_group_rule" "db-egress-v4" {
   security_group_id = aws_security_group.sbcntr-sg-db.id
 }
 
-## Back container -> DB
 resource "aws_security_group_rule" "sbcntr-sg-backcontainer-from-db" {
   type                     = "ingress"
   description              = "MySQL protocol from backend App"
@@ -73,7 +68,6 @@ resource "aws_security_group_rule" "sbcntr-sg-backcontainer-from-db" {
   to_port                  = 3306
 }
 
-## Front container -> DB
 resource "aws_security_group_rule" "sbcntr-sg-frontcontainer-from-db" {
   type                     = "ingress"
   description              = "MySQL protocol from management server"
@@ -86,7 +80,6 @@ resource "aws_security_group_rule" "sbcntr-sg-frontcontainer-from-db" {
 
 
 
-## Management server -> db
 resource "aws_security_group_rule" "sbcntr-sg-management-from-db" {
   type                     = "ingress"
   description              = "MySQL protocol from management server"
@@ -98,7 +91,6 @@ resource "aws_security_group_rule" "sbcntr-sg-management-from-db" {
 }
 
 
-#RDS
 resource "aws_db_subnet_group" "sbcntr-rds-subnet-group" {
   name        = "sbcntr-rds-subnet-group"
   description = "DB subnet group for Auroa"

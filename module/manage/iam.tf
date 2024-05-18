@@ -5,7 +5,7 @@ resource "aws_iam_policy" "administrater" {
 }
 
 resource "aws_iam_role" "cloud9" {
-  name               = "sbcntr-cloud9-role"
+  name               = "${var.env}-${var.service}-cloud9-role"
   description        = "Allow EC2 instances to call AWS service on your behalf ."
   assume_role_policy = data.aws_iam_policy_document.sbcntr-cloud9-role-policy-document.json
 }

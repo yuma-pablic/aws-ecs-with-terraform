@@ -60,7 +60,7 @@ resource "aws_lb_target_group" "green" {
 }
 
 resource "aws_lb_listener" "blue" {
-  load_balancer_arn = aws_alb.sbcntr-alb-internal.id
+  load_balancer_arn = aws_alb.internal.id
   port              = 80
   protocol          = "HTTP"
   default_action {
@@ -70,7 +70,7 @@ resource "aws_lb_listener" "blue" {
 }
 
 resource "aws_lb_listener" "green" {
-  load_balancer_arn = aws_alb.sbcntr-alb-internal.id
+  load_balancer_arn = aws_alb.internal.id
   port              = 10080
   protocol          = "HTTP"
   default_action {
