@@ -13,7 +13,7 @@ resource "aws_ecs_cluster_capacity_providers" "backend" {
     capacity_provider = "FARGATE"
   }
 }
-resource "aws_ecs_service" "sbcntr_backend" {
+resource "aws_ecs_service" "backend" {
   depends_on                         = [aws_lb_listener.sbcntr-lisner-blue, aws_lb_listener.sbcntr-lisner-green]
   name                               = "sbcntr-ecs-backend-service"
   cluster                            = aws_ecs_cluster.backend.id
@@ -36,7 +36,7 @@ resource "aws_ecs_service" "sbcntr_backend" {
   }
   health_check_grace_period_seconds = 120
   load_balancer {
-    target_group_arn = aws_lb_target_group.sbcntr_blue.arn
+    target_group_arn = aws_lb_target_group.blue.arn
     container_name   = "app"
     container_port   = 80
   }

@@ -1,4 +1,4 @@
-resource "aws_alb" "sbcntr_internal" {
+resource "aws_alb" "internal" {
   name            = "sbcntr-alb-internal"
   internal        = true
   security_groups = [aws_security_group.sbcntr-sg-internal.id]
@@ -8,7 +8,7 @@ resource "aws_alb" "sbcntr_internal" {
   ]
 }
 
-resource "aws_lb_target_group" "sbcntr_blue" {
+resource "aws_lb_target_group" "blue" {
   name        = "sbcntr-backend-tg-blue"
   port        = 80
   protocol    = "HTTP"
@@ -34,7 +34,7 @@ resource "aws_lb_target_group" "sbcntr_blue" {
   }
 }
 
-resource "aws_lb_target_group" "sbcntr_green" {
+resource "aws_lb_target_group" "green" {
   name        = "sbcntr-backend-tg-green"
   port        = 80
   protocol    = "HTTP"
@@ -59,27 +59,27 @@ resource "aws_lb_target_group" "sbcntr_green" {
   }
 }
 
-resource "aws_lb_listener" "sbcntr_blue" {
+resource "aws_lb_listener" "blue" {
   load_balancer_arn = aws_alb.sbcntr-alb-internal.id
   port              = 80
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.sbcntr-tg-blue.id
+    target_group_arn = aws_lb_target_group.blue.id
   }
 }
 
-resource "aws_lb_listener" "sbcntr_green" {
+resource "aws_lb_listener" "green" {
   load_balancer_arn = aws_alb.sbcntr-alb-internal.id
   port              = 10080
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.sbcntr-tg-green.id
+    target_group_arn = aws_lb_target_group.green.id
   }
 }
 
-resource "aws_alb" "sbcntr_frontend" {
+resource "aws_alb" "frontend" {
   name            = "sbcntr-alb-frontend"
   internal        = false
   security_groups = [aws_security_group.sbcntr-sg-ingress.id]
@@ -109,7 +109,7 @@ resource "aws_lb_target_group" "frontend" {
 }
 
 resource "aws_lb_listener" "frontend" {
-  load_balancer_arn = aws_alb.sbcntr_frontend.arn
+  load_balancer_arn = aws_alb.frontend.arn
   port              = 80
   protocol          = "HTTP"
   default_action {
