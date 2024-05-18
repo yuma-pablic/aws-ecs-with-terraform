@@ -21,7 +21,7 @@ resource "aws_codebuild_project" "backend" {
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
   }
-  service_role   = aws_iam_role.sbcntr-codebuild-role.arn
+  service_role   = aws_iam_role.codebuild.arn
   build_timeout  = "5"
   queued_timeout = "8"
 

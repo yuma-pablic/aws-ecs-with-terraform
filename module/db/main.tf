@@ -135,7 +135,7 @@ resource "aws_rds_cluster_instance" "sbcntr-db" {
 }
 
 
-resource "aws_vpc_endpoint" "sbcntr-vpce-secrets" {
+resource "aws_vpc_endpoint" "secrets" {
   vpc_id              = var.vpc_id
   service_name        = "com.amazonaws.ap-northeast-1.secretsmanager"
   vpc_endpoint_type   = "Interface"

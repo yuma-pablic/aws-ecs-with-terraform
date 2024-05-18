@@ -1,6 +1,6 @@
 resource "aws_codepipeline" "backend" {
   name     = "sbcntr-pipeline"
-  role_arn = aws_iam_role.sbcntr-pipeline-role.arn
+  role_arn = aws_iam_role.pipeline.arn
 
   artifact_store {
     location = aws_s3_bucket.sbcntr-codepipline-bucket.bucket

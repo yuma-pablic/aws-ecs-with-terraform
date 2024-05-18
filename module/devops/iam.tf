@@ -3,8 +3,8 @@ resource "aws_iam_role" "codebuild" {
   assume_role_policy = data.aws_iam_policy_document.sbcntr-codebuild-role-document.json
 }
 resource "aws_iam_role_policy_attachment" "codebuild" {
-  role       = aws_iam_role.sbcntr_codebuild.id
-  policy_arn = aws_iam_policy.sbcntr-accessing-codecommit-policy.arn
+  role       = aws_iam_role.codebuild.id
+  policy_arn = aws_iam_policy.codecommit.arn
 }
 
 resource "aws_iam_role" "pipeline" {
@@ -18,13 +18,13 @@ resource "aws_iam_policy" "sbcntr-codebuild-policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "sbcntr-codebuild-attachement" {
-  role       = aws_iam_role.sbcntr-codebuild-role.id
+  role       = aws_iam_role.codebuild.id
   policy_arn = aws_iam_policy.sbcntr-codebuild-policy.arn
 }
 
 resource "aws_iam_policy" "codecommit" {
   name   = "sbcntr-AccessingCodeCommitPolicy"
-  policy = data.aws_iam_policy_document.sbcntr-accessing-codecommit-policy-document.json
+  policy = data.aws_iam_policy_document.codecommit.json
 }
 resource "aws_iam_role" "ecs_codedeploy" {
   name               = "ecs-codedeploy-role"
