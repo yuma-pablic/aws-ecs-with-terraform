@@ -73,7 +73,7 @@ data "aws_iam_policy_document" "log_dst" {
   }
 }
 
-data "aws_iam_policy_document" "ecs_task_role" {
+data "aws_iam_policy_document" "assume_ecs_task_role" {
   version = "2012-10-17"
   statement {
     sid     = ""
