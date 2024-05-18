@@ -1,6 +1,6 @@
 
 resource "aws_iam_policy" "administrater" {
-  name   = "sbcntr-administrater"
+  name   = "${var.env}-${var.service}-administrater"
   policy = data.aws_iam_policy_document.sbcntr-accessing-ecr-repository-policy-document.json
 }
 

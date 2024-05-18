@@ -1,5 +1,5 @@
 resource "aws_alb" "internal" {
-  name            = "sbcntr-alb-internal"
+  name            = "${var.env}-${var.service}-alb-internal"
   internal        = true
   security_groups = [aws_security_group.sbcntr-sg-internal.id]
   subnets = [
@@ -9,14 +9,14 @@ resource "aws_alb" "internal" {
 }
 
 resource "aws_lb_target_group" "blue" {
-  name        = "sbcntr-backend-tg-blue"
+  name        = "${var.env}-${var.service}-backend-tg-blue"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
 
   tags = {
-    Name = "sbcntr-tg-blue"
+    Name = "${var.env}-${var.service}-backend-tg-blue"
   }
   health_check {
     protocol            = "HTTP"
@@ -35,7 +35,7 @@ resource "aws_lb_target_group" "blue" {
 }
 
 resource "aws_lb_target_group" "green" {
-  name        = "sbcntr-backend-tg-green"
+  name        = "${var.env}-${var.service}-backend-tg-green"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -80,7 +80,7 @@ resource "aws_lb_listener" "green" {
 }
 
 resource "aws_alb" "frontend" {
-  name            = "sbcntr-alb-frontend"
+  name            = "${var.env}-${var.service}-alb-frontend"
   internal        = false
   security_groups = [aws_security_group.sbcntr-sg-ingress.id]
   subnets = [
@@ -90,7 +90,7 @@ resource "aws_alb" "frontend" {
 }
 
 resource "aws_lb_target_group" "frontend" {
-  name        = "sbcntr-tg-frontend"
+  name        = "${var.env}-${var.service}-tg-frontend"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id

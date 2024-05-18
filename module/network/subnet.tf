@@ -371,7 +371,7 @@ resource "aws_route_table_association" "public_ingress_1c" {
 }
 
 ## Ingress用ルートテーブルのデフォルトルート
-resource "aws_route" "PublicRouteTable_Connect_InternetGateway" {
+resource "aws_route" "public_route_table_connect_internet_gateway" {
   route_table_id         = aws_route_table.route_ingress.id
   destination_cidr_block = "0.0.0.0/0" # internet_gatewayの外への通信許可設定
   gateway_id             = aws_internet_gateway.igw.id
