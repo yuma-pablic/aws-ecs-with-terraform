@@ -1,6 +1,6 @@
 
 resource "aws_ecs_cluster" "backend" {
-  name = "sbcntr-backend-cluster"
+  name = "${local.env}-${local.service_name}-backend-cluster"
   setting {
     name  = "containerInsights"
     value = "enabled"
@@ -15,7 +15,7 @@ resource "aws_ecs_cluster_capacity_providers" "backend" {
 }
 resource "aws_ecs_service" "backend" {
   depends_on                         = [aws_lb_listener.sbcntr-lisner-blue, aws_lb_listener.sbcntr-lisner-green]
-  name                               = "sbcntr-ecs-backend-service"
+  name                               = "${local.env}-${local.service_name}-ecs-backend-service"
   cluster                            = aws_ecs_cluster.backend.id
   platform_version                   = "LATEST"
   task_definition                    = aws_ecs_task_definition.backend.arn
