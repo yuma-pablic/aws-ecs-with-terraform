@@ -6,7 +6,7 @@ resource "aws_ecs_cluster" "frontend" {
   }
 }
 resource "aws_ecs_cluster_capacity_providers" "frontend" {
-  cluster_name       = aws_ecs_cluster.sbcntr_frontend.name
+  cluster_name       = aws_ecs_cluster.frontend.name
   capacity_providers = ["FARGATE"]
   default_capacity_provider_strategy {
     capacity_provider = "FARGATE"
