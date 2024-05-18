@@ -1,5 +1,5 @@
 
-resource "aws_codebuild_project" "sbcntr-codebuild" {
+resource "aws_codebuild_project" "sbcntr_backend" {
   depends_on = [
     aws_s3_bucket.sbcntr-codepipline-bucket
   ]

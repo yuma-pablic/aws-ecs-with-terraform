@@ -1,9 +1,9 @@
-resource "aws_iam_role" "sbcntr-codebuild-role" {
+resource "aws_iam_role" "sbcntr_codebuild" {
   name               = "sbcntr-codebuild-role"
   assume_role_policy = data.aws_iam_policy_document.sbcntr-codebuild-role-document.json
 }
-resource "aws_iam_role_policy_attachment" "sbcntr-codebuild-attachement-role" {
-  role       = aws_iam_role.sbcntr-codebuild-role.id
+resource "aws_iam_role_policy_attachment" "sbcntr_codebuild" {
+  role       = aws_iam_role.sbcntr_codebuild.id
   policy_arn = aws_iam_policy.sbcntr-accessing-codecommit-policy.arn
 }
 

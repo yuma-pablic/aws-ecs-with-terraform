@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "sbcntr-codebuild-role-document" {
+data "aws_iam_policy_document" "sbcntr_codebuild" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "name" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr-pipeline-role-policy-document" {
+data "aws_iam_policy_document" "sbcntr_pipeline" {
   version = "2012-10-17"
   statement {
     effect  = "Allow"
@@ -75,7 +75,7 @@ data "aws_iam_policy_document" "sbcntr-pipeline-role-policy-document" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr-accessing-codecommit-policy-document" {
+data "aws_iam_policy_document" "sbcntr_codecommit" {
   version = "2012-10-17"
   statement {
     sid    = "ListImagesInRepository"
@@ -123,7 +123,7 @@ data "aws_iam_policy_document" "sbcntr-accessing-codecommit-policy-document" {
   }
 }
 
-data "aws_iam_policy_document" "ecs-codedeploy-role-policy-document" {
+data "aws_iam_policy_document" "ecs_codedeploy" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -137,7 +137,7 @@ data "aws_iam_policy_document" "ecs-codedeploy-role-policy-document" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr-pipeline-policy-document" {
+data "aws_iam_policy_document" "sbcntr_pipeline" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -322,7 +322,7 @@ data "aws_iam_policy_document" "sbcntr-pipeline-policy-document" {
   }
 }
 
-data "aws_iam_policy_document" "sbcntr-event-bridge-codepipeline-role-policy_document" {
+data "aws_iam_policy_document" "sbcntr_event_bridge_codepipeline" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -336,7 +336,7 @@ data "aws_iam_policy_document" "sbcntr-event-bridge-codepipeline-role-policy_doc
   }
 }
 
-data "aws_iam_policy_document" "sbcntr-event-bridge-codepipeline-policy-document" {
+data "aws_iam_policy_document" "sbcntr_event_bridge_codepipeline" {
   version = "2012-10-17"
   statement {
     effect = "Allow"

@@ -15,7 +15,7 @@ resource "aws_cloudwatch_event_rule" "sbcntr-cw-ev" {
   )
 }
 
-resource "aws_cloudwatch_event_target" "codepipeline_sample_app" {
+resource "aws_cloudwatch_event_target" "codepipeline_" {
   rule     = aws_cloudwatch_event_rule.sbcntr-cw-ev.name
   arn      = aws_codepipeline.sbcntr-pipeline.arn
   role_arn = aws_iam_role.sbcntr-event-bridge-codepipeline-role.arn
