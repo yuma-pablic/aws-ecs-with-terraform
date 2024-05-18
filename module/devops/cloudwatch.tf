@@ -1,5 +1,5 @@
-resource "aws_cloudwatch_event_rule" "sbcntr-cw-ev" {
-  name = "sbcntr-cw-ev"
+resource "aws_cloudwatch_event_rule" "codecommit" {
+  name = "${var.env}-${var.service}-codecommit-event-rule"
 
   event_pattern = jsonencode(
     {
@@ -16,7 +16,7 @@ resource "aws_cloudwatch_event_rule" "sbcntr-cw-ev" {
 }
 
 resource "aws_cloudwatch_event_target" "codepipeline" {
-  rule     = aws_cloudwatch_event_rule.sbcntr-cw-ev.name
-  arn      = aws_codepipeline.pipeline.arn
-  role_arn = aws_iam_role.sbcntr-event-bridge-codepipeline-role.arn
+  rule     = aws_cloudwatch_event_rule.codecommit.name
+  arn      = aws_codepipeline.backend.arn
+  role_arn = aws_iam_role.pipeline.arn
 }

@@ -1,15 +1,15 @@
-resource "aws_codedeploy_app" "app-ecs-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service" {
+resource "aws_codedeploy_app" "backend" {
   compute_platform = "ECS"
-  name             = "AppECS-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service"
+  name             = "${var.env}-${var.service}-backend"
 }
-resource "aws_codedeploy_deployment_group" "ecs_backend_cluster_ecs_backend_service" {
+resource "aws_codedeploy_deployment_group" "backend" {
   depends_on = [
     aws_iam_role.ecs-codedeploy-role,
     aws_ecs_cluster.sbcntr-backend-cluster
   ]
-  app_name               = "AppECS-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service"
-  deployment_group_name  = "Dpgsbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service"
-  service_role_arn       = aws_iam_role.ecs-codedeploy-role.arn
+  app_name               = "${var.env}-${var.service}-backend"
+  deployment_group_name  = "${var.env}-${var.service}-backend"
+  service_role_arn       = aws_iam_role.ecs_codedeploy_role.arn
   deployment_config_name = "CodeDeployDefault.ECSAllAtOnce"
 
   auto_rollback_configuration {

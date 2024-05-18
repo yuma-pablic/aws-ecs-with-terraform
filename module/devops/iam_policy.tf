@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "codebuild" {
+data "aws_iam_policy_document" "assume_codebuild" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "codebuild" {
   }
 }
 
-data "aws_iam_policy_document" "name" {
+data "aws_iam_policy_document" "codebuild" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -322,7 +322,7 @@ data "aws_iam_policy_document" "pipeline" {
   }
 }
 
-data "aws_iam_policy_document" "event_bridge_codepipeline" {
+data "aws_iam_policy_document" "asssume_event_bridge_codepipeline" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -349,6 +349,6 @@ data "aws_iam_policy_document" "event_bridge_codepipeline" {
   }
 }
 
-data "aws_iam_policy" "AWSCodeDeployRoleForECS" {
+data "aws_iam_policy" "codedeploy_role_for_ecs" {
   arn = "arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS"
 }

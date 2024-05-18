@@ -1,5 +1,5 @@
 resource "aws_codepipeline" "backend" {
-  name     = "sbcntr-pipeline"
+  name     = "${var.env}-${var.service}-backend"
   role_arn = aws_iam_role.pipeline.arn
 
   artifact_store {
@@ -53,8 +53,8 @@ resource "aws_codepipeline" "backend" {
       input_artifacts = ["SourceArtifact", "BuildOutput"]
       configuration = {
         AppSpecTemplateArtifact        = "SourceArtifact",
-        ApplicationName                = aws_codedeploy_app.app-ecs-sbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service.name
-        DeploymentGroupName            = "Dpgsbcntr-ecs-backend-cluster-sbcntr-ecs-backend-service"
+        ApplicationName                = aws_codedeploy_app.backend.name
+        DeploymentGroupName            = "${var.env}-${var.service}-backend"
         Image1ArtifactName             = "BuildOutput"
         Image1ContainerName            = "IMAGE1_NAME"
         TaskDefinitionTemplateArtifact = "SourceArtifact"
