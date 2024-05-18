@@ -31,9 +31,9 @@ resource "aws_iam_role" "ecs_codedeploy" {
   assume_role_policy = data.aws_iam_policy_document.ecs-codedeploy-role-policy-document.json
 }
 
-resource "aws_iam_role_policy_attachment" "AWSCodeDeployRoleForECS" {
+resource "aws_iam_role_policy_attachment" "ecs_codedeploy" {
   policy_arn = data.aws_iam_policy.AWSCodeDeployRoleForECS.arn
-  role       = aws_iam_role.ecs-codedeploy-role.id
+  role       = aws_iam_role.ecs_codedeploy.id
 }
 
 resource "aws_iam_policy" "pipeline" {
@@ -41,8 +41,8 @@ resource "aws_iam_policy" "pipeline" {
   policy = data.aws_iam_policy_document.sbcntr-pipeline-policy-document.json
 }
 resource "aws_iam_role_policy_attachment" "pipleline" {
-  role       = aws_iam_role.sbcntr-pipeline-role.id
-  policy_arn = aws_iam_policy.sbcntr-pipeline-policy.arn
+  role       = aws_iam_role.pipeline.id
+  policy_arn = aws_iam_policy.pipeline.arn
 }
 
 resource "aws_iam_role" "event_bridge_codepipeline" {
@@ -55,6 +55,6 @@ resource "aws_iam_policy" "event_bridge_codepipeline" {
 }
 
 resource "aws_iam_role_policy_attachment" "event_bridge_codepipeline" {
-  role       = aws_iam_role.sbcntr-event-bridge-codepipeline-role.id
-  policy_arn = aws_iam_policy.sbcntr-pipeline-policy.arn
+  role       = aws_iam_role.event_bridge_codepipeline.id
+  policy_arn = aws_iam_policy.pipeline.arn
 }

@@ -1,0 +1,4 @@
+variable "service" {
+}
+variable "env" {
+}

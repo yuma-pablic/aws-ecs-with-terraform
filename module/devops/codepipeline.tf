@@ -18,7 +18,7 @@ resource "aws_codepipeline" "backend" {
       output_artifacts = ["SourceArtifact"]
 
       configuration = {
-        RepositoryName : aws_codecommit_repository.sbcntr-backend.repository_name
+        RepositoryName : aws_codecommit_repository.backend.repository_name
         BranchName : "main"
       }
     }
@@ -36,7 +36,7 @@ resource "aws_codepipeline" "backend" {
       output_artifacts = ["BuildOutput"]
 
       configuration = {
-        ProjectName = aws_codebuild_project.sbcntr-codebuild.id
+        ProjectName = aws_codebuild_project.backend.id
       }
 
     }

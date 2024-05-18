@@ -3,10 +3,10 @@ resource "aws_codebuild_project" "backend" {
   depends_on = [
     aws_s3_bucket.sbcntr-codepipline-bucket
   ]
-  name = "sbcntr-codebuild"
+  name = "${local.env}-${local.service_name}-codebuild"
   source {
     type            = "CODECOMMIT"
-    location        = aws_codecommit_repository.sbcntr-backend.clone_url_http
+    location        = aws_codecommit_repository.backend.clone_url_http
     git_clone_depth = 1
 
     git_submodules_config {

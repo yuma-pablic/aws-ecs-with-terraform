@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "frontend" {
-  name = "sbcntr-frontend-cluster"
+  name = "${var.env}-${var.service}-frontend-cluster"
   setting {
     name  = "containerInsights"
     value = "enabled"
@@ -15,7 +15,7 @@ resource "aws_ecs_cluster_capacity_providers" "frontend" {
 
 resource "aws_ecs_task_definition" "frontend" {
   depends_on               = [aws_alb.sbcntr-alb-frontend]
-  family                   = "sbcntr-frontend-def"
+  family                   = "${var.env}-${var.service}-frontend-def"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 512

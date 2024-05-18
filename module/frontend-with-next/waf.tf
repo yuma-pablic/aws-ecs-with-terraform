@@ -105,5 +105,5 @@ resource "aws_wafv2_web_acl" "frontend" {
 
 resource "aws_wafv2_web_acl_association" "front" {
   resource_arn = module.aws_alb.sbcntr-alb-front-internal-arn
-  web_acl_arn  = aws_wafv2_web_acl.sbcntr-waf-webacl.arn
+  web_acl_arn  = aws_wafv2_web_acl.frontend.arn
 }
