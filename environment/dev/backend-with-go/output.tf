@@ -1,7 +1,1 @@
-output "env" {
-  value = "dev"
-}
-
-output "service" {
-  value = "sbcntr"
-}
+#Hello World
