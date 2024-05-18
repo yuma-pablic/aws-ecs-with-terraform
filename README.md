@@ -1,10 +1,14 @@
 # aws-with-terraform
 [AWSコンテナ設計・構築[本格]入門](https://www.sbcr.jp/product/4815607654/)の第五章までをコード化
+## install
+```
+brew install terraform tfsec tflint tfenv
+```
 ## init
 ```
 make dev-init
 ```
-## serve
+## apply
 ```
 make dev-apply
 ```
