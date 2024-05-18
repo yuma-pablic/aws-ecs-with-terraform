@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "ecs-frontend-extension-role-assume_role_policy" {
+data "aws_iam_policy_document" "ecs_frontend_extension_role" {
   version = "2012-10-17"
   statement {
     sid     = "SbcntrECSFrontendExtensionRoleAssumeRolePolicyID"

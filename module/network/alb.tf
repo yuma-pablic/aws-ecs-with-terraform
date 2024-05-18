@@ -89,7 +89,7 @@ resource "aws_alb" "sbcntr_frontend" {
   ]
 }
 
-resource "aws_lb_target_group" "sbcntr_frontend" {
+resource "aws_lb_target_group" "frontend" {
   name        = "sbcntr-tg-frontend"
   port        = 80
   protocol    = "HTTP"
@@ -108,12 +108,12 @@ resource "aws_lb_target_group" "sbcntr_frontend" {
   }
 }
 
-resource "aws_lb_listener" "sbcntr_frontend" {
+resource "aws_lb_listener" "frontend" {
   load_balancer_arn = aws_alb.sbcntr_frontend.arn
   port              = 80
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.sbcntr_frontend.id
+    target_group_arn = aws_lb_target_group.frontend.id
   }
 }

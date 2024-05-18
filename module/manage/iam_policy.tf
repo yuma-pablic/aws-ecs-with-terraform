@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "sbcntr_accessing_ecr" {
+data "aws_iam_policy_document" "ecr" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -8,7 +8,7 @@ data "aws_iam_policy_document" "sbcntr_accessing_ecr" {
     resources = ["*"]
   }
 }
-data "aws_iam_policy_document" "sbcntr_cloud9" {
+data "aws_iam_policy_document" "cloud9" {
   version = "2012-10-17"
   statement {
     effect = "Allow"

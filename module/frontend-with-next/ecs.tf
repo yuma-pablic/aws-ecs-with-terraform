@@ -1,11 +1,11 @@
-resource "aws_ecs_cluster" "sbcntr_frontend" {
+resource "aws_ecs_cluster" "frontend" {
   name = "sbcntr-frontend-cluster"
   setting {
     name  = "containerInsights"
     value = "enabled"
   }
 }
-resource "aws_ecs_cluster_capacity_providers" "sbcntr_frontend" {
+resource "aws_ecs_cluster_capacity_providers" "frontend" {
   cluster_name       = aws_ecs_cluster.sbcntr_frontend.name
   capacity_providers = ["FARGATE"]
   default_capacity_provider_strategy {
@@ -13,7 +13,7 @@ resource "aws_ecs_cluster_capacity_providers" "sbcntr_frontend" {
   }
 }
 
-resource "aws_ecs_task_definition" "sbcntr-frontend-def" {
+resource "aws_ecs_task_definition" "frontend" {
   depends_on               = [aws_alb.sbcntr-alb-frontend]
   family                   = "sbcntr-frontend-def"
   requires_compatibilities = ["FARGATE"]
