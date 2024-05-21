@@ -2,7 +2,7 @@
 [AWSコンテナ設計・構築[本格]入門](https://www.sbcr.jp/product/4815607654/)の第五章までをコード化
 ## install
 ```
-brew install terraform tfsec tflint
+brew install terraform tflint trivy
 brew unlink tfenv
 brew install tfenv
 pip install pre-commit
