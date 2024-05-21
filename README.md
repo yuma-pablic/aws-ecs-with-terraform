@@ -6,6 +6,7 @@ brew install terraform tfsec tflint
 brew unlink tfenv
 brew install tfenv
 pip install pre-commit
+pre-commit install       
 ```
 ## init
 ```
