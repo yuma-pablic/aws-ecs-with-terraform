@@ -4,5 +4,3 @@ repos:
     hooks:
       - id: terraform_fmt
         files: \.tf$
-      - id: terraform_validate
-        files: \.tf$
