@@ -9,6 +9,12 @@ module "web" {
   env     = var.env
   vpc_id  = module.network.vpc_id
 }
+module "backend-cluster" {
+  source  = "../../modules/backend-cluster"
+  service = var.service
+  env     = var.env
+  vpc_id  = module.network.vpc_id
+}
 module "backend-with-go" {
   source  = "../../modules/backend-with-go"
   env     = "dev"
