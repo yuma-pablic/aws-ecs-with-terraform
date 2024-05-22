@@ -9,7 +9,6 @@ resource "aws_subnet" "private_container_1a" {
   }
 }
 
-
 resource "aws_subnet" "private_container_1c" {
   vpc_id                  = var.vpc_id
   cidr_block              = "10.0.9.0/24"
@@ -88,4 +87,30 @@ resource "aws_subnet" "private_egress_1c" {
   }
 }
 
+resource "aws_subnet" "private_db_1a" {
+  vpc_id                  = var.vpc_id
+  cidr_block              = "10.0.16.0/24"
+  availability_zone       = "ap-northeast-1a"
+  map_public_ip_on_launch = false
+  tags = {
+    Name = "${var.env}-${var.service}-subnet-private-db-1a"
+    Type = "Isolated"
+  }
+}
+
+resource "aws_subnet" "private_db_1c" {
+  vpc_id                  = var.vpc_id
+  cidr_block              = "10.0.17.0/24"
+  availability_zone       = "ap-northeast-1c"
+  map_public_ip_on_launch = false
+  tags = {
+    Name = "${var.env}-${var.service}-subnet-private-db-1c"
+    Type = "Isolated"
+  }
+}
+resource "aws_db_subnet_group" "default" {
+  name        = "${var.env}-${var.service}-rds-subnet-group"
+  description = "DB subnet group for Auroa"
+  subnet_ids  = [aws_subnet.sbcntr-subnet-private-db-1a.id, aws_subnet.sbcntr-subnet-private-db-1c.id]
+}
 data "aws_caller_identity" "self" {}

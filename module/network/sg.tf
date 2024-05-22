@@ -217,3 +217,55 @@ resource "aws_security_group_rule" "management_server_from_internal" {
   protocol                 = "tcp"
   to_port                  = 10080
 }
+resource "aws_security_group" "db" {
+  vpc_id      = var.vpc_id
+  description = "Security Group of database"
+  name        = "database"
+  tags = {
+    "Name" = "${var.env}-${var.service}-sg-db"
+  }
+}
+
+resource "aws_security_group_rule" "db_egress_v4" {
+  type = "egress"
+  cidr_blocks = [
+    "0.0.0.0/0"
+  ]
+  description       = "Allow all outbound traffic by default"
+  from_port         = 80
+  protocol          = "-1"
+  to_port           = 80
+  security_group_id = aws_security_group.db.id
+}
+
+resource "aws_security_group_rule" "back_container_from_db" {
+  type                     = "ingress"
+  description              = "MySQL protocol from backend App"
+  from_port                = 3306
+  source_security_group_id = var.sg-backend-id
+  security_group_id        = aws_security_group.db.id
+  protocol                 = "tcp"
+  to_port                  = 3306
+}
+
+resource "aws_security_group_rule" "front_container_from_db" {
+  type                     = "ingress"
+  description              = "MySQL protocol from management server"
+  from_port                = 3306
+  source_security_group_id = var.sg-frontend-id
+  security_group_id        = aws_security_group.db.id
+  protocol                 = "tcp"
+  to_port                  = 3306
+}
+
+
+
+resource "aws_security_group_rule" "management_from_db" {
+  type                     = "ingress"
+  description              = "MySQL protocol from management server"
+  from_port                = 3306
+  source_security_group_id = var.sg-management-id
+  security_group_id        = aws_security_group.db.id
+  protocol                 = "tcp"
+  to_port                  = 3306
+}

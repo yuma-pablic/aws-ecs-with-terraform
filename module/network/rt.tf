@@ -45,3 +45,20 @@ resource "aws_route_table_association" "public_management_1c" {
   subnet_id      = aws_subnet.public_management_1c.id
   route_table_id = aws_route_table.route_ingress.id
 }
+
+resource "aws_route_table" "db" {
+  vpc_id = var.vpc_id
+  tags = {
+    Name = "${var.env}-${var.service}-route-db"
+  }
+}
+
+resource "aws_route_table_association" "private_db_1a" {
+  subnet_id      = aws_subnet.private_db_1a.id
+  route_table_id = aws_route_table.db.id
+}
+
+resource "aws_route_table_association" "private_db_1c" {
+  subnet_id      = aws_subnet.private_db_1c.id
+  route_table_id = aws_route_table.db.id
+}
