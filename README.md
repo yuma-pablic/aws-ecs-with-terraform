@@ -6,7 +6,7 @@ brew install terraform tflint trivy
 brew unlink tfenv
 brew install tfenv
 pip install pre-commit
-pre-commit install       
+pre-commit install
 ```
 ## init
 ```
