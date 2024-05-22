@@ -8,7 +8,6 @@ data "aws_iam_policy_document" "ecr" {
     ]
     resources = [
       "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-backend",
-      "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-frontend"
     ]
   }
   statement {
@@ -37,7 +36,6 @@ data "aws_iam_policy_document" "ecr" {
     ]
     resources = [
       "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-backend",
-      "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-frontend"
     ]
   }
 }
