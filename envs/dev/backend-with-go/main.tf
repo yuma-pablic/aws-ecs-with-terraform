@@ -1,5 +1,5 @@
 module "newwork" {
-  source  = "../../modules/backend-with-go"
+  source  = "../../modules/network"
   service = var.service
   env     = var.env
 }
