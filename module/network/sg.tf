@@ -242,7 +242,7 @@ resource "aws_security_group_rule" "back_container_from_db" {
   type                     = "ingress"
   description              = "MySQL protocol from backend App"
   from_port                = 3306
-  source_security_group_id = var.sg-backend-id
+  source_security_group_id = aws_security_group.backend.id
   security_group_id        = aws_security_group.db.id
   protocol                 = "tcp"
   to_port                  = 3306
@@ -252,7 +252,7 @@ resource "aws_security_group_rule" "front_container_from_db" {
   type                     = "ingress"
   description              = "MySQL protocol from management server"
   from_port                = 3306
-  source_security_group_id = var.sg-frontend-id
+  source_security_group_id = aws_security_group.front_container.id
   security_group_id        = aws_security_group.db.id
   protocol                 = "tcp"
   to_port                  = 3306
@@ -264,7 +264,7 @@ resource "aws_security_group_rule" "management_from_db" {
   type                     = "ingress"
   description              = "MySQL protocol from management server"
   from_port                = 3306
-  source_security_group_id = var.sg-management-id
+  source_security_group_id = aws_security_group.management.id
   security_group_id        = aws_security_group.db.id
   protocol                 = "tcp"
   to_port                  = 3306
