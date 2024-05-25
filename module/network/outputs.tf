@@ -28,7 +28,7 @@ output "tg_blue_name" {
   value = aws_lb_target_group.blue.name
 }
 
-output "tg_green.name" {
+output "tg_green_name" {
   value = aws_lb_target_group.green.name
 }
 
