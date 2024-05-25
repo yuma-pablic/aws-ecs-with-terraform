@@ -24,7 +24,7 @@ output "subnet_private_egress_1c_id" {
   value = aws_subnet.private_egress_1c.id
 }
 
-output "atg_blue_api_name" {
+output "tg_blue_api_name" {
   value = aws_lb_target_group.api_blue.name
 }
 
