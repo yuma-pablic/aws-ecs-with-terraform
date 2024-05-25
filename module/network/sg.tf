@@ -62,12 +62,12 @@ resource "aws_security_group_rule" "management_egress_v4" {
   security_group_id = aws_security_group.management.id
 }
 
-resource "aws_security_group" "backend" {
+resource "aws_security_group" "api" {
   vpc_id      = var.vpc_id
   description = "Security Group of backend app"
-  name        = "container"
+  name        = "${var.env}-${var.service}-sg-api"
   tags = {
-    "Name" = "${var.env}-${var.service}-sg-backend-container"
+    "Name" = "${var.env}-${var.service}-sg-api"
   }
 }
 
@@ -80,7 +80,7 @@ resource "aws_security_group_rule" "api_egress_v4" {
   from_port         = 80
   protocol          = "-1"
   to_port           = 80
-  security_group_id = aws_security_group.backend.id
+  security_group_id = aws_security_group.api.id
 }
 
 resource "aws_security_group" "web" {
@@ -178,21 +178,21 @@ resource "aws_security_group_rule" "internal_from_api" {
 }
 
 
-resource "aws_security_group_rule" "back_container_from_vpce" {
+resource "aws_security_group_rule" "api_from_vpce" {
   type                     = "ingress"
   description              = " HTTPS for Container App"
   from_port                = 443
-  source_security_group_id = aws_security_group.backend.id
+  source_security_group_id = aws_security_group.api.id
   security_group_id        = aws_security_group.vpce.id
   protocol                 = "tcp"
   to_port                  = 443
 }
 
-resource "aws_security_group_rule" "front_container_from_vpce" {
+resource "aws_security_group_rule" "web_from_vpce" {
   type                     = "ingress"
   description              = "HTTPS for Front Container App"
   from_port                = 443
-  source_security_group_id = aws_security_group.front_container.id
+  source_security_group_id = aws_security_group.web.id
   security_group_id        = aws_security_group.vpce.id
   protocol                 = "tcp"
   to_port                  = 443
@@ -242,7 +242,7 @@ resource "aws_security_group_rule" "back_container_from_db" {
   type                     = "ingress"
   description              = "MySQL protocol from backend App"
   from_port                = 3306
-  source_security_group_id = aws_security_group.backend.id
+  source_security_group_id = aws_security_group.api.id
   security_group_id        = aws_security_group.db.id
   protocol                 = "tcp"
   to_port                  = 3306
@@ -252,7 +252,7 @@ resource "aws_security_group_rule" "front_container_from_db" {
   type                     = "ingress"
   description              = "MySQL protocol from management server"
   from_port                = 3306
-  source_security_group_id = aws_security_group.front_container.id
+  source_security_group_id = aws_security_group.web.id
   security_group_id        = aws_security_group.db.id
   protocol                 = "tcp"
   to_port                  = 3306

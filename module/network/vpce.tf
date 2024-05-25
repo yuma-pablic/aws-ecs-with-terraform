@@ -5,8 +5,8 @@ resource "aws_vpc_endpoint" "ecr_api" {
   private_dns_enabled = true
   vpc_endpoint_type   = "Interface"
   subnet_ids = [
-    aws_subnet.sbcntr-subnet-private-egress-1a.id,
-    aws_subnet.sbcntr-subnet-private-egress-1c.id,
+    aws_subnet.private_egress_1a.id,
+    aws_subnet.private_egress_1c.id,
   ]
   security_group_ids = [aws_security_group.vpce.id]
 }
@@ -17,8 +17,8 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
   private_dns_enabled = true
   vpc_endpoint_type   = "Interface"
   subnet_ids = [
-    aws_subnet.sbcntr-subnet-private-egress-1a.id,
-    aws_subnet.sbcntr-subnet-private-egress-1c.id,
+    aws_subnet.private_egress_1a.id,
+    aws_subnet.private_egress_1c.id,
   ]
   security_group_ids = [aws_security_group.vpce.id]
 }
@@ -36,8 +36,8 @@ resource "aws_vpc_endpoint" "logs" {
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
   subnet_ids = [
-    aws_subnet.sbcntr-subnet-private-egress-1a.id,
-    aws_subnet.sbcntr-subnet-private-egress-1c.id,
+    aws_subnet.private_egress_1a.id,
+    aws_subnet.private_egress_1c.id,
   ]
   security_group_ids = [aws_security_group.vpce.id]
 }
@@ -47,8 +47,8 @@ resource "aws_vpc_endpoint" "secrets" {
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
   subnet_ids = [
-    aws_subnet.sbcntr-subnet-private-egress-1a.id,
-    aws_subnet.sbcntr-subnet-private-egress-1c.id,
+    aws_subnet.private_egress-1a.id,
+    aws_subnet.private_egress-1c.id,
   ]
   security_group_ids = [aws_security_group.db.id]
 }
