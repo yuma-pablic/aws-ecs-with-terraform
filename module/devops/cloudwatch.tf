@@ -17,6 +17,6 @@ resource "aws_cloudwatch_event_rule" "codecommit" {
 
 resource "aws_cloudwatch_event_target" "codepipeline" {
   rule     = aws_cloudwatch_event_rule.codecommit.name
-  arn      = aws_codepipeline.backend.arn
+  arn      = aws_codepipeline.api.arn
   role_arn = aws_iam_role.pipeline.arn
 }

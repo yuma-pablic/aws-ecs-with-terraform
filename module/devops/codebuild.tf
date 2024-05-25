@@ -1,9 +1,9 @@
 
-resource "aws_codebuild_project" "backend" {
+resource "aws_codebuild_project" "api" {
   depends_on = [
     aws_s3_bucket.sbcntr-codepipline-bucket
   ]
-  name = "${var.env}-${var.service}-backend"
+  name = "${var.env}-${var.service}-api"
   source {
     type            = "CODECOMMIT"
     location        = aws_codecommit_repository.backend.clone_url_http
