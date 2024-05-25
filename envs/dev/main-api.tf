@@ -1,21 +1,10 @@
-module "newwork" {
-  source  = "../../modules/network"
-  service = var.service
-  env     = var.env
-}
-module "web" {
-  source  = "../../modules/frontend-with-next"
-  service = var.service
-  env     = var.env
-  vpc_id  = module.network.vpc_id
-}
-module "backend-cluster" {
+module "api-cluster" {
   source  = "../../modules/backend-cluster"
   service = var.service
   env     = var.env
   vpc_id  = module.network.vpc_id
 }
-module "backend-with-go" {
+module "api" {
   source  = "../../modules/backend-with-go"
   env     = "dev"
   service = "backend-with-go"
