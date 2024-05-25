@@ -17,7 +17,7 @@ resource "aws_route_table_association" "private_1c" {
 resource "aws_route_table" "ingress" {
   vpc_id = var.vpc_id
   tags = {
-    Name = "${var.env}-${var.service}-route-ingress"
+    Name = "${var.env}-${var.service}-rt-ingress"
   }
 }
 resource "aws_route_table_association" "public_ingress_1a" {
