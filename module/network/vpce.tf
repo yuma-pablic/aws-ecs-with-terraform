@@ -8,7 +8,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
     aws_subnet.sbcntr-subnet-private-egress-1a.id,
     aws_subnet.sbcntr-subnet-private-egress-1c.id,
   ]
-  security_group_ids = [aws_security_group.sbcntr-sg-vpce.id]
+  security_group_ids = [aws_security_group.vpce.id]
 }
 
 resource "aws_vpc_endpoint" "ecr_dkr" {
@@ -20,14 +20,14 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
     aws_subnet.sbcntr-subnet-private-egress-1a.id,
     aws_subnet.sbcntr-subnet-private-egress-1c.id,
   ]
-  security_group_ids = [aws_security_group.sbcntr-sg-vpce.id]
+  security_group_ids = [aws_security_group.vpce.id]
 }
 
 resource "aws_vpc_endpoint" "s3" {
   vpc_id            = var.vpc_id
   service_name      = "com.amazonaws.ap-northeast-1.s3"
   vpc_endpoint_type = "Gateway"
-  route_table_ids   = [aws_route_table.sbcntr-route-app.id]
+  route_table_ids   = [aws_route_table.api.id]
 }
 
 resource "aws_vpc_endpoint" "logs" {
@@ -39,7 +39,7 @@ resource "aws_vpc_endpoint" "logs" {
     aws_subnet.sbcntr-subnet-private-egress-1a.id,
     aws_subnet.sbcntr-subnet-private-egress-1c.id,
   ]
-  security_group_ids = [aws_security_group.sbcntr-sg-vpce.id]
+  security_group_ids = [aws_security_group.vpce.id]
 }
 resource "aws_vpc_endpoint" "secrets" {
   vpc_id              = var.vpc_id
