@@ -5,33 +5,33 @@ output "vpce_sg" {
   value = aws_security_group.vpce.id
 }
 
-output "sg-backend-id" {
+output "sg_api_id" {
   value = aws_security_group.backend.id
 }
-output "sg-frontend-id" {
+output "sg_web_id" {
   value = aws_security_group.front_container.id
 }
 
-output "sg-management-id" {
+output "sg_management_id" {
   value = aws_security_group.management.id
 }
 
-output "subnet-private-egress-1a-id" {
+output "subnet_private_egress_1a_id" {
   value = aws_subnet.private_egress_1a.id
 }
 
-output "subnet-private-egress-1c-id" {
+output "subnet_private_egress_1c_id" {
   value = aws_subnet.private_egress_1c.id
 }
 
-output "aws_lb_target_group.sbcntr-tg-blue.name" {
+output "tg_blue_name" {
   value = aws_lb_target_group.blue.name
 }
 
-output "aws_lb_target_group.sbcntr-tg-green.name" {
+output "tg_green.name" {
   value = aws_lb_target_group.green.name
 }
 
-output "sbcntr-alb-front-arn" {
+output "alb_web_arn" {
   value = aws_alb.frontend.arn
 }
