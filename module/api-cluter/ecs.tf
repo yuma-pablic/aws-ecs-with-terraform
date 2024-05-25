@@ -2,7 +2,7 @@
 resource "aws_ecs_cluster" "api" {
   name = "${var.env}-${var.service}-api-cluster"
   setting {
-    name  = "containerInsights"
+    name  = "container-insights"
     value = "enabled"
   }
 }
@@ -14,7 +14,7 @@ resource "aws_ecs_cluster_capacity_providers" "api" {
   }
 }
 resource "aws_ecs_service" "api" {
-  depends_on                         = [aws_lb_listener.sbcntr-lisner-blue, aws_lb_listener.sbcntr-lisner-green]
+  depends_on                         = [var.lisner_blue, var.lisner_green]
   name                               = "${var.env}-${var.service}-ecs-api-service"
   cluster                            = aws_ecs_cluster.api.id
   platform_version                   = "LATEST"
@@ -31,12 +31,12 @@ resource "aws_ecs_service" "api" {
       aws_subnet.sbcntr-subnet-private-container-1a.id,
       aws_subnet.sbcntr-subnet-private-container-1c.id,
     ]
-    security_groups  = [aws_security_group.sbcntr-sg-backend.id]
+    security_groups  = [var.sg_api.id]
     assign_public_ip = false
   }
   health_check_grace_period_seconds = 120
   load_balancer {
-    target_group_arn = aws_lb_target_group.blue.arn
+    target_group_arn = var.lisner_blue.arn
     container_name   = "app"
     container_port   = 80
   }
@@ -112,7 +112,7 @@ resource "aws_ecs_task_definition" "api" {
           value : "ap-northeast-1"
           }, {
           name : "LOG_BUCKET_NAME"
-          value : "sbcntr-${data.aws_caller_identity.self.account_id}"
+          value : "${var.env}-${var.service}-${data.aws_caller_identity.self.account_id}"
           }, {
           name : "LOG_GROUP_NAME"
           value : "/ecs/${var.env}-${var.service}-api-def"
