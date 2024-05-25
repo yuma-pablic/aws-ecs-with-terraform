@@ -8,7 +8,7 @@ resource "aws_alb" "internal" {
   ]
 }
 
-resource "aws_lb_target_group" "blue" {
+resource "aws_lb_target_group" "api_blue" {
   name        = "${var.env}-${var.service}-api-tg-blue"
   port        = 80
   protocol    = "HTTP"
@@ -34,7 +34,7 @@ resource "aws_lb_target_group" "blue" {
   }
 }
 
-resource "aws_lb_target_group" "green" {
+resource "aws_lb_target_group" "api_green" {
   name        = "${var.env}-${var.service}-api-tg-green"
   port        = 80
   protocol    = "HTTP"
@@ -59,23 +59,23 @@ resource "aws_lb_target_group" "green" {
   }
 }
 
-resource "aws_lb_listener" "blue" {
+resource "aws_lb_listener" "api_blue" {
   load_balancer_arn = aws_alb.internal.id
   port              = 80
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.blue.id
+    target_group_arn = aws_lb_target_group.api_blue.id
   }
 }
 
-resource "aws_lb_listener" "green" {
+resource "aws_lb_listener" "api_green" {
   load_balancer_arn = aws_alb.internal.id
   port              = 10080
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.green.id
+    target_group_arn = aws_lb_target_group.api_green.id
   }
 }
 
