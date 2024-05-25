@@ -9,14 +9,14 @@ resource "aws_alb" "internal" {
 }
 
 resource "aws_lb_target_group" "blue" {
-  name        = "${var.env}-${var.service}-backend-tg-blue"
+  name        = "${var.env}-${var.service}-api-tg-blue"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
 
   tags = {
-    Name = "${var.env}-${var.service}-backend-tg-blue"
+    Name = "${var.env}-${var.service}-api-tg-blue"
   }
   health_check {
     protocol            = "HTTP"
@@ -35,13 +35,13 @@ resource "aws_lb_target_group" "blue" {
 }
 
 resource "aws_lb_target_group" "green" {
-  name        = "${var.env}-${var.service}-backend-tg-green"
+  name        = "${var.env}-${var.service}-api-tg-green"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
   tags = {
-    "Name" = "sbcntr-tg-green"
+    "Name" = "${var.env}-${var.service}-tg-green"
   }
   health_check {
     protocol            = "HTTP"
@@ -79,8 +79,8 @@ resource "aws_lb_listener" "green" {
   }
 }
 
-resource "aws_alb" "frontend" {
-  name            = "${var.env}-${var.service}-alb-frontend"
+resource "aws_alb" "web" {
+  name            = "${var.env}-${var.service}-alb-web"
   internal        = false
   security_groups = [aws_security_group.sbcntr-sg-ingress.id]
   subnets = [
@@ -89,8 +89,8 @@ resource "aws_alb" "frontend" {
   ]
 }
 
-resource "aws_lb_target_group" "frontend" {
-  name        = "${var.env}-${var.service}-tg-frontend"
+resource "aws_lb_target_group" "web" {
+  name        = "${var.env}-${var.service}-tg-web"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -108,12 +108,12 @@ resource "aws_lb_target_group" "frontend" {
   }
 }
 
-resource "aws_lb_listener" "frontend" {
-  load_balancer_arn = aws_alb.frontend.arn
+resource "aws_lb_listener" "web" {
+  load_balancer_arn = aws_alb.web.arn
   port              = 80
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.frontend.id
+    target_group_arn = aws_lb_target_group.web.id
   }
 }

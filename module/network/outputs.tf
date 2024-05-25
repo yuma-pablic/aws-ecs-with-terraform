@@ -33,7 +33,7 @@ output "tg_green_name" {
 }
 
 output "alb_web_arn" {
-  value = aws_alb.frontend.arn
+  value = aws_alb.web.arn
 }
 
 output "db_subnet_group_id" {

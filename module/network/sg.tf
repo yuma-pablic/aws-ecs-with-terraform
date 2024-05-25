@@ -71,7 +71,7 @@ resource "aws_security_group" "backend" {
   }
 }
 
-resource "aws_security_group_rule" "backdend_egress_v4" {
+resource "aws_security_group_rule" "api_egress_v4" {
   type = "egress"
   cidr_blocks = [
     "0.0.0.0/0"
@@ -83,16 +83,16 @@ resource "aws_security_group_rule" "backdend_egress_v4" {
   security_group_id = aws_security_group.backend.id
 }
 
-resource "aws_security_group" "front_container" {
+resource "aws_security_group" "web" {
   vpc_id      = var.vpc_id
   description = "Security Group of front container app"
-  name        = "front-container"
+  name        = "web-container"
   tags = {
-    "Name" = "${var.env}-${var.service}-sg-front-container"
+    "Name" = "${var.env}-${var.service}-sg-web-container"
   }
 }
 
-resource "aws_security_group_rule" "frontend_egress_v4" {
+resource "aws_security_group_rule" "web_egress_v4" {
   type = "egress"
   cidr_blocks = [
     "0.0.0.0/0"
@@ -101,7 +101,7 @@ resource "aws_security_group_rule" "frontend_egress_v4" {
   from_port         = 80
   protocol          = "-1"
   to_port           = 80
-  security_group_id = aws_security_group.front_container.id
+  security_group_id = aws_security_group.web.id
 }
 
 resource "aws_security_group" "internal" {
@@ -146,33 +146,33 @@ resource "aws_security_group_rule" "vpce_egress" {
   security_group_id = aws_security_group.vpce.id
 }
 
-resource "aws_security_group_rule" "front_container_ingress" {
+resource "aws_security_group_rule" "web_ingress" {
   type                     = "ingress"
   description              = "HTTP for Ingress"
   from_port                = 80
   source_security_group_id = aws_security_group.ingress.id
-  security_group_id        = aws_security_group.front_container.id
+  security_group_id        = aws_security_group.web.id
   protocol                 = "tcp"
   to_port                  = 80
 }
 
 
-resource "aws_security_group_rule" "ingress_from_front_container" {
+resource "aws_security_group_rule" "ingress_from_web" {
   type                     = "ingress"
   description              = "HTTP for front container"
   from_port                = 80
-  source_security_group_id = aws_security_group.front_container.id
+  source_security_group_id = aws_security_group.web.id
   security_group_id        = aws_security_group.internal.id
   protocol                 = "tcp"
   to_port                  = 80
 }
 
-resource "aws_security_group_rule" "internal_from_back_container" {
+resource "aws_security_group_rule" "internal_from_api" {
   type                     = "ingress"
   description              = "HTTP for internal lb"
   from_port                = 80
   source_security_group_id = aws_security_group.internal.id
-  security_group_id        = aws_security_group.backend.id
+  security_group_id        = aws_security_group.api.id
   protocol                 = "tcp"
   to_port                  = 80
 }
