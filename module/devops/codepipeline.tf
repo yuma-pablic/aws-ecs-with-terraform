@@ -1,5 +1,5 @@
-resource "aws_codepipeline" "backend" {
-  name     = "${var.env}-${var.service}-backend"
+resource "aws_codepipeline" "api" {
+  name     = "${var.env}-${var.service}-api"
   role_arn = aws_iam_role.pipeline.arn
 
   artifact_store {
@@ -53,8 +53,8 @@ resource "aws_codepipeline" "backend" {
       input_artifacts = ["SourceArtifact", "BuildOutput"]
       configuration = {
         AppSpecTemplateArtifact        = "SourceArtifact",
-        ApplicationName                = aws_codedeploy_app.backend.name
-        DeploymentGroupName            = "${var.env}-${var.service}-backend"
+        ApplicationName                = aws_codedeploy_app.api.name
+        DeploymentGroupName            = "${var.env}-${var.service}-api"
         Image1ArtifactName             = "BuildOutput"
         Image1ContainerName            = "IMAGE1_NAME"
         TaskDefinitionTemplateArtifact = "SourceArtifact"

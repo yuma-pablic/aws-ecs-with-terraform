@@ -35,3 +35,7 @@ output "tg_green_name" {
 output "alb_web_arn" {
   value = aws_alb.frontend.arn
 }
+
+output "db_subnet_group_id" {
+  value = aws_db_subnet_group.default.id
+}

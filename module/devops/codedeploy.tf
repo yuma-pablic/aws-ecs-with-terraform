@@ -1,14 +1,14 @@
-resource "aws_codedeploy_app" "backend" {
+resource "aws_codedeploy_app" "api" {
   compute_platform = "ECS"
-  name             = "${var.env}-${var.service}-backend"
+  name             = "${var.env}-${var.service}-api"
 }
-resource "aws_codedeploy_deployment_group" "backend" {
+resource "aws_codedeploy_deployment_group" "api" {
   depends_on = [
     aws_iam_role.ecs-codedeploy-role,
     aws_ecs_cluster.sbcntr-backend-cluster
   ]
-  app_name               = "${var.env}-${var.service}-backend"
-  deployment_group_name  = "${var.env}-${var.service}-backend"
+  app_name               = "${var.env}-${var.service}-api"
+  deployment_group_name  = "${var.env}-${var.service}-api"
   service_role_arn       = aws_iam_role.ecs_codedeploy_role.arn
   deployment_config_name = "CodeDeployDefault.ECSAllAtOnce"
 

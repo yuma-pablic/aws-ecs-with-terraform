@@ -1,24 +1,24 @@
 
-resource "aws_ecs_cluster" "backend" {
-  name = "${var.env}-${var.service}-backend-cluster"
+resource "aws_ecs_cluster" "api" {
+  name = "${var.env}-${var.service}-api-cluster"
   setting {
     name  = "containerInsights"
     value = "enabled"
   }
 }
-resource "aws_ecs_cluster_capacity_providers" "backend" {
-  cluster_name       = aws_ecs_cluster.backend.name
+resource "aws_ecs_cluster_capacity_providers" "api" {
+  cluster_name       = aws_ecs_cluster.api.name
   capacity_providers = ["FARGATE"]
   default_capacity_provider_strategy {
     capacity_provider = "FARGATE"
   }
 }
-resource "aws_ecs_service" "backend" {
+resource "aws_ecs_service" "api" {
   depends_on                         = [aws_lb_listener.sbcntr-lisner-blue, aws_lb_listener.sbcntr-lisner-green]
-  name                               = "${var.env}-${var.service}-ecs-backend-service"
-  cluster                            = aws_ecs_cluster.backend.id
+  name                               = "${var.env}-${var.service}-ecs-api-service"
+  cluster                            = aws_ecs_cluster.api.id
   platform_version                   = "LATEST"
-  task_definition                    = aws_ecs_task_definition.backend.arn
+  task_definition                    = aws_ecs_task_definition.api.arn
   desired_count                      = 2
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent         = 200
@@ -51,8 +51,8 @@ resource "aws_ecs_service" "backend" {
   }
 }
 
-resource "aws_ecs_task_definition" "backend" {
-  family                   = "${var.env}-${var.service}-backend-def"
+resource "aws_ecs_task_definition" "api" {
+  family                   = "${var.env}-${var.service}-api-def"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 512
@@ -103,7 +103,7 @@ resource "aws_ecs_task_definition" "backend" {
       environment = [
         {
           name : "APP_ID"
-          value : "backend-def"
+          value : "api-def"
           }, {
           name : "AWS_ACCOUNT_ID"
           value : "${data.aws_caller_identity.self.account_id}"
@@ -115,7 +115,7 @@ resource "aws_ecs_task_definition" "backend" {
           value : "sbcntr-${data.aws_caller_identity.self.account_id}"
           }, {
           name : "LOG_GROUP_NAME"
-          value : "/ecs/sbcntr-backend-def"
+          value : "/ecs/${var.env}-${var.service}-api-def"
         }
       ],
     }

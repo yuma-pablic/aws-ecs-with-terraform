@@ -1,26 +1,26 @@
-resource "aws_ecs_cluster" "frontend" {
-  name = "${var.env}-${var.service}-frontend-cluster"
+resource "aws_ecs_cluster" "web" {
+  name = "${var.env}-${var.service}-web-cluster"
   setting {
     name  = "containerInsights"
     value = "enabled"
   }
 }
-resource "aws_ecs_cluster_capacity_providers" "frontend" {
-  cluster_name       = aws_ecs_cluster.frontend.name
+resource "aws_ecs_cluster_capacity_providers" "web" {
+  cluster_name       = aws_ecs_cluster.web.name
   capacity_providers = ["FARGATE"]
   default_capacity_provider_strategy {
     capacity_provider = "FARGATE"
   }
 }
 
-resource "aws_ecs_task_definition" "frontend" {
+resource "aws_ecs_task_definition" "web" {
   depends_on               = [aws_alb.sbcntr-alb-frontend]
-  family                   = "${var.env}-${var.service}-frontend-def"
+  family                   = "${var.env}-${var.service}-web-def"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 512
   memory                   = 1024
-  execution_role_arn       = aws_iam_role.ecs-frontend-extension-role.arn
+  execution_role_arn       = aws_iam_role.ecs-web-extension-role.arn
   container_definitions = jsonencode([
     {
       name               = "app"
