@@ -4,7 +4,7 @@ resource "aws_rds_cluster" "db" {
   engine                          = "aurora-mysql"
   engine_version                  = "5.7.mysql_aurora.2.10.2"
   master_username                 = "admin"
-  master_password                 = "foobarbaz"
+  manage_master_user_password     = true
   port                            = 3306
   vpc_security_group_ids          = [aws_security_group.sbcntr-sg-db.id]
   db_subnet_group_name            = var.subnet_group.name
