@@ -7,3 +7,5 @@ variable "subnet-private-egress-1a-id" {}
 variable "subnet-private-egress-1c-id" {}
 variable "service" {}
 variable "env" {}
+variable "subnet_group" {
+}

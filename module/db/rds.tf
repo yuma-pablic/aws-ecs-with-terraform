@@ -7,7 +7,7 @@ resource "aws_rds_cluster" "db" {
   master_password                 = "foobarbaz"
   port                            = 3306
   vpc_security_group_ids          = [aws_security_group.sbcntr-sg-db.id]
-  db_subnet_group_name            = aws_db_subnet_group.default.id
+  db_subnet_group_name            = var.subnet_group.name
   db_cluster_parameter_group_name = "default.aurora-mysql5.7"
   enabled_cloudwatch_logs_exports = ["audit", "error", "slowquery"]
   skip_final_snapshot             = true
@@ -20,7 +20,7 @@ resource "aws_rds_cluster_instance" "db" {
   engine                       = aws_rds_cluster.db.engine
   engine_version               = aws_rds_cluster.db.engine_version
   instance_class               = "db.t3.small"
-  db_subnet_group_name         = aws_db_subnet_group.default.id
+  db_subnet_group_name         = var.subnet_group.name
   db_parameter_group_name      = "default.aurora-mysql5.7"
   publicly_accessible          = false
   auto_minor_version_upgrade   = true
