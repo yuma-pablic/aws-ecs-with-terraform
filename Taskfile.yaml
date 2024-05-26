@@ -7,3 +7,15 @@ tasks:
   lint:
     cmds:
       - tflint --recursive
+  dev-apply:
+    cmds:
+      - cd envs/dev && terraform apply
+  pro-apply:
+    cmds:
+      - cd envs/pro && terraform apply
+  dev-destroy:
+    cmds:
+      - cd envs/dev && terraform destroy
+  pro-destroy:
+    cmds:
+      - cd envs/pro && terraform destroy
