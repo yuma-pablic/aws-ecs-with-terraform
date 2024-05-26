@@ -19,7 +19,7 @@ data "aws_iam_policy_document" "full_access_cloud9" {
   }
 }
 
-data "aws_iam_policy_document" "ecr" {
+data "aws_iam_policy_document" "full_access_cloud9_from_api_ecr" {
   version = "2012-10-17"
   statement {
     sid    = "ListImagesInRepository"
