@@ -1,9 +1,9 @@
-module "api-cluster" {
-  source  = "../../modules/api-cluster"
-  service = var.service
-  env     = var.env
-  vpc_id  = module.network.vpc_id
-}
+# module "api-cluster" {
+#   source  = "../../modules/api-cluster"
+#   service = var.service
+#   env     = var.env
+#   vpc_id  = module.network.vpc_id
+# }
 # module "api" {
 #   source  = "../../modules/api"
 #   env     = var.env
