@@ -111,6 +111,6 @@ resource "aws_subnet" "private_db_1c" {
 resource "aws_db_subnet_group" "default" {
   name        = "${var.env}-${var.service}-rds-subnet-group"
   description = "DB subnet group for Auroa"
-  subnet_ids  = [aws_subnet.sbcntr-subnet-private-db-1a.id, aws_subnet.sbcntr-subnet-private-db-1c.id]
+  subnet_ids  = [aws_subnet.private_db_1a.id, aws_subnet.private_db_1c.id]
 }
 data "aws_caller_identity" "self" {}

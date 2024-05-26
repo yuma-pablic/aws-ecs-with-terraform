@@ -47,8 +47,8 @@ resource "aws_vpc_endpoint" "secrets" {
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
   subnet_ids = [
-    aws_subnet.private_egress-1a.id,
-    aws_subnet.private_egress-1c.id,
+    aws_subnet.private_egress_1a.id,
+    aws_subnet.private_egress_1c.id,
   ]
   security_group_ids = [aws_security_group.db.id]
 }
