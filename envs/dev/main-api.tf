@@ -1,13 +1,13 @@
 module "api-cluster" {
-  source  = "../../modules/backend-cluster"
+  source  = "../../modules/api-cluster"
   service = var.service
   env     = var.env
   vpc_id  = module.network.vpc_id
 }
 module "api" {
-  source  = "../../modules/backend-with-go"
-  env     = "dev"
-  service = "backend-with-go"
+  source  = "../../modules/api"
+  env     = var.env
+  service = var.service
   vpc_id  = module.network.vpc_id
 }
 

@@ -1,12 +1,12 @@
-module "web" {
-  source  = "../../modules/frontend-with-next"
+module "web-cluster" {
+  source  = "../../modules/web-cluster"
   service = var.service
   env     = var.env
   vpc_id  = module.network.vpc_id
 }
 
-module "web-cluster" {
-  source  = "../../modules/frontend-cluster"
+module "web" {
+  source  = "../../modules/web"
   service = var.service
   env     = var.env
   vpc_id  = module.network.vpc_id
