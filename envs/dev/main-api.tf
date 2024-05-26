@@ -6,10 +6,10 @@
 #   lisner_green = module.network.tg_green_api_name
 # }
 # module "api" {
-#   source  = "../../modules/api"
-#   env     = var.env
-#   service = var.service
-#   vpc_id  = module.network.vpc_id
+#   source              = "../../modules/api"
+#   env                 = var.env
+#   service             = var.service
+#   aws_caller_identity = ""
 # }
 
 # module "db" {
@@ -35,8 +35,7 @@
 # }
 
 # module "monitoring" {
-#   source  = "../../modules/manegement"
+#   source  = "../../modules/manage"
 #   env     = var.env
 #   service = var.service
-#   vpc_id  = module.network.vpc_id
 # }
