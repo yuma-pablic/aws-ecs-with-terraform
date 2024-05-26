@@ -2,7 +2,7 @@
 resource "aws_ecs_cluster" "api" {
   name = "${var.env}-${var.service}-api-cluster"
   setting {
-    name  = "container-insights"
+    name  = "containerInsights"
     value = "enabled"
   }
 }

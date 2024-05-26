@@ -1,11 +1,13 @@
 variable "vpc_id" {}
 variable "vpce_sg_id" {}
-variable "sg-backend-id" {}
-variable "sg-frontend-id" {}
-variable "sg-management-id" {}
-variable "subnet-private-egress-1a-id" {}
-variable "subnet-private-egress-1c-id" {}
+variable "sg_api_id" {}
+variable "sg_web_id" {}
+variable "sg_manage_id" {}
+variable "sb_private_egress_1a_id" {}
+variable "sb_private_egress_1c_id" {}
 variable "service" {}
 variable "env" {}
 variable "subnet_group" {
+}
+variable "sg_db_id" {
 }

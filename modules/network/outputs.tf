@@ -1,4 +1,4 @@
-output "vpd_id" {
+output "vpc_id" {
   value = aws_vpc.main.id
 }
 output "vpce_sg" {
@@ -38,4 +38,8 @@ output "alb_web_arn" {
 
 output "db_sb_group_id" {
   value = aws_db_subnet_group.default.id
+}
+
+output "sg_db_subnet" {
+  value = aws_security_group.db.id
 }

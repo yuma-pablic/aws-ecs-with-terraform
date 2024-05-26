@@ -6,7 +6,7 @@ resource "aws_rds_cluster" "db" {
   master_username                 = "admin"
   manage_master_user_password     = true
   port                            = 3306
-  vpc_security_group_ids          = [aws_security_group.sbcntr-sg-db.id]
+  vpc_security_group_ids          = [var.sg_db_id]
   db_subnet_group_name            = var.subnet_group.name
   db_cluster_parameter_group_name = "default.aurora-mysql5.7"
   enabled_cloudwatch_logs_exports = ["audit", "error", "slowquery"]
