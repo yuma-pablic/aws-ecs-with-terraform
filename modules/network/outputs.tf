@@ -16,11 +16,11 @@ output "sg_management_id" {
   value = aws_security_group.management.id
 }
 
-output "subnet_private_egress_1a_id" {
+output "sb_private_egress_1a_id" {
   value = aws_subnet.private_egress_1a.id
 }
 
-output "subnet_private_egress_1c_id" {
+output "sb_private_egress_1c_id" {
   value = aws_subnet.private_egress_1c.id
 }
 
@@ -36,6 +36,6 @@ output "alb_web_arn" {
   value = aws_alb.web.arn
 }
 
-output "db_subnet_group_id" {
+output "db_sb_group_id" {
   value = aws_db_subnet_group.default.id
 }
