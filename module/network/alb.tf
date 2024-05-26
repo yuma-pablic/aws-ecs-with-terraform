@@ -1,10 +1,10 @@
 resource "aws_alb" "internal" {
   name            = "${var.env}-${var.service}-alb-internal"
   internal        = true
-  security_groups = [aws_security_group.sbcntr-sg-internal.id]
+  security_groups = [aws_security_group.internal.id]
   subnets = [
-    aws_subnet.sbcntr-subnet-private-container-1a.id,
-    aws_subnet.sbcntr-subnet-private-container-1c.id,
+    aws_subnet.private_1a.id,
+    aws_subnet.private_1c,
   ]
 }
 
@@ -82,10 +82,10 @@ resource "aws_lb_listener" "api_green" {
 resource "aws_alb" "web" {
   name            = "${var.env}-${var.service}-alb-web"
   internal        = false
-  security_groups = [aws_security_group.sbcntr-sg-ingress.id]
+  security_groups = [aws_security_group.ingress.id]
   subnets = [
-    aws_subnet.sbcntr-subnet-public-ingress-1a.id,
-    aws_subnet.sbcntr-subnet-public-ingress-1c.id,
+    aws_subnet.public_ingress_1a.id,
+    aws_subnet.public_ingress_1c.id,
   ]
 }
 
