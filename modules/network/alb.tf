@@ -12,7 +12,7 @@ resource "aws_lb_target_group" "api_blue" {
   name        = "${var.env}-${var.service}-api-tg-blue"
   port        = 80
   protocol    = "HTTP"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.main.id
   target_type = "ip"
 
   tags = {
@@ -38,7 +38,7 @@ resource "aws_lb_target_group" "api_green" {
   name        = "${var.env}-${var.service}-api-tg-green"
   port        = 80
   protocol    = "HTTP"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.main.id
   target_type = "ip"
   tags = {
     "Name" = "${var.env}-${var.service}-tg-green"
@@ -93,7 +93,7 @@ resource "aws_lb_target_group" "web" {
   name        = "${var.env}-${var.service}-tg-web"
   port        = 80
   protocol    = "HTTP"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.main.id
   target_type = "ip"
 
   health_check {

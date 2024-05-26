@@ -1,5 +1,5 @@
 resource "aws_security_group" "ingress" {
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.main.id
   description = "Security group for ingress"
   name        = "ingress"
   tags = {
@@ -42,7 +42,7 @@ resource "aws_security_group_rule" "egress_v6" {
 }
 
 resource "aws_security_group" "management" {
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.main.id
   description = "Security Group of management server"
   name        = "${var.env}-${var.service}-management"
   tags = {
@@ -63,7 +63,7 @@ resource "aws_security_group_rule" "management_egress_v4" {
 }
 
 resource "aws_security_group" "api" {
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.main.id
   description = "Security Group of backend app"
   name        = "${var.env}-${var.service}-sg-api"
   tags = {
@@ -84,7 +84,7 @@ resource "aws_security_group_rule" "api_egress_v4" {
 }
 
 resource "aws_security_group" "web" {
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.main.id
   description = "Security Group of front container app"
   name        = "web-container"
   tags = {
@@ -105,7 +105,7 @@ resource "aws_security_group_rule" "web_egress_v4" {
 }
 
 resource "aws_security_group" "internal" {
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.main.id
   description = "Security group for internal load balancer"
   name        = "internal"
   tags = {
@@ -128,7 +128,7 @@ resource "aws_security_group_rule" "internal_egress_v4" {
 resource "aws_security_group" "vpce" {
   name        = "egress"
   description = "Security Group of VPC Endpoint"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.main.id
   tags = {
     "Name" = "${var.env}-${var.service}-sg-vpce"
   }
@@ -218,7 +218,7 @@ resource "aws_security_group_rule" "management_server_from_internal" {
   to_port                  = 10080
 }
 resource "aws_security_group" "db" {
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.main.id
   description = "Security Group of database"
   name        = "database"
   tags = {
