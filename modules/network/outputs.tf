@@ -43,3 +43,7 @@ output "db_sb_group_id" {
 output "sg_db_subnet" {
   value = aws_security_group.db.id
 }
+
+output "alb_web" {
+  value = aws_alb.web.arn
+}
