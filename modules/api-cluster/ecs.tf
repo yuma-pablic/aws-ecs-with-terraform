@@ -13,6 +13,7 @@ resource "aws_ecs_cluster_capacity_providers" "api" {
     capacity_provider = "FARGATE"
   }
 }
+# ecsspressoに置き換える
 resource "aws_ecs_service" "api" {
   depends_on                         = [var.lisner_blue, var.lisner_green]
   name                               = "${var.env}-${var.service}-ecs-api-service"
