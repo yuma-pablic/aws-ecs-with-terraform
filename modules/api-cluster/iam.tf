@@ -1,6 +1,6 @@
 resource "aws_iam_policy" "log_destionation" {
   name   = "${var.env}-${var.service}-accessing-log-destionation"
-  policy = data.aws_iam_policy_document.sbcntr-AccessingLogDestionation.json
+  policy = data.aws_iam_policy_document.log_dst.json
 }
 resource "aws_iam_role_policy_attachment" "task_role" {
   role       = aws_iam_role.ecsTaskRole.id
@@ -8,7 +8,7 @@ resource "aws_iam_role_policy_attachment" "task_role" {
 }
 resource "aws_iam_role" "ecsTaskRole" {
   name               = "${var.env}-${var.service}-ecs-task-role"
-  assume_role_policy = data.aws_iam_policy_document.sbcntr-ecsTaskRole-policy_document.json
+  assume_role_policy = data.aws_iam_policy_document.assume_ecs_task_role.json
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_api_extension" {
