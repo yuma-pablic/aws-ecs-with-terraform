@@ -10,11 +10,11 @@ pre-commit install
 ```
 ## init
 ```
-make dev-init
+task dev-init
 ```
 ## apply
 ```
-make dev-apply
+task dev-apply
 ```
 
 ## 参考書籍
