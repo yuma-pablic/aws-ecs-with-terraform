@@ -4,7 +4,7 @@ resource "aws_alb" "internal" {
   security_groups = [aws_security_group.internal.id]
   subnets = [
     aws_subnet.private_1a.id,
-    aws_subnet.private_1c,
+    aws_subnet.private_1c.id,
   ]
 }
 

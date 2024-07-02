@@ -5,9 +5,9 @@
 #   vpc_id  = module.network.vpc_id
 # }
 
-module "web" {
-  source  = "../../modules/web"
-  service = var.service
-  env     = var.env
-  alb_web = module.network.alb_web
-}
+# module "web" {
+#   source  = "../../modules/web"
+#   service = var.service
+#   env     = var.env
+#   alb_web = module.network.alb_web
+# }
