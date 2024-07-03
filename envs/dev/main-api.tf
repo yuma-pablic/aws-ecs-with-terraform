@@ -1,10 +1,10 @@
-# module "api-cluster" {
-#   source       = "../../modules/api-cluster"
-#   service      = var.service
-#   env          = var.env
-#   lisner_blue  = module.network.tg_blue_api_name
-#   lisner_green = module.network.tg_green_api_name
-# }
+module "api-cluster" {
+  source       = "../../modules/api-cluster"
+  service      = var.service
+  env          = var.env
+  lisner_blue  = module.network.tg_blue_api_name
+  lisner_green = module.network.tg_green_api_name
+}
 # module "api" {
 #   source              = "../../modules/api"
 #   env                 = var.env
@@ -27,11 +27,11 @@
 #   sg_db_id                = module.network.sg_db_subnet
 # }
 
-module "devops" {
-  source  = "../../modules/devops"
-  env     = var.env
-  service = var.service
-}
+# module "devops" {
+#   source  = "../../modules/devops"
+#   env     = var.env
+#   service = var.service
+# }
 
 # module "monitoring" {
 #   source  = "../../modules/manage"

@@ -12,17 +12,17 @@ resource "aws_iam_role" "ecsTaskRole" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_api_extension" {
-  role       = aws_iam_role.ecs_backend_extension_role.id
-  policy_arn = data.aws_iam_policy.AmazonECSTaskExecutionRolePolicy.arn
+  role       = aws_iam_role.ecsTaskRole.id
+  policy_arn = data.aws_iam_policy.ecs_task_execution_role.arn
 }
 
 resource "aws_iam_role" "ecs_api_extension" {
   name               = "${var.env}-${var.service}-ecs-api-task-execution"
-  assume_role_policy = data.aws_iam_policy_document.sbcntr-ecsTaskRole-policy_document.json
+  assume_role_policy = data.aws_iam_policy.ecs_api_extension.json
 }
 resource "aws_iam_policy" "secrets" {
   name   = "${var.env}-${var.service}-getting-secrets-policy"
-  policy = data.aws_iam_policy_document.sbcntr-getting-secrets-policy_document.json
+  policy = data.aws_iam_policy_document.secrets.json
 }
 resource "aws_iam_role_policy_attachment" "ecs_backend_extension_role_attachement_secrets" {
   policy_arn = aws_iam_policy.secrets.arn
@@ -30,10 +30,10 @@ resource "aws_iam_role_policy_attachment" "ecs_backend_extension_role_attachemen
 }
 resource "aws_iam_policy" "ecr" {
   name   = "${var.env}-${var.service}-accessing-ecr-repository-policy"
-  policy = data.aws_iam_policy_document.sbcntr-accessing-ecr-repository-policy.json
+  policy = data.aws_iam_policy_document.ecr.json
 }
 
 resource "aws_iam_role_policy_attachment" "codebuild_ecr" {
-  role       = module.devops.aws_iam_role.sbcntr-codebuild-role.id
+  role       = module.devops.aws_iam_role.codebuild.id
   policy_arn = aws_iam_policy.ecr.arn
 }
