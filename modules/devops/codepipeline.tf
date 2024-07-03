@@ -3,7 +3,7 @@ resource "aws_codepipeline" "api" {
   role_arn = aws_iam_role.pipeline.arn
 
   artifact_store {
-    location = aws_s3_bucket.codepipline_bucket.bucket
+    location = aws_s3_bucket.api_codepipline_bucket.bucket
     type     = "S3"
   }
   stage {
@@ -36,7 +36,7 @@ resource "aws_codepipeline" "api" {
       output_artifacts = ["BuildOutput"]
 
       configuration = {
-        ProjectName = aws_codebuild_project.backend.id
+        ProjectName = aws_codebuild_project.api.id
       }
 
     }

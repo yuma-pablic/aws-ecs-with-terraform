@@ -4,12 +4,12 @@ resource "aws_codedeploy_app" "api" {
 }
 resource "aws_codedeploy_deployment_group" "api" {
   depends_on = [
-    aws_iam_role.ecs-codedeploy-role,
-    aws_ecs_cluster.sbcntr-backend-cluster
+    aws_iam_role.ecs_codedeploy,
+    aws_ecs_cluster.api.name,
   ]
   app_name               = "${var.env}-${var.service}-api"
   deployment_group_name  = "${var.env}-${var.service}-api"
-  service_role_arn       = aws_iam_role.ecs_codedeploy_role.arn
+  service_role_arn       = aws_iam_role.ecs_codedeploy.arn
   deployment_config_name = "CodeDeployDefault.ECSAllAtOnce"
 
   auto_rollback_configuration {
@@ -33,14 +33,14 @@ resource "aws_codedeploy_deployment_group" "api" {
   }
 
   ecs_service {
-    cluster_name = module.aws_ecs_cluster.sbcntr-backend-cluster-name.name
-    service_name = module.aws_ecs_service.sbcntr-ecs-backend-service-name
+    cluster_name = module.aws_ecs_cluster.api.name
+    service_name = module.aws_ecs_service.api.name
   }
 
   load_balancer_info {
     target_group_pair_info {
       prod_traffic_route {
-        listener_arns = [aws_lb_listener.sbcntr-lisner-blue.arn]
+        listener_arns = [aws_lb_listener.blue.arn]
       }
       target_group {
         name = module.aws_lb_target_group.sbcntr-tg-blue.name

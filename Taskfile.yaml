@@ -7,6 +7,9 @@ tasks:
   lint:
     cmds:
       - tflint --recursive
+  dev-plan:
+    cmds:
+      - cd envs/dev && terraform plan
   dev-apply:
     cmds:
       - cd envs/dev && terraform apply
