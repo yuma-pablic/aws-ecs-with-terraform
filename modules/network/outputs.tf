@@ -25,11 +25,11 @@ output "sb_private_egress_1c_id" {
 }
 
 output "tg_blue_api_name" {
-  value = aws_lb_target_group.api_blue.name
+  value = aws_lb_target_group.api_blue.arn
 }
 
 output "tg_green_api_name" {
-  value = aws_lb_target_group.api_green.name
+  value = aws_lb_target_group.api_green.arn
 }
 
 output "alb_web_arn" {

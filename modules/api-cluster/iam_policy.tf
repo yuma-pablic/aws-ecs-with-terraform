@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "log_dst" {
       "s3:ListBucketMultipartUploads",
       "s3:PutObject"
     ]
-    resources = ["arn:aws:s3:::${aws_s3_bucket.sbcntr-account-id.id}", "arn:aws:s3:::${aws_s3_bucket.sbcntr-account-id.id}/*"]
+    resources = ["arn:aws:s3:::${data.aws_caller_identity.self.account_id}", "arn:aws:s3:::${data.aws_caller_identity.self.account_id}/*"]
   }
   statement {
     effect    = "Allow"

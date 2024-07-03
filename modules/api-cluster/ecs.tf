@@ -29,15 +29,15 @@ resource "aws_ecs_service" "api" {
   }
   network_configuration {
     subnets = [
-      aws_subnet.sbcntr-subnet-private-container-1a.id,
-      aws_subnet.sbcntr-subnet-private-container-1c.id,
+      var.sb_private_1a,
+      var.sb_private_1c
     ]
-    security_groups  = [var.sg_api.id]
+    security_groups  = [var.sg_api]
     assign_public_ip = false
   }
   health_check_grace_period_seconds = 120
   load_balancer {
-    target_group_arn = var.lisner_blue.arn
+    target_group_arn = var.lisner_blue
     container_name   = "app"
     container_port   = 80
   }
@@ -89,7 +89,7 @@ resource "aws_ecs_task_definition" "api" {
       logConfiguration = {
         logDriver = "awslogs",
         options = {
-          awslogs-group : aws_cloudwatch_log_group.ecs-sbcntr-firelens-log-group.name,
+          awslogs-group : aws_cloudwatch_log_group.ecs_firelens.name,
           awslogs-region : "ap-northeast-1",
           awslogs-stream-prefix : "firelens"
         }

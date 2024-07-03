@@ -1,9 +1,12 @@
 module "api-cluster" {
-  source       = "../../modules/api-cluster"
-  service      = var.service
-  env          = var.env
-  lisner_blue  = module.network.tg_blue_api_name
-  lisner_green = module.network.tg_green_api_name
+  source        = "../../modules/api-cluster"
+  service       = var.service
+  env           = var.env
+  lisner_blue   = module.network.tg_blue_api_name
+  lisner_green  = module.network.tg_green_api_name
+  sb_private_1a = module.network.sb_private_egress_1a_id
+  sb_private_1c = module.network.sb_private_egress_1c_id
+  sg_api        = module.network.sg_api_id
 }
 # module "api" {
 #   source              = "../../modules/api"
