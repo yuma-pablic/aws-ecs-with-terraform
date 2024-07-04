@@ -1,9 +1,12 @@
 version: '3'
 
+dotenv: ['.env']
+
 tasks:
   image-push:
     cmds:
       - cd ../go && docker image build -t sbcntr-api:v1 .
+      - aws ecr-public get-login-password --region us-east-1 --profile {{ .user }} | docker login --username AWS --password-stdin public.ecr.aws/w8q6g9x3
   fmt:
     cmds:
       - terraform fmt -recursive
