@@ -5,8 +5,10 @@ dotenv: ['.env']
 tasks:
   image-push:
     cmds:
-      - cd ../go && docker image build -t sbcntr-api:v1 .
-      - aws ecr-public get-login-password --region us-east-1 --profile {{ .user }} | docker login --username AWS --password-stdin public.ecr.aws/w8q6g9x3
+      - cd ../go && docker image build -t sbcntr-backend:v1 .
+      - aws ecr-public get-login-password --region us-east-1 --profile {{ .user }} | docker login --username AWS --password-stdin public.ecr.aws/{{ .alias }}
+      - docker tag sbcntr-backend:v1 public.ecr.aws/{{ .alias }}/sbcntr-backend:v1
+      - docker push public.ecr.aws/{{ .alias }}/sbcntr-backend:v1
   fmt:
     cmds:
       - terraform fmt -recursive
