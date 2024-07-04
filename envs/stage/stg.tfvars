@@ -1,2 +1,0 @@
-service = "sbcntr"
-env     = "pro"
