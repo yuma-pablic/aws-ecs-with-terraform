@@ -1,6 +1,9 @@
 version: '3'
 
 tasks:
+  image_push:
+    cmds:
+      - cd ../go
   fmt:
     cmds:
       - terraform fmt -recursive
