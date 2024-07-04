@@ -1,9 +1,9 @@
 version: '3'
 
 tasks:
-  image_push:
+  image-push:
     cmds:
-      - cd ../go
+      - cd ../go && docker image build -t sbcntr-api:v1 .
   fmt:
     cmds:
       - terraform fmt -recursive
