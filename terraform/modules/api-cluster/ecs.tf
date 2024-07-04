@@ -52,73 +52,73 @@ resource "aws_ecs_service" "api" {
   }
 }
 
-resource "aws_ecs_task_definition" "api" {
-  family                   = "${var.env}-${var.service}-api-def"
-  requires_compatibilities = ["FARGATE"]
-  network_mode             = "awsvpc"
-  cpu                      = 512
-  memory                   = 1024
-  execution_role_arn       = aws_iam_role.ecs_api_extension.arn
-  task_role_arn            = aws_iam_role.ecsTaskRole.arn
-  container_definitions = jsonencode([
-    {
-      name               = "app"
-      image              = "${data.aws_caller_identity.self.account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-backend:v1"
-      cpu                = 256
-      memory_reservation = 512
-      essential          = true
-      runtime_platform = {
-        operating_system_family = "LINUX"
-      }
+# resource "aws_ecs_task_definition" "api" {
+#   family                   = "${var.env}-${var.service}-api-def"
+#   requires_compatibilities = ["FARGATE"]
+#   network_mode             = "awsvpc"
+#   cpu                      = 512
+#   memory                   = 1024
+#   execution_role_arn       = aws_iam_role.ecs_api_extension.arn
+#   task_role_arn            = aws_iam_role.ecsTaskRole.arn
+#   container_definitions = jsonencode([
+#     {
+#       name               = "app"
+#       image              = "${data.aws_caller_identity.self.account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-backend:v1"
+#       cpu                = 256
+#       memory_reservation = 512
+#       essential          = true
+#       runtime_platform = {
+#         operating_system_family = "LINUX"
+#       }
 
-      portMappings = [
-        {
-          containerPort = 80
-        }
-      ]
-      # アプリのログはfirelensで出力
-      logConfiguration = {
-        logDriver = "awsfirelens"
-      }
-      }, {
-      essential         = true,
-      name              = "log_router"
-      image             = "${data.aws_caller_identity.self.account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-base:log-router"
-      memoryReservation = 128,
-      cpu               = 64
-      logConfiguration = {
-        logDriver = "awslogs",
-        options = {
-          awslogs-group : aws_cloudwatch_log_group.ecs_firelens.name,
-          awslogs-region : "ap-northeast-1",
-          awslogs-stream-prefix : "firelens"
-        }
-      },
-      firelensConfiguration = {
-        type = "fluentbit",
-        options = {
-          config-file-type  = "file",
-          config-file-value = "/fluent-bit/custom.conf"
-        }
-      },
-      environment = [
-        {
-          name : "APP_ID"
-          value : "api-def"
-          }, {
-          name : "AWS_ACCOUNT_ID"
-          value : "${data.aws_caller_identity.self.account_id}"
-          }, {
-          name : "AWS_REGION"
-          value : "ap-northeast-1"
-          }, {
-          name : "LOG_BUCKET_NAME"
-          value : "${var.env}-${var.service}-${data.aws_caller_identity.self.account_id}"
-          }, {
-          name : "LOG_GROUP_NAME"
-          value : "/ecs/${var.env}-${var.service}-api-def"
-        }
-      ],
-    }
-  ])
-}
+#       portMappings = [
+#         {
+#           containerPort = 80
+#         }
+#       ]
+#       # アプリのログはfirelensで出力
+#       logConfiguration = {
+#         logDriver = "awsfirelens"
+#       }
+#       }, {
+#       essential         = true,
+#       name              = "log_router"
+#       image             = "${data.aws_caller_identity.self.account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-base:log-router"
+#       memoryReservation = 128,
+#       cpu               = 64
+#       logConfiguration = {
+#         logDriver = "awslogs",
+#         options = {
+#           awslogs-group : aws_cloudwatch_log_group.ecs_firelens.name,
+#           awslogs-region : "ap-northeast-1",
+#           awslogs-stream-prefix : "firelens"
+#         }
+#       },
+#       firelensConfiguration = {
+#         type = "fluentbit",
+#         options = {
+#           config-file-type  = "file",
+#           config-file-value = "/fluent-bit/custom.conf"
+#         }
+#       },
+#       environment = [
+#         {
+#           name : "APP_ID"
+#           value : "api-def"
+#           }, {
+#           name : "AWS_ACCOUNT_ID"
+#           value : "${data.aws_caller_identity.self.account_id}"
+#           }, {
+#           name : "AWS_REGION"
+#           value : "ap-northeast-1"
+#           }, {
+#           name : "LOG_BUCKET_NAME"
+#           value : "${var.env}-${var.service}-${data.aws_caller_identity.self.account_id}"
+#           }, {
+#           name : "LOG_GROUP_NAME"
+#           value : "/ecs/${var.env}-${var.service}-api-def"
+#         }
+#       ],
+#     }
+#   ])
+# }
