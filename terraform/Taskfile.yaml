@@ -1,0 +1,24 @@
+version: '3'
+
+tasks:
+  fmt:
+    cmds:
+      - terraform fmt -recursive
+  lint:
+    cmds:
+      - tflint --recursive
+  dev-plan:
+    cmds:
+      - cd envs/dev && terraform plan
+  dev-apply:
+    cmds:
+      - cd envs/dev && terraform apply
+  pro-apply:
+    cmds:
+      - cd envs/pro && terraform apply
+  dev-destroy:
+    cmds:
+      - cd envs/dev && terraform destroy
+  pro-destroy:
+    cmds:
+      - cd envs/pro && terraform destroy

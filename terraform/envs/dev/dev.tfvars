@@ -1,0 +1,2 @@
+service = "sbcntr"
+env     = "dev"
