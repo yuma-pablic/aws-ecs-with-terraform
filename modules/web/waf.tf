@@ -104,6 +104,6 @@ resource "aws_wafv2_web_acl" "frontend" {
 }
 
 resource "aws_wafv2_web_acl_association" "front" {
-  resource_arn = var.alb_web.arn
+  resource_arn = var.alb_web
   web_acl_arn  = aws_wafv2_web_acl.frontend.arn
 }
