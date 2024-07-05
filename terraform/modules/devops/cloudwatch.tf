@@ -5,7 +5,7 @@ resource "aws_cloudwatch_event_rule" "codecommit" {
     {
       "source" : ["aws.codecommit"],
       "detail-type" : ["CodeCommit Repository State Change"],
-      "resources" : ["${aws_codecommit_repository.backend.id}"],
+      "resources" : [var.backend_api],
       "detail" : {
         "event" : ["referenceCreated", "referenceUpdated"],
         "referenceType" : ["branch"],
