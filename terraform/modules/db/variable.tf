@@ -1,13 +1,33 @@
-variable "vpc_id" {}
-variable "vpce_sg_id" {}
-variable "sg_api_id" {}
-variable "sg_web_id" {}
-variable "sg_manage_id" {}
-variable "sb_private_egress_1a_id" {}
-variable "sb_private_egress_1c_id" {}
-variable "service" {}
-variable "env" {}
+variable "vpc_id" {
+  type = string
+}
+variable "vpce_sg_id" {
+  type = string
+}
+variable "sg_api_id" {
+  type = string
+}
+variable "sg_web_id" {
+  type = string
+}
+variable "sg_manage_id" {
+  type = string
+}
+variable "sb_private_egress_1a_id" {
+  type = string
+}
+variable "sb_private_egress_1c_id" {
+  type = string
+}
+variable "service" {
+  type = string
+}
+variable "env" {
+  type = string
+}
 variable "subnet_group" {
+  type = string
 }
 variable "sg_db_id" {
+  type = string
 }

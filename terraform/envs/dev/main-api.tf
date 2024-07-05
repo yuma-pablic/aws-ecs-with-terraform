@@ -36,8 +36,8 @@
 #   service = var.service
 # }
 
-module "monitoring" {
-  source  = "../../modules/manage"
-  env     = var.env
-  service = var.service
-}
+# module "monitoring" {
+#   source  = "../../modules/manage"
+#   env     = var.env
+#   service = var.service
+# }
