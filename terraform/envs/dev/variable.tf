@@ -10,7 +10,7 @@ variable "env" {
 }
 
 variable "ecspresso_env_dir" {
-  description = "The ARN of the blue listener"
+  description = "The path to the directory containing the ecspresso configuration file"
   type        = string
   default     = "../../../api/"
 }

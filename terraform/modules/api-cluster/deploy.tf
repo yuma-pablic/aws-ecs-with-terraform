@@ -15,8 +15,7 @@ resource "null_resource" "ecspresso" {
 
   provisioner "local-exec" {
     command     = "ecspresso scale --tasks 0 && ecspresso delete --force"
-    working_dir = var.ecspress_env_dir
-    # working_dir = "../../../api/"
-    when = destroy
+    working_dir = "../../../api/"
+    when        = destroy
   }
 }
