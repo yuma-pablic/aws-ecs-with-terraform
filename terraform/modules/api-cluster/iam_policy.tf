@@ -1,45 +1,15 @@
 data "aws_caller_identity" "self" {}
-data "aws_iam_policy_document" "ecr" {
-  version = "2012-10-17"
+data "aws_iam_policy_document" "ecs" {
   statement {
-    sid    = "ListImagesInRepository"
-    effect = "Allow"
-    actions = [
-      "ecr:ListImages"
-    ]
-    resources = [
-      "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-backend",
-    ]
-  }
-  statement {
-    sid    = "GetAuthorizationToken"
-    effect = "Allow"
-    actions = [
-      "ecr:GetAuthorizationToken"
-    ]
-    resources = ["*"]
-  }
-  statement {
-    sid    = "ManageRepositoryContents"
-    effect = "Allow"
-    actions = [
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:GetRepositoryPolicy",
-      "ecr:DescribeRepositories",
-      "ecr:ListImages",
-      "ecr:DescribeImages",
-      "ecr:BatchGetImage",
-      "ecr:InitiateLayerUpload",
-      "ecr:UploadLayerPart",
-      "ecr:CompleteLayerUpload",
-      "ecr:PutImage"
-    ]
-    resources = [
-      "arn:aws:ecr:ap-northeast-1:${data.aws_caller_identity.self.account_id}:repository/sbcntr-backend",
-    ]
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
   }
 }
+
 data "aws_iam_policy_document" "log_dst" {
   version = "2012-10-17"
   statement {
