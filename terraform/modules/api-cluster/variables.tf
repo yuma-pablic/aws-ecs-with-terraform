@@ -20,3 +20,7 @@ variable "sb_private_1c" {
 variable "sg_api" {
   type = string
 }
+
+variable "ecspress_env_dir" {
+  type = string
+}

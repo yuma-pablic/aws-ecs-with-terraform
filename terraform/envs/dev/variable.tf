@@ -8,3 +8,9 @@ variable "env" {
   type        = string
   default     = "dev"
 }
+
+variable "ecspresso_env_dir" {
+  description = "The ARN of the blue listener"
+  type        = string
+  default     = "../../../api/"
+}
