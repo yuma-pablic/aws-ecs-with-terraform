@@ -1,24 +1,18 @@
 {
   "deploymentConfiguration": {
     "alarms": {
-      "alarmnames": [],
-      "enable": false,
-      "rollback": false
-    },
-    "deploymentCircuitBreaker": {
-      "enable": true,
-      "rollback": true
+      "alarmnames": []
     },
     "maximumPercent": 200,
     "minimumHealthyPercent": 100
   },
   "deploymentController": {
-    "type": "ECS"
+   "type": "CODE_DEPLOY"
   },
   "desiredCount": 2,
   "enableECSManagedTags": true,
   "enableExecuteCommand": false,
-  "healthCheckGracePeriodSeconds": 0,
+  "healthCheckGracePeriodSeconds": 100,
   "launchType": "FARGATE",
   "loadBalancers": [
     {
