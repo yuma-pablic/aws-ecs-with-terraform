@@ -47,3 +47,10 @@ output "sg_db_subnet" {
 output "alb_web" {
   value = aws_alb.web.arn
 }
+
+output "listener_blue" {
+  value = aws_lb_listener.api_blue
+}
+output "listener_green" {
+  value = aws_lb_listener.api_green
+}
