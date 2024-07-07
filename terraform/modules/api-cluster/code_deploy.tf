@@ -18,7 +18,7 @@ resource "aws_codedeploy_deployment_group" "api" {
   }
   ecs_service {
     cluster_name = aws_ecs_cluster.api.name
-    service_name = "${var.env}-${var.service}-api-service"
+    service_name = "sbncntr-backend-service"
   }
   blue_green_deployment_config {
     deployment_ready_option {
