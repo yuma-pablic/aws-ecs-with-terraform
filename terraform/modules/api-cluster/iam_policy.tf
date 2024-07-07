@@ -9,6 +9,16 @@ data "aws_iam_policy_document" "ecs" {
     }
   }
 }
+data "aws_iam_policy_document" "assume_code_deploy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["codedeploy.amazonaws.com"]
+    }
+  }
+}
 
 data "aws_iam_policy_document" "log_dst" {
   version = "2012-10-17"
