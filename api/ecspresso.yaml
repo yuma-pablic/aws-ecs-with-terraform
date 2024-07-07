@@ -4,6 +4,9 @@ service: sbcntr-api-service
 service_definition: ecs-service-def.json
 task_definition: ecs-task-def.json
 timeout: "10m0s"
+codedeploy:
+  application_name: AppECS-dev-sbcntr-api-cluster-sbcntr-backend-service
+  deployment_group_name: DgpECS-dev-sbcntr-api-cluster-sbcntr-backend-service
 plugins:
   - name: tfstate
     config:
