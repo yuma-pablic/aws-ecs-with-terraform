@@ -3,12 +3,6 @@ version: '3'
 dotenv: ['.env']
 
 tasks:
-  image-push:
-    cmds:
-      - cd ../go && docker image build -t sbcntr-backend:v1 .
-      - aws ecr get-login-password --region ap-northeast-1 --profile {{ .user }} | docker login --username AWS --password-stdin 254850949809.dkr.ecr.ap-northeast-1.amazonaws.com
-      - docker tag sbcntr-backend:v1 254850949809.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-backend:v1
-      - docker push 254850949809.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-backend:v1
   fmt:
     cmds:
       - terraform fmt -recursive

@@ -4,7 +4,7 @@ resource "null_resource" "ecspresso" {
     execution_role_arn = aws_iam_role.ecs_task_execution.arn,
   }
   provisioner "local-exec" {
-    command     = "ecspresso deploy"
+    command     = "ecspresso deploy --no-wait"
     working_dir = var.ecspress_env_dir
     environment = {
       ECS_CLUSTER        = aws_ecs_cluster.api.name,

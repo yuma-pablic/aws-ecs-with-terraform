@@ -4,10 +4,16 @@ variable "service" {
 variable "env" {
   type = string
 }
-variable "lisner_blue" {
+variable "tg_blue" {
   type = string
 }
-variable "lisner_green" {
+variable "tg_green" {
+  type = string
+}
+variable "listener_blue" {
+  type = string
+}
+variable "listener_green" {
   type = string
 }
 
