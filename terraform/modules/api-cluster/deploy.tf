@@ -2,6 +2,7 @@ resource "null_resource" "ecspresso" {
   triggers = {
     cluster            = aws_ecs_cluster.api.name,
     execution_role_arn = aws_iam_role.ecs_task_execution.arn,
+    target_group_blue  = var.tg_blue,
   }
   provisioner "local-exec" {
     command     = "ecspresso deploy --no-wait"

@@ -6,6 +6,7 @@ resource "aws_codedeploy_deployment_group" "api" {
   depends_on = [
     aws_iam_role.ecs_code_deploy,
     aws_ecs_cluster.api,
+    null_resource.ecspresso,
   ]
   app_name               = aws_codedeploy_app.api.name
   deployment_group_name  = "DgpECS-${var.env}-${var.service}-api-cluster-sbcntr-backend-service"
