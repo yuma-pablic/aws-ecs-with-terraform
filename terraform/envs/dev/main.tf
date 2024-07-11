@@ -1,3 +1,9 @@
+module "network" {
+  source  = "../../modules/network"
+  service = var.service
+  env     = var.env
+}
+
 module "api-cluster" {
   source           = "../../modules/api-cluster"
   service          = var.service
