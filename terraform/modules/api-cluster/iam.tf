@@ -17,16 +17,8 @@ resource "aws_iam_role_policy_attachment" "ecs_code_deploy" {
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS"
 
 }
-# resource "aws_iam_policy" "log_destionation" {
-#   name   = "${var.env}-${var.service}-accessing-log-destionation"
-#   policy = data.aws_iam_policy_document.log_dst.json
-# }
 
 # resource "aws_iam_policy" "secrets" {
 #   name   = "${var.env}-${var.service}-getting-secrets-policy"
 #   policy = data.aws_iam_policy_document.secrets.json
-# }
-# resource "aws_iam_role_policy_attachment" "ecs_backend_extension_role_attachement_secrets" {
-#   policy_arn = aws_iam_policy.secrets.arn
-#   role       = aws_iam_role.ecs_api_extension.id
 # }
