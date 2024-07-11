@@ -33,12 +33,6 @@ module "api-cluster" {
 #   sg_db_id                = module.network.sg_db_subnet
 # }
 
-# module "devops" {
-#   source  = "../../modules/devops"
-#   env     = var.env
-#   service = var.service
-# }
-
 # module "monitoring" {
 #   source  = "../../modules/manage"
 #   env     = var.env
