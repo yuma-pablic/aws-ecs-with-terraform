@@ -1,6 +1,6 @@
 
 resource "aws_iam_role" "ecs_task_execution" {
-  name               = "api-ecs-task-execution"
+  name               = "${var.env}-${var.service}-api-ecs-task-execution"
   assume_role_policy = data.aws_iam_policy_document.ecs.json
 }
 
@@ -15,10 +15,9 @@ resource "aws_iam_role" "ecs_code_deploy" {
 resource "aws_iam_role_policy_attachment" "ecs_code_deploy" {
   role       = aws_iam_role.ecs_code_deploy.name
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS"
-
 }
 
-# resource "aws_iam_policy" "secrets" {
-#   name   = "${var.env}-${var.service}-getting-secrets-policy"
-#   policy = data.aws_iam_policy_document.secrets.json
-# }
+resource "aws_iam_policy" "secrets" {
+  name   = "${var.env}-${var.service}-getting-secrets-policy"
+  policy = data.aws_iam_policy_document.secrets.json
+}
