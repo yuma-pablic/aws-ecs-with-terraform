@@ -22,6 +22,24 @@
           "name": "app-80-tcp",
           "protocol": "tcp"
         }
+      ],
+      "secrets": [
+        {
+         "name": "DB_HOST",
+         "valueFrom": "{{ secretsmanager_arn `host` }}:host::"
+        },
+        {
+         "name": "DB_NAME",
+         "valueFrom": "{{ secretsmanager_arn `name` }}:name::"
+        },
+        {
+         "name": "DB_USERNAME",
+         "valueFrom": "{{ secretsmanager_arn `username` }}:username::"
+        },
+        {
+         "name": "DB_PASSWORD",
+         "valueFrom": "{{ secretsmanager_arn `password` }}:password::"
+        }
       ]
     }
   ],
