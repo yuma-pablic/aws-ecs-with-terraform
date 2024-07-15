@@ -33,3 +33,6 @@ data "aws_iam_policy_document" "secrets" {
     resources = ["*"]
   }
 }
+data "aws_iam_role" "ecs_service_autoscaling" {
+  name = "AWSServiceRoleForApplicationAutoScaling_ECSService"
+}
