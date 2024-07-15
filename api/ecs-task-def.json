@@ -26,25 +26,25 @@
       "secrets": [
         {
          "name": "DB_HOST",
-         "valueFrom": "{{ secretsmanager_arn `host` }}:host::"
+         "valueFrom": "{{ secretsmanager_arn `cluster` }}:host::"
         },
         {
          "name": "DB_NAME",
-         "valueFrom": "{{ secretsmanager_arn `name` }}:name::"
+         "valueFrom": "{{ secretsmanager_arn `cluster` }}:name::"
         },
         {
          "name": "DB_USERNAME",
-         "valueFrom": "{{ secretsmanager_arn `username` }}:username::"
+         "valueFrom": "{{ secretsmanager_arn `cluster` }}:username::"
         },
         {
          "name": "DB_PASSWORD",
-         "valueFrom": "{{ secretsmanager_arn `password` }}:password::"
+         "valueFrom": "{{ secretsmanager_arn `cluster` }}:password::"
         }
       ]
     }
   ],
   "cpu": "1024",
-  "executionRoleArn": "arn:aws:iam::{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}:role/dev-api-ecs-task-execution",
   "family": "sbcntr-backend-def",
   "ipcMode": "",
   "memory": "3072",
