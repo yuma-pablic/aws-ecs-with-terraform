@@ -36,3 +36,13 @@ resource "aws_rds_cluster_parameter_group" "this" {
     value = "Asia/Tokyo"
   }
 }
+
+resource "aws_rds_cluster_endpoint" "db" {
+  cluster_identifier          = aws_rds_cluster.db.id
+  cluster_endpoint_identifier = "reader"
+  custom_endpoint_type        = "READER"
+
+  excluded_members = [
+    aws_rds_cluster_instance.db.id,
+  ]
+}
