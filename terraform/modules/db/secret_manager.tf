@@ -8,7 +8,7 @@ resource "aws_secretsmanager_secret_version" "asm_secret_rds_cluster_arn_version
 }
 
 resource "aws_secretsmanager_secret" "rds_dbname" {
-  name = "${var.env}-${var.service}-rds-cluster-arn"
+  name = "${var.env}-${var.service}-rds-dbname"
 }
 
 resource "aws_secretsmanager_secret_version" "asm_secret_dbname_version" {
