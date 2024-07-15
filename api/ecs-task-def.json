@@ -22,11 +22,17 @@
           "name": "app-80-tcp",
           "protocol": "tcp"
         }
-      ]
+      ],
+      "secrets": [
+    {
+      "name": "DB_NAME",
+      "valueFrom": "{{ secretsmanager_arn `dev-sbcntr-rds-dbnamee` }}:name::"
+    }
+  ]
     }
   ],
   "cpu": "1024",
-  "executionRoleArn": "arn:aws:iam::{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}:role/dev-api-ecs-task-execution",
+  "executionRoleArn": "arn:aws:iam::{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}:role/ecsTaskExecutionRole ",
   "family": "sbcntr-backend-def",
   "ipcMode": "",
   "memory": "3072",

@@ -11,4 +11,3 @@ plugins:
   - name: tfstate
     config:
       path: ../terraform/envs/dev/terraform.tfstate
-  - name: ssm
