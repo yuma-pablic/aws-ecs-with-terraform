@@ -24,11 +24,11 @@
         }
       ],
       "secrets": [
-    {
-      "name": "DB_NAME",
-      "valueFrom": "{{ secretsmanager_arn `dev-sbcntr-rds-dbnamee` }}:name::"
-    }
-  ]
+        {
+          "name": "DB_NAME",
+          "valueFrom": "{{ secretsmanager_arn `dev-sbcntr-rds-dbnamee` }}:name::"
+        }
+      ]
     }
   ],
   "cpu": "1024",
