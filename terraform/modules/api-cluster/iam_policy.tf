@@ -33,3 +33,35 @@ data "aws_iam_policy_document" "secrets" {
     resources = ["*"]
   }
 }
+
+data "aws_iam_policy_document" "session_manager" {
+  version = "2012-10-17"
+
+  statement {
+    effect    = "Allow"
+    actions   = ["iam:PassRole"]
+    resources = ["*"]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["ssm.amazonaws.com"]
+    }
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:DeleteActivation",
+      "ssm:RemoveTagsFromResource",
+      "ssm:AddTagsToResource",
+      "ssm:CreateActivation"
+    ]
+    resources = ["*"]
+  }
+}
+
+
+
+data "aws_iam_policy_document" "session_manager_core" {
+  policy_id = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}

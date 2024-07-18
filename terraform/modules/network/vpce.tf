@@ -52,3 +52,27 @@ resource "aws_vpc_endpoint" "secrets" {
   ]
   security_group_ids = [aws_security_group.db.id]
 }
+
+resource "aws_vpc_endpoint" "session_manager" {
+  vpc_id              = aws_vpc.main.id
+  service_name        = "com.amazonaws.ap-northeast-1.ssm"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+  subnet_ids = [
+    aws_subnet.private_egress_1a.id,
+    aws_subnet.private_egress_1c.id,
+  ]
+  security_group_ids = [aws_security_group.vpce.id]
+}
+
+resource "aws_vpc_endpoint" "session_manager_agent" {
+  vpc_id              = aws_vpc.main.id
+  service_name        = "com.amazonaws.ap-northeast-1.ssmmessages"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+  subnet_ids = [
+    aws_subnet.private_egress_1a.id,
+    aws_subnet.private_egress_1c.id,
+  ]
+  security_group_ids = [aws_security_group.vpce.id]
+}
