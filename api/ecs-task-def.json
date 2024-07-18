@@ -26,7 +26,19 @@
       "secrets": [
         {
           "name": "DB_NAME",
-          "valueFrom": "{{ secretsmanager_arn `dev-sbcntr-rds-dbnamee` }}:name::"
+          "valueFrom": "{{ secretsmanager_arn `dev-sbcntr-rds-dbname` }}:name::"
+        },
+        {
+          "name": "DB_HOST",
+          "valueFrom": "{{ secretsmanager_arn `dev-sbcntr-rds-cluster-arn` }}:host::"
+        },
+        {
+          "name": "DB_USERNAME",
+          "valueFrom": "{{ tfstate `module.db.data.aws_secretsmanager_secret.master_password.id` }}:username::"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "{{ tfstate `module.db.data.aws_secretsmanager_secret.master_password.id` }}:password::"
         }
       ]
     }
