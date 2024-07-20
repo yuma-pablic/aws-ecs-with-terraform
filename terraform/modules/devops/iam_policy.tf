@@ -1,4 +1,6 @@
 data "aws_caller_identity" "self" {}
+data "aws_region" "current" {}
+
 data "aws_iam_policy_document" "oidc_assume_role_policy" {
   statement {
     effect  = "Allow"
@@ -17,5 +19,23 @@ data "aws_iam_policy_document" "oidc_assume_role_policy" {
       variable = "token.actions.githubusercontent.com:sub"
       values   = ["repo:yuma-pablic/aws-ecs-with-terraform:*"]
     }
+  }
+}
+
+data "aws_iam_policy_document" "ecr_push_policy" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:PutImage",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload"
+    ]
+    resources = [
+      "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.self.account_id}:repository/${aws_ecr_repository.api.name}"
+    ]
   }
 }
