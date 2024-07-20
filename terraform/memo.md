@@ -1,1 +1,1 @@
-## AWS_ACCOUNT_IDをセットアップ
+## AWS_ACCOUNT_IDをGITHUB Secretにセットアップ
