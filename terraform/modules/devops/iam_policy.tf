@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "ecr_push_policy" {
       "ecr:CompleteLayerUpload"
     ]
     resources = [
-      "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:repository/${aws_ecr_repository.api.name}"
+      "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.self.account_id}:repository/${aws_ecr_repository.api.name}"
     ]
   }
 }
