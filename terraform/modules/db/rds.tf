@@ -36,3 +36,16 @@ resource "aws_rds_cluster_parameter_group" "this" {
     value = "Asia/Tokyo"
   }
 }
+
+resource "aws_rds_cluster_endpoint" "db" {
+  cluster_identifier          = aws_rds_cluster.db.id
+  cluster_endpoint_identifier = "reader"
+  custom_endpoint_type        = "READER"
+}
+
+data "aws_rds_cluster" "this" {
+  cluster_identifier = aws_rds_cluster.db.id
+}
+data "aws_secretsmanager_secret" "master_password" {
+  arn = data.aws_rds_cluster.this.master_user_secret[0].secret_arn
+}

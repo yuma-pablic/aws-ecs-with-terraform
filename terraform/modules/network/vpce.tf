@@ -50,5 +50,5 @@ resource "aws_vpc_endpoint" "secrets" {
     aws_subnet.private_egress_1a.id,
     aws_subnet.private_egress_1c.id,
   ]
-  security_group_ids = [aws_security_group.db.id]
+  security_group_ids = [aws_security_group.vpce.id]
 }

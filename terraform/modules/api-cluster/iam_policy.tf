@@ -27,9 +27,14 @@ data "aws_iam_policy_document" "assume_code_deploy" {
 data "aws_iam_policy_document" "secrets" {
   version = "2012-10-17"
   statement {
-    sid       = "GetSecretForECS"
-    effect    = "Allow"
-    actions   = ["secretsmanager:GetSecretValue"]
+    sid    = "GetSecretForECS"
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetResourcePolicy",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:ListSecretVersionIds",
+    ]
     resources = ["*"]
   }
 }
