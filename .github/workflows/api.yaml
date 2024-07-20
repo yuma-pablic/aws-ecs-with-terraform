@@ -32,6 +32,6 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
           ENVIRONMENT: "dev"
         run: |
-          pwd
+          ls
           docker build . --tag ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
           docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}
