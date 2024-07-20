@@ -1,49 +1,29 @@
-resource "aws_appautoscaling_target" "appautoscaling_ecs_target" {
+resource "aws_appautoscaling_target" "ecs" {
   service_namespace  = "ecs"
-  resource_id        = "sbcntr-api-service"
   scalable_dimension = "ecs:service:DesiredCount"
-
-  role_arn = data.aws_iam_role.ecs_service_autoscaling.arn
-
-  min_capacity = 2
-  max_capacity = 4
+  resource_id        = "service/${aws_ecs_cluster.api.name}/sbcntr-api-service"
+  min_capacity       = 2
+  max_capacity       = 4
+  depends_on = [
+    aws_ecs_cluster.api,
+    null_resource.ecspresso,
+  ]
 }
 
-resource "aws_appautoscaling_policy" "autoscaling_scale_up" {
-  name              = "${var.env}-${var.service}-scale-up"
-  service_namespace = "ecs"
+resource "aws_appautoscaling_policy" "ecs" {
+  name               = "cpu-auto-scaling"
+  service_namespace  = aws_appautoscaling_target.ecs.service_namespace
+  scalable_dimension = aws_appautoscaling_target.ecs.scalable_dimension
+  resource_id        = aws_appautoscaling_target.ecs.resource_id
+  policy_type        = "TargetTrackingScaling"
 
-  resource_id        = "sbcntr-api-service"
-  scalable_dimension = "ecs:service:DesiredCount"
-
-  step_scaling_policy_configuration {
-    adjustment_type         = "ChangeInCapacity"
-    cooldown                = 120
-    metric_aggregation_type = "Average"
-
-    step_adjustment {
-      metric_interval_lower_bound = 0
-      scaling_adjustment          = 1
+  target_tracking_scaling_policy_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageCPUUtilization"
     }
-  }
-}
 
-# サーバ台数減少設定
-resource "aws_appautoscaling_policy" "appautoscaling_scale_down" {
-  name              = "${var.env}-${var.service}-scale-down"
-  service_namespace = "ecs"
-
-  resource_id        = "sbcntr-api-service"
-  scalable_dimension = "ecs:service:DesiredCount"
-
-  step_scaling_policy_configuration {
-    adjustment_type         = "ChangeInCapacity"
-    cooldown                = 120
-    metric_aggregation_type = "Average"
-
-    step_adjustment {
-      metric_interval_lower_bound = 0
-      scaling_adjustment          = -1
-    }
+    target_value       = 80
+    scale_in_cooldown  = 300
+    scale_out_cooldown = 300
   }
 }
