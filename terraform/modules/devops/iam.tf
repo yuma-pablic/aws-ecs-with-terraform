@@ -1,6 +1,6 @@
 resource "aws_iam_role" "oidc" {
-  name               = "${var.env}-${var.service}oidc-role"
-  assume_role_policy = data.aws_iam_policy_document.example_assume_role_policy.json
+  name               = "${var.env}-${var.service}-oidc-role"
+  assume_role_policy = data.aws_iam_policy_document.oidc_assume_role_policy.json
 }
 
 # 任意のポリシーをアタッチする
