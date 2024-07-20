@@ -1,4 +1,4 @@
-resource "aws_ecr_repository" "default" {
+resource "aws_ecr_repository" "api" {
   name                 = "sbcntr-api"
   image_tag_mutability = "MUTABLE"
 
