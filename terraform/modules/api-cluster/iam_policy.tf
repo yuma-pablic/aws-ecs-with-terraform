@@ -36,3 +36,48 @@ data "aws_iam_policy_document" "secrets" {
 data "aws_iam_role" "ecs_service_autoscaling" {
   name = "AWSServiceRoleForApplicationAutoScaling_ECSService"
 }
+
+data "aws_iam_policy_document" "firelens" {
+  version = "2012-10-17"
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:AbortMultipartUpload",
+      "s3:GetBucketLocation",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:ListBucketMultipartUploads",
+      "s3:PutObject"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.firelens.bucket_domain_name}",
+      "arn:aws:s3:::${aws_s3_bucket.firelens.bucket_domain_name}/*"
+    ]
+  }
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey"
+    ]
+
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+      "logs:PutLogEvents"
+    ]
+
+    resources = ["*"]
+  }
+
+}

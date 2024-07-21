@@ -1,9 +1,13 @@
-resource "aws_s3_bucket" "firelens-logs" {
-  bucket = "firelens-logs-${var.environment}"
-  acl    = "private"
+resource "aws_s3_bucket" "firelens" {
+  bucket        = "${var.env}-${var.service}-firelens"
+  force_destroy = true
 
   tags = {
-    Name        = "firelens-logs-${var.environment}"
-    Environment = var.environment
+    Name = "${var.env}-${var.service}firelens"
   }
+}
+
+resource "aws_s3_bucket_acl" "firelens" {
+  bucket = aws_s3_bucket.firelens.bucket
+  acl    = "private"
 }
