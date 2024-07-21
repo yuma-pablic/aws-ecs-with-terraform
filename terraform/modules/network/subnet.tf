@@ -4,7 +4,7 @@ resource "aws_subnet" "private_1a" {
   availability_zone       = "ap-northeast-1a"
   map_public_ip_on_launch = false
   tags = {
-    Name = "${var.env}-${var.service}-subnet-private-1a"
+    Name = "${var.env}-${var.service}-subnet-private-container-1a"
     Type = "Isolated"
   }
 }
