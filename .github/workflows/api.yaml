@@ -34,7 +34,7 @@ jobs:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: "sbcntr-api"
           IMAGE_TAG: ${{ github.sha }}
-          ENVIRONMENT: "dev"
+          ENVIRONMENT: ${{ vars.ENV }}
         run: |
           ls -la
           docker build . --tag ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}
