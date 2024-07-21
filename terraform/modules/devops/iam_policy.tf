@@ -38,4 +38,11 @@ data "aws_iam_policy_document" "ecr_push_policy" {
       "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.self.account_id}:repository/${aws_ecr_repository.api.name}"
     ]
   }
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:GetAuthorizationToken"
+    ]
+    resources = ["*"]
+  }
 }
