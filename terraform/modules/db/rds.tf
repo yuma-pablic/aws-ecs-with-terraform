@@ -16,7 +16,7 @@ resource "aws_rds_cluster" "db" {
 }
 
 resource "aws_rds_cluster_instance" "db" {
-  count                        = 3
+  count                        = var.env == "prod" ? 3 : 1
   cluster_identifier           = aws_rds_cluster.db.id
   engine                       = aws_rds_cluster.db.engine
   engine_version               = aws_rds_cluster.db.engine_version
