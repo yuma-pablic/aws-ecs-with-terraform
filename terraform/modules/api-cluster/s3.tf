@@ -3,11 +3,6 @@ resource "aws_s3_bucket" "firelens" {
   force_destroy = true
 
   tags = {
-    Name = "${var.env}-${var.service}firelens"
+    Name = "${var.env}-${var.service}-firelens"
   }
-}
-
-resource "aws_s3_bucket_acl" "firelens" {
-  bucket = aws_s3_bucket.firelens.bucket
-  acl    = "private"
 }
