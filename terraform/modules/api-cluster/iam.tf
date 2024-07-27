@@ -35,3 +35,14 @@ resource "aws_iam_role_policy_attachment" "firelens" {
   role       = aws_iam_role.ecs_task_execution.name
   policy_arn = aws_iam_policy.firelens.arn
 }
+
+resource "aws_iam_policy" "ssm" {
+  name        = "${var.env}-${var.service}-ssm-policy"
+  description = "Allow ECS tasks to get SSM parameters"
+  policy      = data.aws_iam_policy_document.ssm.json
+}
+
+resource "aws_iam_role_policy_attachment" "ssm" {
+  role       = aws_iam_role.ecs_task_execution.name
+  policy_arn = aws_iam_policy.ssm.arn
+}

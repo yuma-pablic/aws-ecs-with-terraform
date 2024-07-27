@@ -7,11 +7,11 @@
     "minimumHealthyPercent": 100
   },
   "deploymentController": {
-   "type": "CODE_DEPLOY"
+    "type": "CODE_DEPLOY"
   },
   "desiredCount": 2,
   "enableECSManagedTags": true,
-  "enableExecuteCommand": false,
+  "enableExecuteCommand": true,
   "healthCheckGracePeriodSeconds": 100,
   "launchType": "FARGATE",
   "loadBalancers": [
@@ -28,8 +28,8 @@
         "{{ tfstate `module.network.aws_security_group.api.id` }}"
       ],
       "subnets": [
-       "{{ tfstate `module.network.aws_subnet.private_1a.id` }}",
-       "{{ tfstate `module.network.aws_subnet.private_1a.id` }}"
+        "{{ tfstate `module.network.aws_subnet.private_1a.id` }}",
+        "{{ tfstate `module.network.aws_subnet.private_1a.id` }}"
       ]
     }
   },
