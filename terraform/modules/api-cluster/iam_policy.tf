@@ -2,6 +2,7 @@ data "aws_caller_identity" "self" {}
 data "aws_iam_policy_document" "ecs" {
   statement {
     actions = ["sts:AssumeRole"]
+    effect  = "Allow"
 
     principals {
       type        = "Service"
