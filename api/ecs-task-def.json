@@ -1,8 +1,9 @@
 {
   "containerDefinitions": [
     {
-      "cpu": 0,
+      "cpu": 256,
       "essential": true,
+      "memoryReservation": 512,
       "image": "{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-backend:v1",
       "logConfiguration": {
         "logDriver": "awsfirelens"
@@ -19,7 +20,7 @@
       ]
     },
     {
-      "cpu": 0,
+      "cpu": 64,
       "environment": [
         {
           "name": "LOG_BUCKET_NAME",
@@ -50,28 +51,25 @@
           "config-file-value": "/fluent-bit/custom.conf"
         }
       },
-      "image": "{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:latest",
+      "image": "{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:v1",
       "logConfiguration": {
-        "logDriver": "awsfirelens",
+        "logDriver": "awslogs",
         "options": {
-          "Name": "s3",
-          "bucket": "dev-sbcntr-firelens",
-          "region": "ap-northeast-1",
-          "total_file_size": "1M",
-          "upload_timeout": "1m",
-          "use_put_object": "On"
+          "awslogs-group": "/aws/ecs/dev-sbcntr-firelens-def",
+          "awslogs-stream-prefix": "firelens",
+          "awslogs-region": "ap-northeast-1"
         }
       },
-      "memoryReservation": 50,
+      "memoryReservation": 128,
       "name": "log_router",
       "user": "0"
     }
   ],
-  "cpu": "1024",
+  "cpu": "512",
   "executionRoleArn": "arn:aws:iam::{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}:role/dev-sbcntr-api-ecs-task-execution",
   "family": "sbcntr-backend-def",
   "ipcMode": "",
-  "memory": "3072",
+  "memory": "1024",
   "networkMode": "awsvpc",
   "pidMode": "",
   "requiresCompatibilities": [
