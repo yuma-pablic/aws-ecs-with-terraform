@@ -8,6 +8,11 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
   role       = aws_iam_role.ecs_task_execution.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+
+resource "aws_iam_role" "ecs_task" {
+  name               = "${var.env}-${var.service}-ecs-task"
+  assume_role_policy = data.aws_iam_policy_document.ecs.json
+}
 resource "aws_iam_role" "ecs_code_deploy" {
   name               = "${var.env}-${var.service}-ecs-code-deploy-role"
   assume_role_policy = data.aws_iam_policy_document.assume_code_deploy.json
@@ -43,6 +48,6 @@ resource "aws_iam_policy" "ssm" {
 }
 
 resource "aws_iam_role_policy_attachment" "ssm" {
-  role       = aws_iam_role.ecs_task_execution.name
+  role       = aws_iam_role.ecs_task.name
   policy_arn = aws_iam_policy.ssm.arn
 }
