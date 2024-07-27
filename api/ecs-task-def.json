@@ -1,17 +1,12 @@
 {
   "containerDefinitions": [
     {
-      "cpu": 0,
+      "cpu": 256,
       "essential": true,
+      "memoryReservation": 512,
       "image": "{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-backend:v1",
       "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-create-group": "true",
-          "awslogs-group": "/ecs/sbcntr-backend-def",
-          "awslogs-region": "ap-northeast-1",
-          "awslogs-stream-prefix": "ecs"
-        }
+        "logDriver": "awsfirelens"
       },
       "name": "app",
       "portMappings": [
@@ -23,13 +18,58 @@
           "protocol": "tcp"
         }
       ]
+    },
+    {
+      "cpu": 64,
+      "environment": [
+        {
+          "name": "LOG_BUCKET_NAME",
+          "value": "dev-sbcntr-firelens"
+        },
+        {
+          "name": "APP_ID",
+          "value": "backend-def"
+        },
+        {
+          "name": "AWS_ACCOUNT_ID",
+          "value": "{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}"
+        },
+        {
+          "name": "AWS_REGION",
+          "value": "ap-northeast-1"
+        },
+        {
+          "name": "LOG_GROUP_NAME",
+          "value": "/aws/ecs/sbcntr-backend-def"
+        }
+      ],
+      "essential": true,
+      "firelensConfiguration": {
+        "type": "fluentbit",
+        "options": {
+          "config-file-type": "file",
+          "config-file-value": "/fluent-bit/custom.conf"
+        }
+      },
+      "image": "{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:v1",
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/aws/ecs/dev-sbcntr-firelens-def",
+          "awslogs-stream-prefix": "firelens",
+          "awslogs-region": "ap-northeast-1"
+        }
+      },
+      "memoryReservation": 128,
+      "name": "log_router",
+      "user": "0"
     }
   ],
-  "cpu": "1024",
-  "executionRoleArn": "arn:aws:iam::{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}:role/ecsTaskExecutionRole",
+  "cpu": "512",
+  "executionRoleArn": "arn:aws:iam::{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}:role/dev-sbcntr-api-ecs-task-execution",
   "family": "sbcntr-backend-def",
   "ipcMode": "",
-  "memory": "3072",
+  "memory": "1024",
   "networkMode": "awsvpc",
   "pidMode": "",
   "requiresCompatibilities": [

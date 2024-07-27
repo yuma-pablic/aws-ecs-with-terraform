@@ -21,3 +21,17 @@ resource "aws_iam_policy" "secrets" {
   name   = "${var.env}-${var.service}-getting-secrets-policy"
   policy = data.aws_iam_policy_document.secrets.json
 }
+
+resource "aws_iam_role_policy_attachment" "secrets" {
+  role       = aws_iam_role.ecs_task_execution.name
+  policy_arn = aws_iam_policy.secrets.arn
+}
+
+resource "aws_iam_policy" "firelens" {
+  name   = "${var.env}-${var.service}-firelens-policy"
+  policy = data.aws_iam_policy_document.firelens.json
+}
+resource "aws_iam_role_policy_attachment" "firelens" {
+  role       = aws_iam_role.ecs_task_execution.name
+  policy_arn = aws_iam_policy.firelens.arn
+}
