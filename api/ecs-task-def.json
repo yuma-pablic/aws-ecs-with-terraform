@@ -5,13 +5,7 @@
       "essential": true,
       "image": "{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-backend:v1",
       "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-create-group": "true",
-          "awslogs-group": "/ecs/sbcntr-backend-def",
-          "awslogs-region": "ap-northeast-1",
-          "awslogs-stream-prefix": "ecs"
-        }
+        "logDriver": "awsfirelens"
       },
       "name": "app",
       "portMappings": [
@@ -29,7 +23,7 @@
       "environment": [
         {
           "name": "LOG_BUCKET_NAME",
-          "value": "{{ tfstate ` module.api-cluster.aws_s3_bucket.firelens.bucket_domain_name` }}"
+          "value": "dev-sbcntr-firelens"
         },
         {
           "name": "APP_ID",
@@ -50,14 +44,18 @@
       ],
       "essential": true,
       "firelensConfiguration": {
-        "type": "fluentbit"
+        "type": "fluentbit",
+        "options": {
+          "config-file-type": "file",
+          "config-file-value": "/fluent-bit/custom.conf"
+        }
       },
       "image": "{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:latest",
       "logConfiguration": {
         "logDriver": "awsfirelens",
         "options": {
           "Name": "s3",
-          "bucket": "{{ tfstate `module.api-cluster.aws_s3_bucket.firelens.bucket_domain_name` }}",
+          "bucket": "dev-sbcntr-firelens",
           "region": "ap-northeast-1",
           "total_file_size": "1M",
           "upload_timeout": "1m",
