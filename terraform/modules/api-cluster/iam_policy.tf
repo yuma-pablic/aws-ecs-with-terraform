@@ -14,6 +14,17 @@ data "aws_iam_policy_document" "ecs" {
 data "aws_iam_policy" "ecs_task_execution_role" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+data "aws_iam_policy_document" "ecs_task" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+}
 data "aws_iam_policy_document" "assume_code_deploy" {
   statement {
     actions = ["sts:AssumeRole"]
