@@ -11,9 +11,9 @@ tasks:
   image-push-log:
     cmds:
       - aws ecr get-login-password --region ap-northeast-1 --profile administrator | docker login --username AWS --password-stdin {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com
-      - cd ../firelens && docker build -t sbcntrfirelens .
-      - docker tag sbcntrfirelens:latest {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntrfirelens:latest
-      - docker push {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntrfirelens:latest
+      - cd ../firelens && docker build -t sbcntr-log .
+      - docker tag sbcntr-log:latest {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:latest
+      - docker push {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:latest
   fmt:
     cmds:
       - terraform fmt -recursive
