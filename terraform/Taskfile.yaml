@@ -1,0 +1,35 @@
+version: '3'
+
+silent: true
+
+tasks:
+  default:
+    aliases:
+      - list
+    desc: List all tasks
+    cmd: task -l
+
+  run-dev:
+    cmds:
+      - docker-compose up -d
+      - go run cmd/main.go
+  migrate:
+    cmds:
+     - migrate create -ext sql -dir infrastructure/migrate -seq create_users_table
+  migrate-up:
+    cmds:
+      - migrate -path infrastructure/migrate -database "user:password@tcp(localhost:3306)/sbcntrapp" -verbose up
+  sqlc-gen:
+    cmds:
+      - sqlc generate
+  image-push-api:
+    cmds:
+      - docker build -t my-image .
+      - docker tag my-image my-repo/my-image
+      - docker push my-repo/my-image
+  image-push-log:
+    cmds:
+      - aws ecr get-login-password --region ap-northeast-1 --profile administrator | docker login --username AWS --password-stdin {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com
+      - cd ../firelens && docker build -t sbcntr-log --platform linux/x86_64 .
+      - docker tag sbcntr-log:latest {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:v1
+      - docker push {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:v1

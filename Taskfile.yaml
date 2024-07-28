@@ -1,7 +1,16 @@
-version: '3'
+version: "3"
 
-dotenv: ['.env']
 silent: true
+dotenv: [".env"]
+
+includes:
+  api:
+    taskfile: api/Taskfile.yaml
+    dir: taskfiles
+
+    terraform:
+      taskfile: terraform/Taskfile.yaml
+      dir: taskfiles
 
 tasks:
   default:
