@@ -5,30 +5,29 @@ silent: true
 tasks:
   fmt:
     desc: Format terraform files
-    dir: ../terraform
     cmds:
-      - cd terraform && terraform fmt -recursive
+      - terraform fmt -recursive
   lint:
     desc: Lint terraform files
     cmds:
-      - cd terraform && tflint --recursive
+      - tflint --recursive
   dev-plan:
     desc: Plan terraform for dev
     cmds:
-      - cd terraform/envs/dev && terraform plan
+      - cd envs/dev && terraform plan
   dev-apply:
     desc: Plan terraform for dev
     cmds:
-      - cd terraform/envs/dev && terraform apply
+      - cd envs/dev && terraform apply
   pro-apply:
     desc: Plan terraform for dev
     cmds:
-      - cd terraform/envs/pro && terraform apply
+      - envs/pro && terraform apply
   dev-destroy:
     desc: Plan terraform for dev
     cmds:
-      - cd terraform/envs/dev && terraform destroy
+      - cd envs/dev && terraform destroy
   pro-destroy:
     desc: Plan terraform for dev
     cmds:
-      - cd terraform/envs/pro && terraform destroy
+      - cd envs/pro && terraform destroy
