@@ -3,13 +3,9 @@ version: "3"
 silent: true
 
 tasks:
-  default:
-    aliases:
-      - list
-    desc: List terraform tasks
-    cmd: task -l
   fmt:
     desc: Format terraform files
+    dir: ../terraform
     cmds:
       - cd terraform && terraform fmt -recursive
   lint:

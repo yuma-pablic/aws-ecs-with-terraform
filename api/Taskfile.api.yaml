@@ -3,12 +3,6 @@ version: "3"
 silent: true
 
 tasks:
-  default:
-    aliases:
-      - list
-    desc: List api tasks
-    cmd: task -l
-
   run-dev:
     desc: Run the application in development mode
     cmds:
