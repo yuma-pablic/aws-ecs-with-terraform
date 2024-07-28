@@ -1,8 +1,8 @@
 package user
 
 import (
+	"api/usecase/user"
 	"context"
-	"ddd/usecase/user"
 	"net/http"
 )
 

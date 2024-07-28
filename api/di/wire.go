@@ -5,10 +5,10 @@
 package di
 
 import (
-	"ddd/infra/rdb"
+	userUseCase "api/usecase/user"
+	"dd/infra/rdb"
 	"ddd/infra/repository"
 	userPresenter "ddd/presentation/user"
-	userUseCase "ddd/usecase/user"
 
 	"github.com/google/wire"
 )

@@ -1,8 +1,8 @@
 package main
 
 import (
+	"api/cmd/router"
 	"database/sql"
-	"ddd/cmd/router"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"

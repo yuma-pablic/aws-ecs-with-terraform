@@ -1,10 +1,10 @@
 package repository
 
 import (
+	userDomain "api/domain/user"
+	query "api/infrastructure/queries"
 	"context"
 	"database/sql"
-	userDomain "ddd/domain/user"
-	query "ddd/infra/sqlc"
 	"fmt"
 )
 
