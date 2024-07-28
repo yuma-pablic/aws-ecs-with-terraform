@@ -1,6 +1,7 @@
 package router
 
 import (
+	"api/di"
 	"encoding/json"
 	"log"
 	"net/http"
