@@ -16,22 +16,22 @@ tasks:
       - docker push {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:v1
   fmt:
     cmds:
-      - terraform fmt -recursive
+      - cd terraform && terraform fmt -recursive
   lint:
     cmds:
-      - tflint --recursive
+      - cd terraform && tflint --recursive
   dev-plan:
     cmds:
-      - cd envs/dev && terraform plan
+      - cd terraform/envs/dev && terraform plan
   dev-apply:
     cmds:
-      - cd envs/dev && terraform apply
+      - cd terraform/envs/dev && terraform apply
   pro-apply:
     cmds:
-      - cd envs/pro && terraform apply
+      - cd terraform/envs/pro && terraform apply
   dev-destroy:
     cmds:
-      - cd envs/dev && terraform destroy
+      - cd terraform/envs/dev && terraform destroy
   pro-destroy:
     cmds:
-      - cd envs/pro && terraform destroy
+      - cd terraform/envs/pro && terraform destroy
