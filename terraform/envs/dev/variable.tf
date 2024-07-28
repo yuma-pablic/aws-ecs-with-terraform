@@ -12,5 +12,5 @@ variable "env" {
 variable "ecspresso_env_dir" {
   description = "The path to the directory containing the ecspresso configuration file"
   type        = string
-  default     = "../../../api/"
+  default     = "../../../api/deploy"
 }
