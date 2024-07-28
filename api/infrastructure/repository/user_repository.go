@@ -35,13 +35,8 @@ func (ur *userRepository) FindById(id string) (*userDomain.User, error) {
 func (ur *userRepository) Register(user *userDomain.User) error {
 	queries := query.New(ur.db)
 	ctx := context.Background()
-	param := query.RegisterUserParams{
-		Username: user.UserName,
-		Email:    user.Email,
-		Password: user.Password,
-	}
 
-	err := queries.RegisterUser(ctx, param)
+	err := queries.RegisterUser(ctx)
 	if err != nil {
 		return err
 	}
