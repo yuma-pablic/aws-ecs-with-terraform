@@ -2,7 +2,7 @@ package repository
 
 import (
 	userDomain "api/domain/user"
-	query "api/infrastructure/queries"
+	query "api/infrastructure/sqlc"
 	"context"
 	"database/sql"
 	"fmt"
