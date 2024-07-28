@@ -5,17 +5,17 @@ dotenv: ['.env']
 tasks:
   run-dev:
     cmds:
-      - docker-compose up -d
-      - go run cmd/main.go
+      - cd api && docker-compose up -d
+      - cd api && go run cmd/main.go
   migrate:
     cmds:
-     - migrate create -ext sql -dir infrastructure/migrate -seq create_users_table
+     - cd api && migrate create -ext sql -dir infrastructure/migrate -seq create_users_table
   migrate-up:
     cmds:
-      - migrate -path infrastructure/migrate -database "user:password@tcp(localhost:3306)/sbcntrapp" -verbose up
+      - cd api &&migrate -path infrastructure/migrate -database "user:password@tcp(localhost:3306)/sbcntrapp" -verbose up
   sqlc-gen:
     cmds:
-      - sqlc generate
+      - cd api && sqlc generate
   image-push-api:
     cmds:
       - docker build -t my-image .
@@ -27,10 +27,10 @@ tasks:
       - cd ../firelens && docker build -t sbcntr-log --platform linux/x86_64 .
       - docker tag sbcntr-log:latest {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:v1
       - docker push {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:v1
-  fmt:
+  iac-fmt:
     cmds:
       - cd terraform && terraform fmt -recursive
-  lint:
+  iac-lint:
     cmds:
       - cd terraform && tflint --recursive
   dev-plan:
