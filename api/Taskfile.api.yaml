@@ -1,37 +1,35 @@
-version: '3'
+version: "3"
 
-dotenv: ['.env']
+silent: true
 
 tasks:
+  run-dev:
+    desc: Run the application in development mode
+    cmds:
+      - docker-compose up -d
+      - go run cmd/main.go
+  migrate:
+    desc: Create a new migration file
+    cmds:
+      - migrate create -ext sql -dir infrastructure/migrate -seq create_users_table
+  migrate-up:
+    desc: Run all migrations
+    cmds:
+      - migrate -path infrastructure/migrate -database "user:password@tcp(localhost:3306)/sbcntrapp" -verbose up
+  sqlc-gen:
+    desc: Generate SQLC files
+    cmds:
+      - sqlc generate
   image-push-api:
+    desc: Push the API image to the ECR
     cmds:
       - docker build -t my-image .
       - docker tag my-image my-repo/my-image
       - docker push my-repo/my-image
   image-push-log:
+    desc: Push the Log image to the ECR
     cmds:
       - aws ecr get-login-password --region ap-northeast-1 --profile administrator | docker login --username AWS --password-stdin {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com
       - cd ../firelens && docker build -t sbcntr-log --platform linux/x86_64 .
       - docker tag sbcntr-log:latest {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:v1
       - docker push {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:v1
-  fmt:
-    cmds:
-      - terraform fmt -recursive
-  lint:
-    cmds:
-      - tflint --recursive
-  dev-plan:
-    cmds:
-      - cd envs/dev && terraform plan
-  dev-apply:
-    cmds:
-      - cd envs/dev && terraform apply
-  pro-apply:
-    cmds:
-      - cd envs/pro && terraform apply
-  dev-destroy:
-    cmds:
-      - cd envs/dev && terraform destroy
-  pro-destroy:
-    cmds:
-      - cd envs/pro && terraform destroy

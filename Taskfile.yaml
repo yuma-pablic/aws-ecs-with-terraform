@@ -1,0 +1,30 @@
+version: "3"
+
+silent: true
+dotenv: [".env"]
+
+includes:
+  api:
+    taskfile: ./api/Taskfile.api.yaml
+    dir: ./api
+
+  terraform:
+    taskfile: ./terraform/Taskfile.terraform.yaml
+    dir: ./terraform
+
+tasks:
+  default:
+    aliases:
+      - list
+    desc: List all tasks
+    cmd: task -l
+
+  fmt:
+    desc: Format all files
+    deps:
+      - terraform:fmt
+
+  lint:
+    desc: Lint all files
+    deps:
+      - terraform:lint
