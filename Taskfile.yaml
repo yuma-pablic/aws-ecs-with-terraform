@@ -5,11 +5,11 @@ dotenv: [".env"]
 
 includes:
   api:
-    taskfile: api/Taskfile.yaml
+    taskfile: api/Taskfile.api.yaml
     dir: taskfiles
 
     terraform:
-      taskfile: terraform/Taskfile.yaml
+      taskfile: terraform/Taskfile.terraform.yaml
       dir: taskfiles
 
 tasks:

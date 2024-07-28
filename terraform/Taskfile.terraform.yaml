@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 silent: true
 
@@ -6,7 +6,7 @@ tasks:
   default:
     aliases:
       - list
-    desc: List all tasks
+    desc: List terraform tasks
     cmd: task -l
 
   run-dev:
@@ -15,7 +15,7 @@ tasks:
       - go run cmd/main.go
   migrate:
     cmds:
-     - migrate create -ext sql -dir infrastructure/migrate -seq create_users_table
+      - migrate create -ext sql -dir infrastructure/migrate -seq create_users_table
   migrate-up:
     cmds:
       - migrate -path infrastructure/migrate -database "user:password@tcp(localhost:3306)/sbcntrapp" -verbose up
