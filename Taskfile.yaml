@@ -8,9 +8,9 @@ includes:
     taskfile: api/Taskfile.api.yaml
     dir: taskfiles
 
-    terraform:
-      taskfile: terraform/Taskfile.terraform.yaml
-      dir: taskfiles
+  terraform:
+    taskfile: terraform/Taskfile.terraform.yaml
+    dir: taskfiles
 
 tasks:
   default:
@@ -18,31 +18,3 @@ tasks:
       - list
     desc: List all tasks
     cmd: task -l
-  iac-fmt:
-    desc: Format terraform files
-    cmds:
-      - cd terraform && terraform fmt -recursive
-  iac-lint:
-    desc: Lint terraform files
-    cmds:
-      - cd terraform && tflint --recursive
-  dev-plan:
-    desc: Plan terraform for dev
-    cmds:
-      - cd terraform/envs/dev && terraform plan
-  dev-apply:
-    desc: Plan terraform for dev
-    cmds:
-      - cd terraform/envs/dev && terraform apply
-  pro-apply:
-    desc: Plan terraform for dev
-    cmds:
-      - cd terraform/envs/pro && terraform apply
-  dev-destroy:
-    desc: Plan terraform for dev
-    cmds:
-      - cd terraform/envs/dev && terraform destroy
-  pro-destroy:
-    desc: Plan terraform for dev
-    cmds:
-      - cd terraform/envs/pro && terraform destroy

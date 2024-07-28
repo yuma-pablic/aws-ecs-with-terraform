@@ -8,28 +8,31 @@ tasks:
       - list
     desc: List terraform tasks
     cmd: task -l
-
-  run-dev:
+  fmt:
+    desc: Format terraform files
     cmds:
-      - docker-compose up -d
-      - go run cmd/main.go
-  migrate:
+      - cd terraform && terraform fmt -recursive
+  lint:
+    desc: Lint terraform files
     cmds:
-      - migrate create -ext sql -dir infrastructure/migrate -seq create_users_table
-  migrate-up:
+      - cd terraform && tflint --recursive
+  dev-plan:
+    desc: Plan terraform for dev
     cmds:
-      - migrate -path infrastructure/migrate -database "user:password@tcp(localhost:3306)/sbcntrapp" -verbose up
-  sqlc-gen:
+      - cd terraform/envs/dev && terraform plan
+  dev-apply:
+    desc: Plan terraform for dev
     cmds:
-      - sqlc generate
-  image-push-api:
+      - cd terraform/envs/dev && terraform apply
+  pro-apply:
+    desc: Plan terraform for dev
     cmds:
-      - docker build -t my-image .
-      - docker tag my-image my-repo/my-image
-      - docker push my-repo/my-image
-  image-push-log:
+      - cd terraform/envs/pro && terraform apply
+  dev-destroy:
+    desc: Plan terraform for dev
     cmds:
-      - aws ecr get-login-password --region ap-northeast-1 --profile administrator | docker login --username AWS --password-stdin {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com
-      - cd ../firelens && docker build -t sbcntr-log --platform linux/x86_64 .
-      - docker tag sbcntr-log:latest {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:v1
-      - docker push {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-log:v1
+      - cd terraform/envs/dev && terraform destroy
+  pro-destroy:
+    desc: Plan terraform for dev
+    cmds:
+      - cd terraform/envs/pro && terraform destroy
