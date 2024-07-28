@@ -7,10 +7,10 @@ tasks:
       - go run cmd/main.go
   migrate:
     cmds:
-     - migrate create -ext sql -dir infra/migrate -seq create_users_table
+     - migrate create -ext sql -dir infrastructure/migrate -seq create_users_table
   migrate-up:
     cmds:
-      - migrate -path infra/migrate -database "user:password@tcp(localhost:3306)/sbcntrapp" -verbose up
+      - migrate -path infrastructure/migrate -database "user:password@tcp(localhost:3306)/sbcntrapp" -verbose up
   sqlc-gen:
     cmds:
       - sqlc generate
