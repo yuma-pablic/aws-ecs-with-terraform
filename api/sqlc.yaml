@@ -1,0 +1,9 @@
+version: "2"
+sql:
+  - schema: "infrastructure/migrate/"
+    queries: "infrastructure/queries/"
+    engine: "mysql"
+    gen:
+      go:
+        package: "query"
+        out: "infrastructure/sqlc/"
