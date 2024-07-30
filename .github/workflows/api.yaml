@@ -2,7 +2,7 @@ name: api
 on:
   push:
     branches: ["main", "feaeture-github-actions"]
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 env:
   ECS_CLUSTER: dev-sbcntr-api-cluster
