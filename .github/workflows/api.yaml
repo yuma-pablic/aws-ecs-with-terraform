@@ -64,6 +64,13 @@ jobs:
         run: |
           ecspresso deploy --suspend-auto-scaling
 
+      - name: Deploy app with CodeDeploy Blue/Green deployment
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def-go.outputs.task-definition }}
+          cluster: dev-sbcntr-api-cluster
+          service: dev-sbcntr-api-service
+
       - name: restart auto scaling
         run: |
           ecspresso deploy --resume-auto-scaling
