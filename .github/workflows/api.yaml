@@ -5,6 +5,11 @@ on:
     branches: ["main"]
   pull_request:
 
+env:
+  ECS_CLUSTER: dev-sbcntr-api-cluster
+  ECS_SERVICE: dev-sbcntr-api-service
+  ECS_TASK_DEFINITION: ./api/deploy/ecs-task-def.json
+
 jobs:
   push:
     runs-on: ubuntu-latest
@@ -30,6 +35,7 @@ jobs:
         id: login-ecr
 
       - name: build and push docker image to ecr
+        id: build-image
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: "sbcntr-api"
@@ -39,3 +45,25 @@ jobs:
           ls -la
           docker build . --tag ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}
           docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}
+
+      - uses: kayac/ecspresso@v2
+        with:
+          version: v2.3.4
+      - run: |
+          ecspresso version
+
+      - name: deploy to api
+        id: task-def-go
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: sbcntr-api
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: stop auto scaling
+        run: |
+          ecspresso deploy --suspend-auto-scaling
+
+      - name: restart auto scaling
+        run: |
+          ecspresso deploy --resume-auto-scaling
