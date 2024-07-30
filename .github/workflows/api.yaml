@@ -1,5 +1,4 @@
-name: ecr push image
-
+name: api
 on:
   push:
     branches: ["main", "feature-github-actions"]
