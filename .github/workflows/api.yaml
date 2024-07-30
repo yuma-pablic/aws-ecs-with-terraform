@@ -1,6 +1,7 @@
 name: ecr push image
 
 on:
+  workflow_dispatch:
   push:
     branches: ["main"]
   pull_request:
