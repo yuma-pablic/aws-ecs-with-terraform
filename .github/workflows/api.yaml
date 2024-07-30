@@ -1,7 +1,7 @@
 name: api
 on:
   push:
-    branches: ["main", "feaeture-github-actions"]
+    branches: ["main"]
   workflow_dispatch: {}
 
 env:
