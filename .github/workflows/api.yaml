@@ -7,7 +7,7 @@ on:
 env:
   ECS_CLUSTER: dev-sbcntr-api-cluster
   ECS_SERVICE: dev-sbcntr-api-service
-  ECS_TASK_DEFINITION: ./api/deploy/ecs-task-def.json
+  ECS_TASK_DEFINITION: ./deploy/ecs-task-def.json
 
 jobs:
   push:
