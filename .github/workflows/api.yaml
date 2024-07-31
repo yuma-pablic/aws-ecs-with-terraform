@@ -20,8 +20,6 @@ jobs:
     defaults:
       run:
         working-directory: ./api
-    outputs:
-      image: ${{ steps.build-image.outputs.image }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -35,16 +33,18 @@ jobs:
       - uses: aws-actions/amazon-ecr-login@v1
         id: login-ecr
 
-      - name: build and push docker image to ecr
+      - name: Build and push
+        uses: docker/build-push-action@v3
         id: build-image
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: "sbcntr-api"
           IMAGE_TAG: ${{ github.sha }}
           ENVIRONMENT: "dev"
-        run: |
-          docker buildx build -t ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }} .
-          docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}
 
       - uses: kayac/ecspresso@v2
         with:
