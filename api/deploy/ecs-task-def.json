@@ -4,7 +4,7 @@
       "cpu": 256,
       "essential": true,
       "memoryReservation": 512,
-      "image": "254850949809.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-backend:v1",
+      "image": "{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-backend:v1",
       "logConfiguration": {
         "logDriver": "awsfirelens"
       },
