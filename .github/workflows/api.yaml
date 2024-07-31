@@ -41,8 +41,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
           ENVIRONMENT: "dev"
         run: |
-          ls -la
-          docker build . -t ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}
+          docker buildx build --tag . -t ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}
           docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}
 
       - uses: kayac/ecspresso@v2
