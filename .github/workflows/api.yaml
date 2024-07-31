@@ -43,6 +43,7 @@ jobs:
           ENVIRONMENT: "dev"
         with:
           context: .
+          file: ./Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}
 
@@ -58,7 +59,7 @@ jobs:
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: sbcntr-api
-          image: ${{ steps.build-image.outputs.image }}
+          image: ${{ steps.build-image.outputs.imageid }}
 
       - name: deploy vertify
         run: |
