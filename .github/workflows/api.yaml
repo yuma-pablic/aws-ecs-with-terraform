@@ -46,7 +46,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
           ENVIRONMENT: "dev"
         with:
-          context: .
+          file: ./api/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}
 
