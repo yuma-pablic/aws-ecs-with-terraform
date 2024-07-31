@@ -33,6 +33,10 @@ jobs:
       - uses: aws-actions/amazon-ecr-login@v1
         id: login-ecr
 
+      - name: cd
+        run: |
+          ls -la
+
       - name: Build and push
         uses: docker/build-push-action@v3
         id: build-image
