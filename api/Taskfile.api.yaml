@@ -23,9 +23,10 @@ tasks:
   image-push-api:
     desc: Push the API image to the ECR
     cmds:
-      - docker build -t my-image .
-      - docker tag my-image my-repo/my-image
-      - docker push my-repo/my-image
+      - aws ecr get-login-password --region ap-northeast-1 --profile administrator | docker login --username AWS --password-stdin {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com
+      - docker build -t sbcntr-api --platform linux/x86_64 .
+      - docker tag sbcntr-api:latest {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-api:v1
+      - docker push {{ .AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-api:v1
   image-push-log:
     desc: Push the Log image to the ECR
     cmds:
