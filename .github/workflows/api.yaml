@@ -16,10 +16,10 @@ jobs:
       id-token: write
       contents: read
     environment:
-      name: production
+      name: pro
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: ./api
     steps:
       - uses: actions/checkout@v3
         with:
