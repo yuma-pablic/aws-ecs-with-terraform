@@ -10,4 +10,4 @@ codedeploy:
 plugins:
   - name: tfstate
     config:
-      path: ../terraform/envs/dev/terraform.tfstate
+      path: ../../terraform/envs/dev/terraform.tfstate
