@@ -59,6 +59,10 @@ jobs:
           container-name: sbcntr-api
           image: ${{ steps.build-image.outputs.image }}
 
+      - name: deploy vertify
+        run: |
+          ecspresso verify --config-dir ./api/deploy --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --task-def ${{ env.ECS_TASK_DEFINITION }}
+
       - name: stop auto scaling
         run: |
           ecspresso deploy --suspend-auto-scaling
