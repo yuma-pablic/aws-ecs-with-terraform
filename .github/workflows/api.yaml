@@ -61,7 +61,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
-          container-name: sbcntr-api
+          container-name: app
           image: "${{steps.login-ecr.outputs.registry}}/sbcntr-api:dev-${{ github.sha }}"
 
       - name: deploy vertify
