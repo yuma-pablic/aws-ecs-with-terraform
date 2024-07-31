@@ -62,7 +62,7 @@ jobs:
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: sbcntr-api
-          image: "sbcntr-api:dev-${{ github.sha }}"
+          image: "${{steps.login-ecr.outputs.registry}}/sbcntr-api:dev-${{ github.sha }}"
 
       - name: deploy vertify
         run: |
