@@ -64,11 +64,9 @@ jobs:
           container-name: app
           image: "${{steps.login-ecr.outputs.registry}}/sbcntr-api:dev-${{ github.sha }}"
 
-      - name: register new task definition family
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
-          cluster: ${{ env.ECS_CLUSTER }}
+      - name: diff
+        run: |
+          git diff
 
       - name: deploy vertify
         run: |
