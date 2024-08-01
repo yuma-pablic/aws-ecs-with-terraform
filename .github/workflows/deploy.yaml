@@ -1,0 +1,64 @@
+name: deploy
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch: {}
+
+env:
+  ECS_CLUSTER: dev-sbcntr-api-cluster
+  ECS_SERVICE: dev-sbcntr-api-service
+  ECS_TASK_DEFINITION: ./api/deploy/ecs-task-def.json
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment:
+      name: pro
+    defaults:
+      run:
+        working-directory: ./api
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: "ap-northeast-1"
+          role-to-assume: "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/dev-sbcntr-oidc-role"
+
+      - uses: aws-actions/amazon-ecr-login@v1
+        id: login-ecr
+
+      - uses: kayac/ecspresso@v2
+        with:
+          version: v2.3.4
+      - run: |
+          ecspresso version
+
+      - name: deploy to api
+        id: task-def-go
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: app
+          image: "${{steps.login-ecr.outputs.registry}}/sbcntr-api:dev-${{ github.sha }}"
+
+      - name: deploy vertify
+        run: |
+          ecspresso verify --config-dir ./api/deploy --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --task-def ${{ env.ECS_TASK_DEFINITION }}
+
+      - name: stop auto scaling
+        run: |
+          ecspresso deploy --suspend-auto-scaling
+
+      - name: deploy to api
+        run: |
+          ecspresso deploy --config-dir ./api/deploy --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --task-def ${{ env.ECS_TASK_DEFINITION }}
+
+      - name: restart auto scaling
+        run: |
+          ecspresso deploy --resume-auto-scaling
