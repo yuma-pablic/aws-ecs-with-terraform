@@ -39,14 +39,6 @@ jobs:
       - run: |
           ecspresso version
 
-      - name: deploy to api
-        id: task-def-go
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
-          container-name: app
-          image: "${{steps.login-ecr.outputs.registry}}/sbcntr-api:dev-${{ github.sha }}"
-
       - name: deploy vertify
         run: |
           ecspresso verify --config-dir ./api/deploy --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --task-def ${{ env.ECS_TASK_DEFINITION }}
