@@ -54,6 +54,9 @@ jobs:
            --task-definition sbcntr-backend-def  \
            --query taskDefinition > ./deploy/ecs-task-def.json
 
+      - name: diff
+        run: |
+          git diff --exit-code || exit 0
       - name: commit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
