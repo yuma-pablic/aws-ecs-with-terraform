@@ -49,5 +49,5 @@ jobs:
       - name: describe task definition
         run: |
           aws ecs describe-task-definition \
-           --task-definition my-task-definition-family \
+           --task-definition sbcntr-backend-def  \
            --query taskDefinition > api/deploy/ecs-task-def.json
