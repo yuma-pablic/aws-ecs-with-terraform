@@ -1,3 +1,5 @@
+# License
+The source code is licensed MIT. The website content is licensed CC BY 4.0,see LICENSE.
 # aws-with-terraform
 [AWSコンテナ設計・構築[本格]入門](https://www.sbcr.jp/product/4815607654/)の第五章までをコード化
 ## install
