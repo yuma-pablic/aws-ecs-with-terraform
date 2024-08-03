@@ -66,3 +66,25 @@ jobs:
           git add .
           git commit -m "Update ecs task definition"
           git push origin main
+
+      - uses: kayac/ecspresso@v2
+        with:
+          version: v2.3.4
+      - run: |
+          ecspresso version
+
+      - name: deploy vertify
+        run: |
+          ecspresso verify --config-dir ./api/deploy --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --task-def ${{ env.ECS_TASK_DEFINITION }}
+
+      - name: stop auto scaling
+        run: |
+          ecspresso deploy --suspend-auto-scaling
+
+      - name: deploy to api
+        run: |
+          ecspresso deploy --config-dir ./api/deploy --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --task-def ${{ env.ECS_TASK_DEFINITION }}
+
+      - name: restart auto scaling
+        run: |
+          ecspresso deploy --resume-auto-scaling
