@@ -50,4 +50,4 @@ jobs:
         run: |
           aws ecs describe-task-definition \
            --task-definition sbcntr-backend-def  \
-           --query taskDefinition > ./api/deploy/ecs-task-def.json
+           --query taskDefinition > ./deploy/ecs-task-def.json
