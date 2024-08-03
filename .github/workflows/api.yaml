@@ -81,10 +81,6 @@ jobs:
         run: |
           ecspresso deploy --suspend-auto-scaling
 
-      - name: deploy to api
-        run: |
-          ecspresso deploy --config-dir ./api/deploy --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --task-def ${{ env.ECS_TASK_DEFINITION }}
-
       - name: restart auto scaling
         run: |
           ecspresso scale --resume-auto-scaling
