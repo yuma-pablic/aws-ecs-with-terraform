@@ -33,10 +33,6 @@ jobs:
       - uses: aws-actions/amazon-ecr-login@v1
         id: login-ecr
 
-      - name: cd
-        run: |
-          ls -la
-
       - name: Build and push
         uses: docker/build-push-action@v3
         id: build-image
@@ -50,36 +46,8 @@ jobs:
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ env.IMAGE_TAG }}
 
-      # - uses: kayac/ecspresso@v2
-      #   with:
-      #     version: v2.3.4
-      # - run: |
-      #     ecspresso version
-
-      - name: deploy to api
-        id: task-def-go
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
-          container-name: app
-          image: "${{steps.login-ecr.outputs.registry}}/sbcntr-api:dev-${{ github.sha }}"
-
-      # - name: diff
-      #   run: |
-      #     git diff
-
-      # - name: deploy vertify
-      #   run: |
-      #     ecspresso verify --config-dir ./api/deploy --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --task-def ${{ env.ECS_TASK_DEFINITION }}
-
-      # - name: stop auto scaling
-      #   run: |
-      #     ecspresso deploy --suspend-auto-scaling
-
-      # - name: deploy to api
-      #   run: |
-      #     ecspresso deploy --config-dir ./api/deploy --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --task-def ${{ env.ECS_TASK_DEFINITION }}
-
-      # - name: restart auto scaling
-      #   run: |
-      #     ecspresso deploy --resume-auto-scaling
+      - name: describe task definition
+        run: |
+          aws ecs describe-task-definition \
+           --task-definition my-task-definition-family \
+           --query taskDefinition > api/deploy/ecs-task-def.json
