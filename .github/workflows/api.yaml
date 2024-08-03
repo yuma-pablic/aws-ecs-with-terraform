@@ -1,7 +1,7 @@
 name: image-push-api
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "feature-fix-deploy"]
   workflow_dispatch: {}
 
 env:
