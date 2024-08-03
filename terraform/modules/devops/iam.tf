@@ -17,3 +17,14 @@ resource "aws_iam_role_policy_attachment" "ecr_push_for_oidc" {
   role       = aws_iam_role.oidc.name
   policy_arn = aws_iam_policy.api.arn
 }
+
+resource "aws_iam_policy" "ecs" {
+  name        = "${var.env}-${var.service}-ecs-policy"
+  description = "Allow ECS describe task definition for OIDC"
+  policy      = data.aws_iam_policy_document.ecs.json
+}
+
+resource "aws_iam_role_policy_attachment" "ecs" {
+  role       = aws_iam_role.oidc.name
+  policy_arn = aws_iam_policy.ecs.arn
+}
