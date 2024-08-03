@@ -1,7 +1,7 @@
 name: image-push-api
 on:
   push:
-    branches: ["main", "feature-fix-deploy"]
+    branches: ["main"]
   workflow_dispatch: {}
 
 env:
@@ -50,4 +50,4 @@ jobs:
         run: |
           aws ecs describe-task-definition \
            --task-definition sbcntr-backend-def  \
-           --query taskDefinition > api/deploy/ecs-task-def.json
+           --query taskDefinition > ./api/deploy/ecs-task-def.json
