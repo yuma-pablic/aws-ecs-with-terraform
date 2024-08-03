@@ -47,3 +47,13 @@ data "aws_iam_policy_document" "ecr_push_policy" {
     resources = ["*"]
   }
 }
+
+data "aws_iam_policy_document" "ecs" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecs:DescribeTaskDefinition"
+    ]
+    resources = ["*"]
+  }
+}
