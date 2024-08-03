@@ -87,4 +87,4 @@ jobs:
 
       - name: restart auto scaling
         run: |
-          ecspresso deploy --resume-auto-scaling
+          ecspresso scale --resume-auto-scaling
