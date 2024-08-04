@@ -2,6 +2,7 @@ data "aws_caller_identity" "self" {}
 data "aws_iam_policy_document" "ecs" {
   statement {
     actions = ["sts:AssumeRole"]
+    effect  = "Allow"
 
     principals {
       type        = "Service"
@@ -12,6 +13,17 @@ data "aws_iam_policy_document" "ecs" {
 
 data "aws_iam_policy" "ecs_task_execution_role" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+data "aws_iam_policy_document" "ecs_task" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
 }
 data "aws_iam_policy_document" "assume_code_deploy" {
   statement {
@@ -80,4 +92,20 @@ data "aws_iam_policy_document" "firelens" {
     resources = ["*"]
   }
 
+}
+
+data "aws_iam_policy_document" "ssm" {
+  version = "2012-10-17"
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "ssmmessages:CreateControlChannel",
+      "ssmmessages:CreateDataChannel",
+      "ssmmessages:OpenControlChannel",
+      "ssmmessages:OpenDataChannel"
+    ]
+
+    resources = ["*"]
+  }
 }

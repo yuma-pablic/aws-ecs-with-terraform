@@ -67,6 +67,7 @@
   ],
   "cpu": "512",
   "executionRoleArn": "arn:aws:iam::{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}:role/dev-sbcntr-api-ecs-task-execution",
+  "taskRoleArn": "arn:aws:iam::{{ tfstate `module.network.data.aws_caller_identity.self.account_id` }}:role/dev-sbcntr-ecs-task",
   "family": "sbcntr-backend-def",
   "ipcMode": "",
   "memory": "1024",
