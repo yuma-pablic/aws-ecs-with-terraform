@@ -4,8 +4,9 @@ module "network" {
   env     = var.env
 }
 data "aws_vpc" "network" {
-  tags = {
-    Environment = var.env
+  filter {
+    name   = "tag:Name"
+    values = [module.network.vpc_name]
   }
 }
 
