@@ -47,14 +47,18 @@ module "db" {
   sg_db_id                = module.network.sg_db_subnet
 }
 
-# module "monitoring" {
-#   source  = "../../modules/manage"
+# module "web" {
+#   source  = "../../modules/web"
+#   service = var.service
+#   env     = var.env
+#   alb_web = module.network.alb_web
+# }
+
+
+# module "devops" {
+#   source  = "../../modules/devops"
 #   env     = var.env
 #   service = var.service
 # }
 
-module "devops" {
-  source  = "../../modules/devops"
-  env     = var.env
-  service = var.service
-}
+
