@@ -1,8 +1,8 @@
-# License
-The source code is licensed MIT. The website content is licensed CC BY 4.0,see LICENSE.
+# ライセンス
+ソースコードは MIT ライセンスです。ウェブサイトのコンテンツは CC BY 4.0 ライセンスです。詳細は LICENSE を参照してください。
 # aws-with-terraform
 [AWSコンテナ設計・構築[本格]入門](https://www.sbcr.jp/product/4815607654/)の第五章までをコード化
-## install
+## インストール
 ```
 brew install terraform tflint trivy
 brew unlink tfenv
@@ -10,11 +10,11 @@ brew install tfenv
 pip install pre-commit
 pre-commit install
 ```
-## init
+## 初期化
 ```
 task dev-init
 ```
-## apply
+## 適用
 ```
 task dev-apply
 ```
